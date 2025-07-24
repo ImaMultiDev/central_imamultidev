@@ -9,6 +9,7 @@ import {
   BookOpen,
   FileText,
   HardDrive,
+  Wrench,
   Menu,
   X,
   LogOut,
@@ -37,6 +38,11 @@ const navigation = [
     name: "Documentación",
     href: "/docs",
     icon: FileText,
+  },
+  {
+    name: "Herramientas",
+    href: "/tools",
+    icon: Wrench,
   },
   {
     name: "Test Hardware",

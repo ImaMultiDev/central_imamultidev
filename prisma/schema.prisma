@@ -25,6 +25,7 @@ model User {
   events        Event[]
   courses       Course[]
   documentation Documentation[]
+  tools         Tool[]
 
   @@map("users")
 }
@@ -111,4 +112,50 @@ enum DocumentationCategory {
   FRONTEND
   CIENCIA_DATOS
   LENGUAJES
+}
+
+model Tool {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  type        ToolType
+  category    ToolCategory
+  tags        String[]
+  userId      String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations (opcional en producción)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tools")
+}
+
+enum ToolType {
+  DESPLIEGUE
+  DISENO
+  MULTIMEDIA
+  IA_GENERATIVA
+  DOCUMENTACION
+  LEGAL
+  DESARROLLO
+  MONITOREO
+  COMUNICACION
+}
+
+enum ToolCategory {
+  SERVICIOS_CLOUD
+  HERRAMIENTAS_DISENO
+  EDITORES_MULTIMEDIA
+  IA_ARTE
+  IA_TEXTO
+  IA_CODIGO
+  PLATAFORMAS_DOCS
+  SERVICIOS_LEGALES
+  IDES_EDITORES
+  SERVICIOS_BASE_DATOS
+  AUTENTICACION
+  ANALITICAS
+  CHAT_COLABORACION
 } 

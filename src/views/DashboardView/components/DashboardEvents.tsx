@@ -47,7 +47,7 @@ export function DashboardEvents({ events }: DashboardEventsProps) {
   };
 
   return (
-    <Card className="lg:col-span-2">
+    <Card className="lg:col-span-1">
       <CardHeader>
         <CardTitle>Próximos Eventos</CardTitle>
         <CardDescription>

@@ -75,10 +75,52 @@ export enum DocumentationCategory {
   LENGUAJES = "LENGUAJES",
 }
 
+export interface Tool {
+  id: string;
+  title: string;
+  description?: string;
+  url: string;
+  type: ToolType;
+  category: ToolCategory;
+  tags: string[];
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum ToolType {
+  DESPLIEGUE = "DESPLIEGUE",
+  DISENO = "DISENO",
+  MULTIMEDIA = "MULTIMEDIA",
+  IA_GENERATIVA = "IA_GENERATIVA",
+  DOCUMENTACION = "DOCUMENTACION",
+  LEGAL = "LEGAL",
+  DESARROLLO = "DESARROLLO",
+  MONITOREO = "MONITOREO",
+  COMUNICACION = "COMUNICACION",
+}
+
+export enum ToolCategory {
+  SERVICIOS_CLOUD = "SERVICIOS_CLOUD",
+  HERRAMIENTAS_DISENO = "HERRAMIENTAS_DISENO",
+  EDITORES_MULTIMEDIA = "EDITORES_MULTIMEDIA",
+  IA_ARTE = "IA_ARTE",
+  IA_TEXTO = "IA_TEXTO",
+  IA_CODIGO = "IA_CODIGO",
+  PLATAFORMAS_DOCS = "PLATAFORMAS_DOCS",
+  SERVICIOS_LEGALES = "SERVICIOS_LEGALES",
+  IDES_EDITORES = "IDES_EDITORES",
+  SERVICIOS_BASE_DATOS = "SERVICIOS_BASE_DATOS",
+  AUTENTICACION = "AUTENTICACION",
+  ANALITICAS = "ANALITICAS",
+  CHAT_COLABORACION = "CHAT_COLABORACION",
+}
+
 export interface DashboardStats {
   totalTasks: number;
   completedTasks: number;
   activeCourses: number;
   totalDocuments: number;
+  totalTools: number;
   upcomingEvents: number;
 }

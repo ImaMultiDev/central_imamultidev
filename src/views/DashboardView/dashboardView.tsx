@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEvents } from "@/hooks/useEvents";
 import { useCourses } from "@/hooks/useCourses";
 import { useDocumentation } from "@/hooks/useDocumentation";
+import { useTools } from "@/hooks/useTools";
 import {
   DashboardHeader,
   DashboardStats,
   DashboardEvents,
   DashboardCourses,
+  DashboardTools,
   DashboardQuickActions,
 } from "./components";
 
@@ -17,6 +19,7 @@ export function DashboardView() {
   const { events } = useEvents();
   const { courses } = useCourses();
   const { documentation } = useDocumentation();
+  const { tools } = useTools();
 
   // Función helper para convertir fechas de manera segura
   const safeDate = (date: Date | string): Date => {
@@ -30,6 +33,7 @@ export function DashboardView() {
     activeCourses: courses.filter((course) => course.status === "EN_PROGRESO")
       .length,
     totalDocuments: documentation.length,
+    totalTools: tools.length,
     upcomingEvents: events.filter((event) => {
       const eventDate = safeDate(event.startDate);
       const today = new Date();
@@ -57,6 +61,15 @@ export function DashboardView() {
     .filter((course) => course.status === "EN_PROGRESO")
     .slice(0, 3);
 
+  // Obtener herramientas recientes
+  const recentTools = tools
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return dateB.getTime() - dateA.getTime();
+    })
+    .slice(0, 3);
+
   const handleQuickAction = (action: string) => {
     switch (action) {
       case "calendar":
@@ -71,6 +84,9 @@ export function DashboardView() {
       case "newDocument":
         router.push("/docs");
         break;
+      case "newTool":
+        router.push("/tools");
+        break;
       case "hardwareTest":
         router.push("/hardware-test");
         break;
@@ -80,7 +96,7 @@ export function DashboardView() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col gap-6">
       {/* Header */}
       <DashboardHeader onViewCalendar={() => router.push("/calendar")} />
 
@@ -94,6 +110,9 @@ export function DashboardView() {
 
         {/* Recent Courses */}
         <DashboardCourses courses={recentCourses} />
+
+        {/* Recent Tools */}
+        <DashboardTools tools={recentTools} />
       </div>
 
       {/* Quick Actions */}

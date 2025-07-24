@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, BookOpen, FileText, Clock } from "lucide-react";
+import { CheckCircle, BookOpen, FileText, Clock, Wrench } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Stats {
@@ -8,6 +8,7 @@ interface Stats {
   completedTasks: number;
   activeCourses: number;
   totalDocuments: number;
+  totalTools: number;
   upcomingEvents: number;
 }
 
@@ -17,7 +18,7 @@ interface DashboardStatsProps {
 
 export function DashboardStats({ stats }: DashboardStatsProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Tareas Totales</CardTitle>
@@ -49,6 +50,17 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalDocuments}</div>
+          <p className="text-xs text-muted-foreground">Recursos guardados</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Herramientas</CardTitle>
+          <Wrench className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.totalTools}</div>
           <p className="text-xs text-muted-foreground">Recursos guardados</p>
         </CardContent>
       </Card>

@@ -6,6 +6,7 @@ import {
   FileText,
   TrendingUp,
   Monitor,
+  Wrench,
 } from "lucide-react";
 import {
   Card,
@@ -32,7 +33,7 @@ export function DashboardQuickActions({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           <Button
             variant="outline"
             className="h-20 flex-col space-y-2"
@@ -56,6 +57,14 @@ export function DashboardQuickActions({
           >
             <FileText className="h-6 w-6" />
             <span>Guardar Documento</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2"
+            onClick={() => onQuickAction("newTool")}
+          >
+            <Wrench className="h-6 w-6" />
+            <span>Añadir Herramienta</span>
           </Button>
           <Button
             variant="outline"
