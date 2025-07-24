@@ -15,6 +15,7 @@ interface CameraTestProps {
   onTestStatusChange: (status: TestStatus) => void;
   cameraStream: MediaStream | null;
   onCameraStreamChange: (stream: MediaStream | null) => void;
+  className?: string;
 }
 
 export function CameraTest({
@@ -22,6 +23,7 @@ export function CameraTest({
   onTestStatusChange,
   cameraStream,
   onCameraStreamChange,
+  className,
 }: CameraTestProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -101,7 +103,7 @@ export function CameraTest({
   };
 
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Camera className="h-5 w-5" />

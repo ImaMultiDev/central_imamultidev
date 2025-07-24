@@ -110,7 +110,7 @@ export function DayView({
   return (
     <Card className="lg:col-span-2">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
             {formatDate(currentDate)}
@@ -181,7 +181,7 @@ export function DayView({
 
           {/* Timeline por horas */}
           <div className="space-y-1">
-            <h3 className="text-sm font-medium text-muted-foreground mb-3">
+            <h3 className="hidden lg:block text-sm font-medium text-muted-foreground mb-3">
               Horario
             </h3>
             <div className="lg:h-[400px] max-h-[400px] overflow-y-auto border rounded-lg">
@@ -258,11 +258,11 @@ export function DayView({
           {/* Sin eventos */}
           {sortedEvents.length === 0 && (
             <div className="text-center py-12">
-              <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <Calendar className="h-10 lg:h-12 w-10 lg:w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium text-muted-foreground mb-2">
                 Sin eventos para este día
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="hidden lg:block text-sm text-muted-foreground">
                 No hay eventos programados para el{" "}
                 {currentDate.toLocaleDateString("es-ES", {
                   weekday: "long",

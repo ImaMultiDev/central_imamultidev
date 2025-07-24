@@ -37,7 +37,7 @@ export function DocsGrid({
   categoryLabels,
 }: DocsGridProps) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
       {documents.map((doc) => (
         <Card key={doc.id} className="flex flex-col">
           <CardHeader>
@@ -134,7 +134,7 @@ export function DocsGrid({
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2 pt-2">
+            <div className="flex gap-2 pt-2 flex-wrap justify-center">
               <Button
                 variant="outline"
                 size="sm"

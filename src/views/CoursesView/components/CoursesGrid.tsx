@@ -59,7 +59,7 @@ export function CoursesGrid({
   onAddCourse,
 }: CoursesGridProps) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
       {courses.map((course) => (
         <Card key={course.id} className="flex flex-col">
           <CardHeader>
@@ -135,7 +135,7 @@ export function CoursesGrid({
 
           <CardContent className="flex-1 space-y-4">
             {/* Status Change Buttons */}
-            <div className="flex gap-2 mb-3">
+            <div className="flex gap-2 mb-3 flex-wrap ">
               <Button
                 size="sm"
                 variant={
@@ -144,7 +144,7 @@ export function CoursesGrid({
                 onClick={() =>
                   onStatusChange(course.id, CourseStatus.POR_COMENZAR)
                 }
-                className="text-xs"
+                className="text-xs w-full sm:w-auto"
               >
                 Por Comenzar
               </Button>
@@ -156,7 +156,7 @@ export function CoursesGrid({
                 onClick={() =>
                   onStatusChange(course.id, CourseStatus.EN_PROGRESO)
                 }
-                className="text-xs"
+                className="text-xs w-full sm:w-auto"
               >
                 En Progreso
               </Button>
@@ -166,7 +166,7 @@ export function CoursesGrid({
                 onClick={() =>
                   onStatusChange(course.id, CourseStatus.COMPLETADO)
                 }
-                className="text-xs"
+                className="text-xs w-full sm:w-auto"
               >
                 Completado
               </Button>

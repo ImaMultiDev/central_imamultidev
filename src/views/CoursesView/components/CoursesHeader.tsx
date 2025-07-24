@@ -9,9 +9,9 @@ interface CoursesHeaderProps {
 
 export function CoursesHeader({ onAddCourse }: CoursesHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Cursos</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Cursos</h1>
         <p className="text-muted-foreground">
           Gestiona tu aprendizaje y seguimiento de cursos
         </p>

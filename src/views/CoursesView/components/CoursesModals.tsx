@@ -46,7 +46,7 @@ export function CoursesModals({
         isOpen={isCourseModalOpen}
         onClose={onCourseModalClose}
         title="Añadir Nuevo Curso"
-        className="max-w-md"
+        className="max-w-md max-h-[90vh] overflow-y-auto"
       >
         <form
           className="space-y-4"
@@ -81,7 +81,7 @@ export function CoursesModals({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-foreground block mb-2">
                 Plataforma
@@ -150,7 +150,7 @@ export function CoursesModals({
             />
           </div>
 
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
               className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
@@ -174,7 +174,7 @@ export function CoursesModals({
         isOpen={isEditModalOpen}
         onClose={onEditModalClose}
         title="Editar Curso"
-        className="max-w-md"
+        className="max-w-md max-h-[90vh] overflow-y-auto"
       >
         {editingCourse && (
           <form
@@ -216,7 +216,7 @@ export function CoursesModals({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Plataforma
@@ -293,7 +293,7 @@ export function CoursesModals({
               />
             </div>
 
-            <div className="flex gap-2 pt-4">
+            <div className="flex flex-col sm:flex-row gap-2 pt-4">
               <Button
                 type="submit"
                 className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"

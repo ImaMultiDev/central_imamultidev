@@ -98,10 +98,10 @@ export function CalendarGrid({
   }
 
   return (
-    <Card className="lg:col-span-2">
+    <Card className="lg:col-span-2 overflow-x-auto lg:overflow-visible">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
+          <CardTitle className="text-2xl font-bold">
             {monthNames[month]} {year}
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -129,7 +129,8 @@ export function CalendarGrid({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-auto lg:overflow-visible w-[600px] lg:w-full">
+        {/* Headers de días */}
         <div className="grid grid-cols-7 gap-2 mb-4">
           {dayNames.map((day) => (
             <div
@@ -140,6 +141,8 @@ export function CalendarGrid({
             </div>
           ))}
         </div>
+
+        {/* Grid del calendario */}
         <div className="grid grid-cols-7 gap-2">
           {calendarDays.map((date, index) => {
             const isCurrentMonth = date.getMonth() === month;
@@ -150,20 +153,20 @@ export function CalendarGrid({
               <div
                 key={index}
                 className={`
-                    h-[120px] p-2 border rounded-lg cursor-pointer transition-all duration-300
-                    ${
-                      isCurrentMonth
-                        ? isToday
-                          ? "bg-blue-500/10 border-blue-500/30 shadow-lg"
-                          : "bg-card hover:bg-accent/50"
-                        : "bg-muted/30 text-muted-foreground"
-                    }
-                    ${
-                      isToday
-                        ? "ring-2 ring-blue-500/30"
-                        : "border-border hover:border-muted-foreground"
-                    }
-                  `}
+                      min-h-[120px] lg:h-[120px] p-2 border rounded-lg cursor-pointer transition-all duration-300
+                      ${
+                        isCurrentMonth
+                          ? isToday
+                            ? "bg-blue-500/10 border-blue-500/30 shadow-lg"
+                            : "bg-card hover:bg-accent/50"
+                          : "bg-muted/30 text-muted-foreground"
+                      }
+                      ${
+                        isToday
+                          ? "ring-2 ring-blue-500/30"
+                          : "border-border hover:border-muted-foreground"
+                      }
+                    `}
                 onClick={() => {
                   // TODO: Implementar selección de fecha
                 }}

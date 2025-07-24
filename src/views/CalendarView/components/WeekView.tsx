@@ -44,12 +44,6 @@ export function WeekView({
   };
 
   // Obtener el fin de la semana (sábado)
-  const getWeekEnd = (date: Date) => {
-    const weekStart = getWeekStart(date);
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
-    return weekEnd;
-  };
 
   const navigateWeek = (direction: "prev" | "next") => {
     setCurrentDate((prev) => {
@@ -80,7 +74,6 @@ export function WeekView({
   };
 
   const weekStart = getWeekStart(currentDate);
-  const weekEnd = getWeekEnd(currentDate);
 
   const weekDays = [];
   for (let i = 0; i < 7; i++) {
@@ -104,11 +97,11 @@ export function WeekView({
   };
 
   return (
-    <Card className="lg:col-span-2">
+    <Card className="lg:col-span-2 overflow-x-auto lg:overflow-visible">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>
-            Semana del {formatDate(weekStart)} - {formatDate(weekEnd)}
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
+          <CardTitle className="text-2xl font-bold">
+            Semana del {formatDate(weekDays[0])} - {formatDate(weekDays[6])}
           </CardTitle>
           <div className="flex items-center gap-2">
             <Button
@@ -123,7 +116,7 @@ export function WeekView({
               size="sm"
               onClick={() => setCurrentDate(new Date())}
             >
-              Semana
+              Esta Semana
             </Button>
             <Button
               variant="outline"
@@ -135,8 +128,8 @@ export function WeekView({
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-4 gap-4">
+      <CardContent className="overflow-x-auto lg:overflow-visible w-[700px] lg:w-full">
+        <div className="grid grid-cols-7 gap-4">
           {weekDays.map((date, index) => {
             const isToday = date.toDateString() === today.toDateString();
             const dayEvents = getEventsForDate(date);
@@ -144,17 +137,17 @@ export function WeekView({
             return (
               <div
                 key={index}
-                className={`lg:min-h-[250px] max-h-[250px] overflow-hidden p-4 border rounded-lg ${
+                className={`min-h-[200px] lg:min-h-[250px] max-h-[250px] overflow-hidden p-3 lg:p-4 border rounded-lg ${
                   isToday
                     ? "bg-blue-500/10 border-blue-500/30 shadow-lg"
                     : "bg-card border-border"
                 }`}
               >
                 {/* Header del día */}
-                <div className="flex justify-between">
-                  <div className="text-center mb-4 flex flex-col items-center justify-center gap-2">
+                <div className="flex justify-between mb-3">
+                  <div className="text-center flex flex-col items-center justify-center gap-1">
                     <div
-                      className={`text-sm font-medium ${
+                      className={`text-xs lg:text-sm font-medium ${
                         isToday
                           ? "text-blue-600 font-bold"
                           : "text-muted-foreground"
@@ -163,7 +156,7 @@ export function WeekView({
                       {shortDayNames[index]}
                     </div>
                     <div
-                      className={`text-xl font-bold ${
+                      className={`text-lg lg:text-xl font-bold ${
                         isToday ? "text-blue-600" : "text-foreground"
                       }`}
                     >
@@ -171,15 +164,13 @@ export function WeekView({
                     </div>
                   </div>
                   {isToday && (
-                    <div className="text-xs text-blue-500 font-medium mt-1">
-                      Hoy
-                    </div>
+                    <div className="text-xs text-blue-500 font-medium">Hoy</div>
                   )}
                 </div>
                 {/* Eventos del día */}
-                <div className="flex flex-col gap-2 max-h-[150px] overflow-y-auto">
+                <div className="flex flex-col gap-2 max-h-[120px] lg:max-h-[150px] overflow-y-auto">
                   {dayEvents.length === 0 ? (
-                    <div className="text-xs text-muted-foreground text-center py-8">
+                    <div className="text-xs text-muted-foreground text-center py-4">
                       Sin eventos
                     </div>
                   ) : (
@@ -191,7 +182,7 @@ export function WeekView({
                       return (
                         <div
                           key={event.id}
-                          className={`p-2 rounded-md text-white text-sm cursor-pointer hover:opacity-80 transition-all ${
+                          className={`p-2 rounded-md text-white text-xs lg:text-sm cursor-pointer hover:opacity-80 transition-all ${
                             categoryColors[
                               event.category as keyof typeof categoryColors
                             ]

@@ -73,20 +73,20 @@ export function Sidebar({ className }: SidebarProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50 lg:hidden"
+        className="fixed top-4 left-4 z-50 lg:hidden bg-background border border-border rounded-full"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         {isMobileOpen ? (
-          <X className="h-4 w-4" />
+          <X className="h-8 w-8 text-foreground border border-border rounded-full p-1" />
         ) : (
-          <Menu className="h-4 w-4" />
+          <Menu className="h-8 w-8 border border-border rounded-full p-1 text-foreground" />
         )}
       </Button>
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen bg-sidebar-background border-r border-sidebar-border transition-all duration-300",
+          "fixed left-0 top-0 z-40 h-screen bg-background border-r border-border transition-all duration-300",
           isCollapsed ? "w-16" : "w-64",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           className
@@ -94,16 +94,16 @@ export function Sidebar({ className }: SidebarProps) {
       >
         <div className="flex h-full flex-col">
           {/* Header */}
-          <div className="flex h-16 items-center justify-between px-4 border-b border-sidebar-border">
+          <div className="flex mx-auto lg:mx-0 h-16 items-center justify-between px-4 border-b border-border">
             {!isCollapsed && (
-              <h1 className="text-lg font-semibold text-sidebar-primary">
+              <h1 className="text-lg font-semibold text-foreground">
                 Central IMA
               </h1>
             )}
             <Button
               variant="ghost"
               size="icon"
-              className="hidden lg:flex h-8 w-8"
+              className="hidden lg:flex h-8 w-8 text-foreground"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
               <Menu className="h-4 w-4" />
@@ -123,8 +123,8 @@ export function Sidebar({ className }: SidebarProps) {
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground hover:bg-accent hover:text-accent-foreground",
                     isCollapsed && "justify-center"
                   )}
                   onClick={() => setIsMobileOpen(false)}
@@ -137,17 +137,17 @@ export function Sidebar({ className }: SidebarProps) {
           </nav>
 
           {/* User section */}
-          <div className="border-t border-sidebar-border p-4">
+          <div className="border-t border-border p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
                 I
               </div>
               {!isCollapsed && (
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-sidebar-primary truncate">
+                  <p className="text-sm font-medium text-foreground truncate">
                     Imanol MU
                   </p>
-                  <p className="text-xs text-sidebar-foreground truncate">
+                  <p className="text-xs text-muted-foreground truncate">
                     imamultidev
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export function Sidebar({ className }: SidebarProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-sidebar-foreground hover:text-sidebar-accent-foreground"
+                className="h-8 w-8 text-foreground hover:text-accent-foreground"
                 title="Cerrar sesión"
                 onClick={handleLogout}
               >

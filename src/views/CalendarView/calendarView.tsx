@@ -170,13 +170,15 @@ export function CalendarView() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Calendario</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-white">
+            Calendario
+          </h1>
+          <p className="text-muted-foreground text-sm mt-2 lg:mt-0 lg:text-base">
             Gestiona tus eventos, tareas y recordatorios
           </p>
-          <div className="flex items-center gap-4 mt-2 text-sm">
+          <div className="flex items-center gap-4 mt-4 lg:mt-2 text-sm flex-wrap justify-center lg:justify-start">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span className="text-muted-foreground">
@@ -197,12 +199,15 @@ export function CalendarView() {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-col lg:flex-row mt-2 lg:mt-0">
           <ViewControls
             currentView={currentView}
             onViewChange={setCurrentView}
           />
-          <Button onClick={() => setIsEventModalOpen(true)}>
+          <Button
+            onClick={() => setIsEventModalOpen(true)}
+            className="mt-2 lg:mt-0"
+          >
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Evento
           </Button>

@@ -9,9 +9,9 @@ interface DocsHeaderProps {
 
 export function DocsHeader({ onAddDocument }: DocsHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-3xl font-bold tracking-tight text-white">
           Centro de Documentación
         </h1>
         <p className="text-muted-foreground">

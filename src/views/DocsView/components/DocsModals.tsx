@@ -60,7 +60,7 @@ export function DocsModals({
         isOpen={isDocModalOpen}
         onClose={onCloseDocModal}
         title="Añadir Nuevo Documento"
-        className="max-w-md"
+        className="max-w-md max-h-[90vh] overflow-y-auto"
       >
         <form
           className="space-y-4"
@@ -112,7 +112,7 @@ export function DocsModals({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-foreground block mb-2">
                 Tipo
@@ -162,7 +162,7 @@ export function DocsModals({
             <label className="text-sm font-medium text-foreground block mb-2">
               Tags
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Input
                 placeholder="react, javascript, tutorial (separados por comas)"
                 value={tempTagsInput}
@@ -173,14 +173,24 @@ export function DocsModals({
                     const inputValue = tempTagsInput;
                     const tags = inputValue
                       .split(",")
-                      .map((tag: string) => tag.trim())
-                      .filter((tag: string) => tag.length > 0);
+                      .map((tag: string) => tag.trim().toLowerCase())
+                      .filter((tag: string) => tag.length > 0)
+                      .filter(
+                        (tag: string) =>
+                          !newDocument.tags
+                            .map((t) => t.toLowerCase())
+                            .includes(tag)
+                      );
 
-                    onNewDocumentChange({
-                      ...newDocument,
-                      tags: [...newDocument.tags, ...tags],
-                    });
-                    onTempTagsInputChange("");
+                    if (tags.length > 0) {
+                      onNewDocumentChange({
+                        ...newDocument,
+                        tags: [...newDocument.tags, ...tags],
+                      });
+                      onTempTagsInputChange("");
+                    } else {
+                      onTempTagsInputChange("");
+                    }
                   }
                 }}
               />
@@ -193,14 +203,24 @@ export function DocsModals({
                   const inputValue = tempTagsInput;
                   const tags = inputValue
                     .split(",")
-                    .map((tag: string) => tag.trim())
-                    .filter((tag: string) => tag.length > 0);
+                    .map((tag: string) => tag.trim().toLowerCase())
+                    .filter((tag: string) => tag.length > 0)
+                    .filter(
+                      (tag: string) =>
+                        !newDocument.tags
+                          .map((t) => t.toLowerCase())
+                          .includes(tag)
+                    );
 
-                  onNewDocumentChange({
-                    ...newDocument,
-                    tags: [...newDocument.tags, ...tags],
-                  });
-                  onTempTagsInputChange("");
+                  if (tags.length > 0) {
+                    onNewDocumentChange({
+                      ...newDocument,
+                      tags: [...newDocument.tags, ...tags],
+                    });
+                    onTempTagsInputChange("");
+                  } else {
+                    onTempTagsInputChange("");
+                  }
                 }}
               >
                 Añadir
@@ -210,7 +230,7 @@ export function DocsModals({
               <div className="flex flex-wrap gap-1 mt-2">
                 {newDocument.tags.map((tag, index) => (
                   <span
-                    key={index}
+                    key={`new-tag-${index}-${tag}`}
                     className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md flex items-center gap-1"
                   >
                     {tag}
@@ -231,11 +251,12 @@ export function DocsModals({
               </div>
             )}
             <p className="text-xs text-muted-foreground mt-1">
-              Escribe los tags y presiona Enter o el botón Añadir
+              Escribe los tags y presiona Enter o el botón Añadir. Los tags
+              duplicados se ignorarán.
             </p>
           </div>
 
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
               className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
@@ -259,7 +280,7 @@ export function DocsModals({
         isOpen={isEditModalOpen}
         onClose={onCloseEditModal}
         title="Editar Documento"
-        className="max-w-md"
+        className="max-w-md max-h-[90vh] overflow-y-auto"
       >
         {editingDoc && (
           <form
@@ -312,7 +333,7 @@ export function DocsModals({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Tipo
@@ -362,7 +383,7 @@ export function DocsModals({
               <label className="text-sm font-medium text-foreground block mb-2">
                 Tags
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   placeholder="react, javascript, tutorial (separados por comas)"
                   value={editingTagsInput}
@@ -373,14 +394,24 @@ export function DocsModals({
                       const inputValue = editingTagsInput;
                       const tags = inputValue
                         .split(",")
-                        .map((tag: string) => tag.trim())
-                        .filter((tag: string) => tag.length > 0);
+                        .map((tag: string) => tag.trim().toLowerCase())
+                        .filter((tag: string) => tag.length > 0)
+                        .filter(
+                          (tag: string) =>
+                            !editingDoc.tags
+                              .map((t) => t.toLowerCase())
+                              .includes(tag)
+                        );
 
-                      onEditingDocChange({
-                        ...editingDoc,
-                        tags: [...editingDoc.tags, ...tags],
-                      });
-                      onEditingTagsInputChange("");
+                      if (tags.length > 0) {
+                        onEditingDocChange({
+                          ...editingDoc,
+                          tags: [...editingDoc.tags, ...tags],
+                        });
+                        onEditingTagsInputChange("");
+                      } else {
+                        onEditingTagsInputChange("");
+                      }
                     }
                   }}
                 />
@@ -392,14 +423,24 @@ export function DocsModals({
                     const inputValue = editingTagsInput;
                     const tags = inputValue
                       .split(",")
-                      .map((tag: string) => tag.trim())
-                      .filter((tag: string) => tag.length > 0);
+                      .map((tag: string) => tag.trim().toLowerCase())
+                      .filter((tag: string) => tag.length > 0)
+                      .filter(
+                        (tag: string) =>
+                          !editingDoc.tags
+                            .map((t) => t.toLowerCase())
+                            .includes(tag)
+                      );
 
-                    onEditingDocChange({
-                      ...editingDoc,
-                      tags: [...editingDoc.tags, ...tags],
-                    });
-                    onEditingTagsInputChange("");
+                    if (tags.length > 0) {
+                      onEditingDocChange({
+                        ...editingDoc,
+                        tags: [...editingDoc.tags, ...tags],
+                      });
+                      onEditingTagsInputChange("");
+                    } else {
+                      onEditingTagsInputChange("");
+                    }
                   }}
                 >
                   Añadir
@@ -409,7 +450,7 @@ export function DocsModals({
                 <div className="flex flex-wrap gap-1 mt-2">
                   {editingDoc.tags.map((tag, index) => (
                     <span
-                      key={index}
+                      key={`edit-tag-${index}-${tag}`}
                       className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md flex items-center gap-1"
                     >
                       {tag}
@@ -430,11 +471,12 @@ export function DocsModals({
                 </div>
               )}
               <p className="text-xs text-muted-foreground mt-1">
-                Escribe los tags y presiona Enter o el botón Añadir
+                Escribe los tags y presiona Enter o el botón Añadir. Los tags
+                duplicados se ignorarán.
               </p>
             </div>
 
-            <div className="flex gap-2 pt-4">
+            <div className="flex flex-col sm:flex-row gap-2 pt-4">
               <Button
                 type="submit"
                 className="flex-1 hover:bg-blue-500 hover:text-white transition-colors duration-300"

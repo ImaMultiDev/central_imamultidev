@@ -6,7 +6,6 @@ import {
   MicrophoneTest,
   SpeakerTest,
   ScreenTest,
-  TestSummary,
 } from "./components";
 
 // Types
@@ -48,15 +47,16 @@ export function HardwareTestView() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Test de Hardware</h1>
+        <h1 className="text-3xl font-bold text-white">Test de Hardware</h1>
         <p className="text-muted-foreground">
           Verifica el funcionamiento de los componentes de tu dispositivo
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Camera Test */}
         <CameraTest
+          className="lg:col-span-3"
           testStatus={cameraTest}
           onTestStatusChange={setCameraTest}
           cameraStream={cameraStream}
@@ -87,14 +87,6 @@ export function HardwareTestView() {
           onTestStatusChange={setScreenTest}
         />
       </div>
-
-      {/* Summary */}
-      <TestSummary
-        cameraTest={cameraTest}
-        micTest={micTest}
-        speakerTest={speakerTest}
-        screenTest={screenTest}
-      />
     </div>
   );
 }
