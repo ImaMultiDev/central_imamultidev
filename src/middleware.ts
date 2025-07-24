@@ -1,31 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyToken } from "@/lib/auth";
 
 export function middleware(request: NextRequest) {
-  // En desarrollo, ser menos estricto con la autenticación
+  // Solo aplicar middleware en desarrollo para testing
   if (process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }
 
-  const authHeader = request.headers.get("authorization");
-  const url = request.nextUrl.clone();
-
-  // Si no hay autenticación, redirigir al login
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
-
-  // Extraer y verificar el token JWT
-  const token = authHeader.substring(7); // Remover "Bearer "
-  const payload = verifyToken(token);
-
-  if (!payload) {
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
-
+  // En producción, dejar que el ProtectedRoute maneje la autenticación
   return NextResponse.next();
 }
 

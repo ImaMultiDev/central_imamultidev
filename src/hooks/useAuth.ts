@@ -11,9 +11,14 @@ export function useAuth() {
     const token = localStorage.getItem("authToken");
     const user = localStorage.getItem("user");
 
+    console.log("useAuth - Token:", token ? "Presente" : "Ausente");
+    console.log("useAuth - User:", user ? "Presente" : "Ausente");
+
     if (token && user) {
+      console.log("useAuth - Usuario autenticado");
       setIsAuthenticated(true);
     } else {
+      console.log("useAuth - Usuario no autenticado");
       setIsAuthenticated(false);
     }
     setIsLoading(false);

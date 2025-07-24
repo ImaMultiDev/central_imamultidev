@@ -40,6 +40,12 @@ export default function LoginPage() {
         localStorage.setItem("authToken", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
+        console.log(
+          "Login exitoso - Token guardado:",
+          data.token ? "Sí" : "No"
+        );
+        console.log("Login exitoso - User guardado:", data.user ? "Sí" : "No");
+
         // Redirigir al dashboard
         window.location.href = "/";
       } else {
