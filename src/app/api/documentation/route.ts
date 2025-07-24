@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getTokenFromRequest } from "@/lib/auth";
 
 // GET /api/documentation - Obtener toda la documentación del usuario
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const token = getTokenFromRequest(request);
+    const user = await getCurrentUser(token);
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
@@ -28,7 +29,8 @@ export async function GET() {
 // POST /api/documentation - Crear nueva documentación
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const token = getTokenFromRequest(request);
+    const user = await getCurrentUser(token);
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
@@ -59,7 +61,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error al crear documentación:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      {
+        error: "Error interno del servidor",
+        details: error instanceof Error ? error.message : "Error desconocido",
+      },
       { status: 500 }
     );
   }

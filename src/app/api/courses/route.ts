@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getTokenFromRequest } from "@/lib/auth";
 
 // GET /api/courses - Obtener todos los cursos del usuario
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const token = getTokenFromRequest(request);
+    const user = await getCurrentUser(token);
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
@@ -28,7 +29,8 @@ export async function GET() {
 // POST /api/courses - Crear un nuevo curso
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const token = getTokenFromRequest(request);
+    const user = await getCurrentUser(token);
     if (!user) {
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
