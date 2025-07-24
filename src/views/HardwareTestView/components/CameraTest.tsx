@@ -124,13 +124,14 @@ export function CameraTest({
               ref={videoRef}
               autoPlay
               playsInline
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-48 lg:h-96 object-cover rounded-lg"
             />
+
             <Button
               onClick={stopCamera}
               variant="destructive"
-              size="sm"
-              className="absolute top-2 right-2"
+              size="lg"
+              className="absolute bottom-2 right-2"
             >
               Detener
             </Button>

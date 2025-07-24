@@ -56,12 +56,13 @@ export function HardwareTestView() {
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Camera Test */}
         <CameraTest
-          className="lg:col-span-3"
+          className="lg:col-span-2"
           testStatus={cameraTest}
           onTestStatusChange={setCameraTest}
           cameraStream={cameraStream}
           onCameraStreamChange={setCameraStream}
         />
+        <div className="lg:col-span-1"></div>
 
         {/* Microphone Test */}
         <MicrophoneTest
