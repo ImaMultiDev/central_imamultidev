@@ -4,32 +4,36 @@ import {
   DocumentationType,
   DocumentationCategory,
 } from "@/types";
+import { apiRequest, handleApiResponse } from "@/lib/api";
+
+// Tipo para la respuesta de la API sin fechas parseadas
+type DocumentationResponse = Omit<Documentation, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
 
 export function useDocumentation() {
   const [documentation, setDocumentation] = useState<Documentation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Función para convertir fechas de string a Date
-  const parseDates = (doc: Record<string, unknown>): Documentation =>
-    ({
+  // Función helper para parsear fechas
+  const parseDates = (doc: DocumentationResponse): Documentation => {
+    return {
       ...doc,
-      createdAt: new Date(doc.createdAt as string),
-      updatedAt: new Date(doc.updatedAt as string),
-    } as Documentation);
+      createdAt: new Date(doc.createdAt),
+      updatedAt: new Date(doc.updatedAt),
+    };
+  };
 
   // Cargar documentación
   const fetchDocumentation = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/documentation");
-      if (!response.ok) {
-        throw new Error("Error al cargar documentación");
-      }
-      const data = await response.json();
-      // Convertir fechas de string a Date
-      const parsedData = data.map(parseDates);
-      setDocumentation(parsedData);
+      const response = await apiRequest("/api/documentation");
+      const data = await handleApiResponse<DocumentationResponse[]>(response);
+      const docsWithDates = data.map(parseDates);
+      setDocumentation(docsWithDates);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -44,26 +48,18 @@ export function useDocumentation() {
     url: string;
     type: DocumentationType;
     category: DocumentationCategory;
-    tags: string[];
+    tags?: string[];
   }) => {
     try {
-      const response = await fetch("/api/documentation", {
+      const response = await apiRequest("/api/documentation", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(docData),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al crear documentación");
-      }
-
-      const newDoc = await response.json();
-      // Convertir fechas del nuevo documento
-      const parsedNewDoc = parseDates(newDoc);
-      setDocumentation((prev) => [...prev, parsedNewDoc]);
-      return parsedNewDoc;
+      const newDoc = await handleApiResponse<DocumentationResponse>(response);
+      const docWithDates = parseDates(newDoc);
+      setDocumentation((prev) => [...prev, docWithDates]);
+      return docWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -79,29 +75,23 @@ export function useDocumentation() {
       url: string;
       type: DocumentationType;
       category: DocumentationCategory;
-      tags: string[];
+      tags?: string[];
     }
   ) => {
     try {
-      const response = await fetch(`/api/documentation/${id}`, {
+      const response = await apiRequest(`/api/documentation/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(docData),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al actualizar documentación");
-      }
-
-      const updatedDoc = await response.json();
-      // Convertir fechas del documento actualizado
-      const parsedUpdatedDoc = parseDates(updatedDoc);
-      setDocumentation((prev) =>
-        prev.map((doc) => (doc.id === id ? parsedUpdatedDoc : doc))
+      const updatedDoc = await handleApiResponse<DocumentationResponse>(
+        response
       );
-      return parsedUpdatedDoc;
+      const docWithDates = parseDates(updatedDoc);
+      setDocumentation((prev) =>
+        prev.map((doc) => (doc.id === id ? docWithDates : doc))
+      );
+      return docWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -111,14 +101,11 @@ export function useDocumentation() {
   // Eliminar documentación
   const deleteDocumentation = async (id: string) => {
     try {
-      const response = await fetch(`/api/documentation/${id}`, {
+      const response = await apiRequest(`/api/documentation/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) {
-        throw new Error("Error al eliminar documentación");
-      }
-
+      await handleApiResponse(response);
       setDocumentation((prev) => prev.filter((doc) => doc.id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");

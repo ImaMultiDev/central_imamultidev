@@ -90,7 +90,8 @@ export function CalendarView() {
     try {
       await createEvent({
         ...newEvent,
-        endDate: newEvent.endDate || undefined,
+        startDate: newEvent.startDate.toISOString(),
+        endDate: newEvent.endDate?.toISOString(),
       });
       setIsEventModalOpen(false);
       setNewEvent({
@@ -118,8 +119,8 @@ export function CalendarView() {
       await updateEvent(editingEvent.id, {
         title: editingEvent.title,
         description: editingEvent.description || "",
-        startDate: editingEvent.startDate,
-        endDate: editingEvent.endDate || undefined,
+        startDate: editingEvent.startDate.toISOString(),
+        endDate: editingEvent.endDate?.toISOString(),
         category: editingEvent.category,
         isAllDay: editingEvent.isAllDay,
       });

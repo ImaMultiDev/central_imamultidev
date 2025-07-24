@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Event, EventCategory } from "@/types";
+import { apiRequest, handleApiResponse } from "@/lib/api";
 
 export function useEvents() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -10,29 +11,9 @@ export function useEvents() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/events");
-      if (!response.ok) {
-        throw new Error("Error al cargar eventos");
-      }
-      const data = await response.json();
-      // Convertir las fechas de string a Date
-      const eventsWithDates = data.map(
-        (
-          event: Event & {
-            startDate: string;
-            endDate?: string;
-            createdAt: string;
-            updatedAt: string;
-          }
-        ) => ({
-          ...event,
-          startDate: new Date(event.startDate),
-          endDate: event.endDate ? new Date(event.endDate) : null,
-          createdAt: new Date(event.createdAt),
-          updatedAt: new Date(event.updatedAt),
-        })
-      );
-      setEvents(eventsWithDates);
+      const response = await apiRequest("/api/events");
+      const data = await handleApiResponse<Event[]>(response);
+      setEvents(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -44,41 +25,20 @@ export function useEvents() {
   const createEvent = async (eventData: {
     title: string;
     description?: string;
-    startDate: Date;
-    endDate?: Date;
+    startDate: string;
+    endDate?: string;
     category: EventCategory;
     isAllDay?: boolean;
   }) => {
-    // Convertir fechas a ISO string para evitar problemas de zona horaria
-    const eventDataToSend = {
-      ...eventData,
-      startDate: eventData.startDate.toISOString(),
-      endDate: eventData.endDate?.toISOString(),
-    };
     try {
-      const response = await fetch("/api/events", {
+      const response = await apiRequest("/api/events", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventDataToSend),
+        body: JSON.stringify(eventData),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al crear evento");
-      }
-
-      const newEvent = await response.json();
-      // Convertir las fechas del nuevo evento
-      const eventWithDates = {
-        ...newEvent,
-        startDate: new Date(newEvent.startDate),
-        endDate: newEvent.endDate ? new Date(newEvent.endDate) : null,
-        createdAt: new Date(newEvent.createdAt),
-        updatedAt: new Date(newEvent.updatedAt),
-      };
-      setEvents((prev) => [...prev, eventWithDates]);
-      return eventWithDates;
+      const newEvent = await handleApiResponse<Event>(response);
+      setEvents((prev) => [...prev, newEvent]);
+      return newEvent;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -91,44 +51,23 @@ export function useEvents() {
     eventData: {
       title: string;
       description?: string;
-      startDate: Date;
-      endDate?: Date;
+      startDate: string;
+      endDate?: string;
       category: EventCategory;
       isAllDay?: boolean;
     }
   ) => {
-    // Convertir fechas a ISO string para evitar problemas de zona horaria
-    const eventDataToSend = {
-      ...eventData,
-      startDate: eventData.startDate.toISOString(),
-      endDate: eventData.endDate?.toISOString(),
-    };
     try {
-      const response = await fetch(`/api/events/${id}`, {
+      const response = await apiRequest(`/api/events/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventDataToSend),
+        body: JSON.stringify(eventData),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al actualizar evento");
-      }
-
-      const updatedEvent = await response.json();
-      // Convertir las fechas del evento actualizado
-      const eventWithDates = {
-        ...updatedEvent,
-        startDate: new Date(updatedEvent.startDate),
-        endDate: updatedEvent.endDate ? new Date(updatedEvent.endDate) : null,
-        createdAt: new Date(updatedEvent.createdAt),
-        updatedAt: new Date(updatedEvent.updatedAt),
-      };
+      const updatedEvent = await handleApiResponse<Event>(response);
       setEvents((prev) =>
-        prev.map((event) => (event.id === id ? eventWithDates : event))
+        prev.map((event) => (event.id === id ? updatedEvent : event))
       );
-      return eventWithDates;
+      return updatedEvent;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -138,14 +77,11 @@ export function useEvents() {
   // Eliminar evento
   const deleteEvent = async (id: string) => {
     try {
-      const response = await fetch(`/api/events/${id}`, {
+      const response = await apiRequest(`/api/events/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) {
-        throw new Error("Error al eliminar evento");
-      }
-
+      await handleApiResponse(response);
       setEvents((prev) => prev.filter((event) => event.id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");

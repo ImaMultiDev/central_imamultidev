@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Course, CourseStatus } from "@/types";
+import { apiRequest, handleApiResponse } from "@/lib/api";
 
 export function useCourses() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -10,11 +11,8 @@ export function useCourses() {
   const fetchCourses = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/courses");
-      if (!response.ok) {
-        throw new Error("Error al cargar cursos");
-      }
-      const data = await response.json();
+      const response = await apiRequest("/api/courses");
+      const data = await handleApiResponse<Course[]>(response);
       setCourses(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
@@ -33,20 +31,12 @@ export function useCourses() {
     status?: CourseStatus;
   }) => {
     try {
-      const response = await fetch("/api/courses", {
+      const response = await apiRequest("/api/courses", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(courseData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.details || "Error al crear curso");
-      }
-
-      const newCourse = await response.json();
+      const newCourse = await handleApiResponse<Course>(response);
       setCourses((prev) => [...prev, newCourse]);
       return newCourse;
     } catch (err) {
@@ -68,19 +58,12 @@ export function useCourses() {
     }
   ) => {
     try {
-      const response = await fetch(`/api/courses/${id}`, {
+      const response = await apiRequest(`/api/courses/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(courseData),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al actualizar curso");
-      }
-
-      const updatedCourse = await response.json();
+      const updatedCourse = await handleApiResponse<Course>(response);
       setCourses((prev) =>
         prev.map((course) => (course.id === id ? updatedCourse : course))
       );
@@ -94,19 +77,12 @@ export function useCourses() {
   // Cambiar estado del curso
   const updateCourseStatus = async (id: string, status: CourseStatus) => {
     try {
-      const response = await fetch(`/api/courses/${id}/status`, {
+      const response = await apiRequest(`/api/courses/${id}/status`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ status }),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al cambiar estado del curso");
-      }
-
-      const updatedCourse = await response.json();
+      const updatedCourse = await handleApiResponse<Course>(response);
       setCourses((prev) =>
         prev.map((course) => (course.id === id ? updatedCourse : course))
       );
@@ -120,14 +96,11 @@ export function useCourses() {
   // Eliminar curso
   const deleteCourse = async (id: string) => {
     try {
-      const response = await fetch(`/api/courses/${id}`, {
+      const response = await apiRequest(`/api/courses/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) {
-        throw new Error("Error al eliminar curso");
-      }
-
+      await handleApiResponse(response);
       setCourses((prev) => prev.filter((course) => course.id !== id));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
