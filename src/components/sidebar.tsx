@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const navigation = [
   {
@@ -52,6 +53,11 @@ export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <>
@@ -134,15 +140,15 @@ export function Sidebar({ className }: SidebarProps) {
           <div className="border-t border-sidebar-border p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                U
+                I
               </div>
               {!isCollapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-sidebar-primary truncate">
-                    Usuario
+                    Imanol MU
                   </p>
                   <p className="text-xs text-sidebar-foreground truncate">
-                    user@example.com
+                    imamultidev
                   </p>
                 </div>
               )}
@@ -151,6 +157,7 @@ export function Sidebar({ className }: SidebarProps) {
                 size="icon"
                 className="h-8 w-8 text-sidebar-foreground hover:text-sidebar-accent-foreground"
                 title="Cerrar sesión"
+                onClick={handleLogout}
               >
                 <LogOut className="h-4 w-4" />
               </Button>

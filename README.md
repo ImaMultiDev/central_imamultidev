@@ -52,6 +52,31 @@ Una aplicación web moderna tipo dashboard que funciona como centro de operacion
 - Información detallada del navegador y APIs disponibles
 - Resumen visual de resultados de tests
 
+## 🔐 Autenticación
+
+La aplicación incluye un sistema de autenticación básica para proteger el acceso:
+
+### **Características:**
+
+- ✅ **Autenticación básica** con usuario/contraseña
+- ✅ **Protección automática** en producción
+- ✅ **Sesión persistente** con localStorage
+- ✅ **Logout funcional** desde el sidebar
+- ✅ **Middleware de protección** de rutas
+
+### **Configuración:**
+
+- **Desarrollo**: No requiere autenticación
+- **Producción**: Requiere credenciales configuradas
+- **Variables**: `AUTH_USERNAME` y `AUTH_PASSWORD`
+
+### **Uso:**
+
+1. **Acceder a la aplicación** → Redirige a `/login`
+2. **Ingresar credenciales** → Usuario y contraseña
+3. **Acceso completo** → Dashboard y todas las funcionalidades
+4. **Cerrar sesión** → Botón en sidebar
+
 ## 🛠️ Stack Tecnológico
 
 - **Frontend**: Next.js 15 con App Router, React 19, TypeScript
@@ -127,13 +152,60 @@ La aplicación estará disponible en `http://localhost:3000`
 
 ## 🚀 Despliegue en Producción
 
-### Vercel (Recomendado)
+### Vercel + Railway (Recomendado)
 
-1. **Conectar repositorio a Vercel**
-2. **Configurar variables de entorno en Vercel**
-3. **Configurar base de datos PostgreSQL**
-   - Recomendado: Neon, Supabase, o Railway
+1. **Configurar Railway para PostgreSQL**
+
+   - Crear cuenta en [Railway](https://railway.app/)
+   - Crear nueva base de datos PostgreSQL
+   - Copiar la URL de conexión
+
+2. **Configurar Vercel**
+   - Conectar repositorio a [Vercel](https://vercel.com/)
+   - Configurar variables de entorno:
+
+```env
+# Base de datos PostgreSQL (Railway)
+DATABASE_URL="postgresql://username:password@railway-host:5432/database"
+
+# Autenticación básica
+AUTH_USERNAME="imamultidev"
+AUTH_PASSWORD="tu-contraseña-super-segura"
+
+# Variables públicas (solo para desarrollo)
+NEXT_PUBLIC_AUTH_USERNAME="imamultidev"
+NEXT_PUBLIC_AUTH_PASSWORD="tu-contraseña-super-segura"
+
+# Next.js
+NEXTAUTH_URL="https://tu-dominio.vercel.app"
+NODE_ENV="production"
+```
+
+3. **Ejecutar migraciones**
+
+   ```bash
+   # En Railway CLI o en Vercel Functions
+   npx prisma db push
+   ```
+
 4. **Deploy automático**
+   - Vercel detectará automáticamente Next.js
+   - Deploy automático en cada push a main
+
+### Variables de Entorno Requeridas
+
+#### **Producción (Vercel):**
+
+- `DATABASE_URL` - URL de PostgreSQL en Railway
+- `AUTH_USERNAME` - Usuario para autenticación
+- `AUTH_PASSWORD` - Contraseña para autenticación
+- `NEXTAUTH_URL` - URL de tu aplicación
+
+#### **Desarrollo Local:**
+
+- `DATABASE_URL` - URL de PostgreSQL local
+- `NEXT_PUBLIC_AUTH_USERNAME` - Usuario para desarrollo
+- `NEXT_PUBLIC_AUTH_PASSWORD` - Contraseña para desarrollo
 
 ### Docker
 
@@ -142,7 +214,11 @@ La aplicación estará disponible en `http://localhost:3000`
 docker build -t central-ima .
 
 # Ejecutar contenedor
-docker run -p 3000:3000 -e DATABASE_URL="tu_url" central-ima
+docker run -p 3000:3000 \
+  -e DATABASE_URL="tu_url" \
+  -e AUTH_USERNAME="imamultidev" \
+  -e AUTH_PASSWORD="tu-contraseña" \
+  central-ima
 ```
 
 ## 📁 Estructura del Proyecto
@@ -246,7 +322,7 @@ La aplicación usa Tailwind CSS v4 con:
 
 Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
-## 🙏 Agradecimientos
+## �� Agradecimientos
 
 - [Next.js](https://nextjs.org/) - Framework React
 - [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
