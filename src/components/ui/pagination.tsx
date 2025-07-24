@@ -55,7 +55,7 @@ export function Pagination({
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="h-8 w-8 p-0"
+        className="h-8 w-8 p-0 text-white border-gray-600 hover:bg-gray-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -64,14 +64,18 @@ export function Pagination({
         <div key={index}>
           {page === "..." ? (
             <div className="flex items-center justify-center h-8 w-8">
-              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+              <MoreHorizontal className="h-4 w-4 text-gray-400" />
             </div>
           ) : (
             <Button
               variant={currentPage === page ? "default" : "outline"}
               size="sm"
               onClick={() => onPageChange(page as number)}
-              className="h-8 w-8 p-0"
+              className={`h-8 w-8 p-0 ${
+                currentPage === page
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "text-white border-gray-600 hover:bg-gray-700 hover:text-white"
+              }`}
             >
               {page}
             </Button>
@@ -84,7 +88,7 @@ export function Pagination({
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="h-8 w-8 p-0"
+        className="h-8 w-8 p-0 text-white border-gray-600 hover:bg-gray-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>

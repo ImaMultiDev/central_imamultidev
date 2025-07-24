@@ -152,3 +152,6 @@ temp/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Docs
+PROMPT.md
