@@ -21,8 +21,13 @@ export async function GET(request: NextRequest) {
     }
 
     console.log("🔍 Buscando cursos para usuario:", user.id);
+
+    // En desarrollo, filtrar por userId. En producción, obtener todos
+    const whereClause =
+      process.env.NODE_ENV === "development" ? { userId: user.id } : {};
+
     const courses = await prisma.course.findMany({
-      where: { userId: user.id },
+      where: whereClause,
       orderBy: { createdAt: "desc" },
     });
     console.log("✅ Cursos encontrados:", courses.length);
@@ -70,26 +75,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("🔍 Intentando crear curso en BD con datos:", {
+    // En desarrollo, incluir userId. En producción, no es necesario
+    const baseData = {
       title,
       description,
       platform,
       url,
       notes,
       status: status || "POR_COMENZAR",
-      userId: user.id,
-    });
+    };
+
+    console.log("🔍 Intentando crear curso en BD");
 
     const course = await prisma.course.create({
-      data: {
-        title,
-        description,
-        platform,
-        url,
-        notes,
-        status: status || "POR_COMENZAR",
-        userId: user.id,
-      },
+      data:
+        process.env.NODE_ENV === "development"
+          ? { ...baseData, userId: user.id }
+          : (baseData as Parameters<typeof prisma.course.create>[0]["data"]),
     });
 
     console.log("✅ Curso creado exitosamente:", course.id);

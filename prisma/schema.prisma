@@ -37,12 +37,12 @@ model Event {
   endDate     DateTime?
   category    EventCategory
   isAllDay    Boolean       @default(false)
-  userId      String
+  userId      String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relations (opcional en producción)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("events")
 }
@@ -62,17 +62,15 @@ model Course {
   status      CourseStatus   @default(POR_COMENZAR)
   url         String?
   notes       String?
-  userId      String
+  userId      String?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relations (opcional en producción)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("courses")
 }
-
-
 
 enum CourseStatus {
   EN_PROGRESO
@@ -88,12 +86,12 @@ model Documentation {
   type        DocumentationType
   category    DocumentationCategory
   tags        String[]
-  userId      String
+  userId      String?
   createdAt   DateTime              @default(now())
   updatedAt   DateTime              @updatedAt
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Relations (opcional en producción)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("documentation")
 }
