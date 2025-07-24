@@ -61,6 +61,7 @@ export function DocsView() {
   });
   const [tempTagsInput, setTempTagsInput] = useState("");
   const [editingTagsInput, setEditingTagsInput] = useState("");
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const {
     documentation,
@@ -69,16 +70,12 @@ export function DocsView() {
     deleteDocumentation,
   } = useDocumentation();
 
-  // Cerrar menús cuando se hace clic fuera de ellos
+  // Cerrar menús al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest(".relative")) {
-        // Cerrar todos los menús
-        const menus = document.querySelectorAll('[id^="menu-"]');
-        menus.forEach((menu) => {
-          menu.classList.add("hidden");
-        });
+      const target = event.target as Element;
+      if (!target.closest(".doc-menu-button")) {
+        setOpenMenuId(null);
       }
     };
 
@@ -194,6 +191,8 @@ export function DocsView() {
         documents={filteredDocuments}
         onEditDocument={handleEditDocument}
         onDeleteDocument={handleDeleteDocument}
+        openMenuId={openMenuId}
+        onOpenMenuChange={setOpenMenuId}
         typeColors={typeColors}
         typeLabels={typeLabels}
         categoryColors={categoryColors}

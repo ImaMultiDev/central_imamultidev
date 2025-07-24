@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import {
-  ExternalLink,
-  MoreHorizontal,
-  Edit,
-  Trash2,
-  Wrench,
-} from "lucide-react";
+import { ExternalLink, MoreHorizontal, Wrench } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -23,6 +17,8 @@ interface ToolsGridProps {
   tools: Tool[];
   onEditTool: (tool: Tool) => void;
   onDeleteTool: (toolId: string) => void;
+  openMenuId: string | null;
+  onOpenMenuChange: (menuId: string | null) => void;
   typeColors: Record<string, string>;
   typeLabels: Record<string, string>;
   categoryColors: Record<string, string>;
@@ -33,6 +29,8 @@ export function ToolsGrid({
   tools,
   onEditTool,
   onDeleteTool,
+  openMenuId,
+  onOpenMenuChange,
   typeColors,
   typeLabels,
   categoryColors,
@@ -73,41 +71,40 @@ export function ToolsGrid({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
-                    onClick={() => {
-                      // Toggle menu for this specific tool
-                      const menuId = `menu-${tool.id}`;
-                      const menu = document.getElementById(menuId);
-                      if (menu) {
-                        menu.classList.toggle("hidden");
-                      }
+                    className="h-8 w-8 tool-menu-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenMenuChange(openMenuId === tool.id ? null : tool.id);
                     }}
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
-                  <div
-                    id={`menu-${tool.id}`}
-                    className="absolute right-0 top-8 z-10 hidden bg-background border border-border rounded-md shadow-lg min-w-[120px]"
-                  >
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start px-3 py-2 rounded-none border-b border-border"
-                      onClick={() => onEditTool(tool)}
-                    >
-                      <Edit className="mr-2 h-4 w-4" />
-                      Editar
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start px-3 py-2 rounded-none text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => onDeleteTool(tool.id)}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Eliminar
-                    </Button>
-                  </div>
+                  {openMenuId === tool.id && (
+                    <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                      <div className="py-1">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEditTool(tool);
+                            onOpenMenuChange(null);
+                          }}
+                          className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteTool(tool.id);
+                            onOpenMenuChange(null);
+                          }}
+                          className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

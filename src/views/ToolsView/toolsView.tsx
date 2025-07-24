@@ -27,6 +27,7 @@ export function ToolsView() {
   });
   const [tempTagsInput, setTempTagsInput] = useState("");
   const [editingTagsInput, setEditingTagsInput] = useState("");
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   // Colores para tipos de herramientas
   const typeColors: Record<string, string> = {
@@ -89,6 +90,21 @@ export function ToolsView() {
   // Cargar herramientas
   useEffect(() => {
     fetchTools();
+  }, []);
+
+  // Cerrar menús al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest(".tool-menu-button")) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
   const fetchTools = async () => {
@@ -190,6 +206,9 @@ export function ToolsView() {
 
   // Eliminar herramienta
   const handleDeleteTool = async (toolId: string) => {
+    if (!confirm("¿Estás seguro de que quieres eliminar esta herramienta?"))
+      return;
+
     try {
       const response = await fetch(`/api/tools/${toolId}`, {
         method: "DELETE",
@@ -242,6 +261,8 @@ export function ToolsView() {
         tools={filteredTools}
         onEditTool={handleEditClick}
         onDeleteTool={handleDeleteTool}
+        openMenuId={openMenuId}
+        onOpenMenuChange={setOpenMenuId}
         typeColors={typeColors}
         typeLabels={typeLabels}
         categoryColors={categoryColors}
