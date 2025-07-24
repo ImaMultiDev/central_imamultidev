@@ -4,10 +4,10 @@ import { prisma } from "@/lib/prisma";
 // PUT /api/tools/[id] - Actualizar una herramienta
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { title, description, url, type, category, tags } = body;
 
@@ -44,10 +44,10 @@ export async function PUT(
 // DELETE /api/tools/[id] - Eliminar una herramienta
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     await prisma.tool.delete({
       where: { id },
