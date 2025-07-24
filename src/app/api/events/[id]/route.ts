@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 // PUT /api/events/[id] - Actualizar un evento
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getCurrentUser();
@@ -13,6 +13,7 @@ export async function PUT(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { title, description, startDate, endDate, category, isAllDay } = body;
 
@@ -25,7 +26,7 @@ export async function PUT(
 
     const event = await prisma.event.update({
       where: {
-        id: params.id,
+        id,
         userId: user.id, // Asegurar que solo el propietario puede actualizar
       },
       data: {
@@ -51,7 +52,7 @@ export async function PUT(
 // DELETE /api/events/[id] - Eliminar un evento
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getCurrentUser();
@@ -59,9 +60,11 @@ export async function DELETE(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
+    const { id } = await params;
+
     await prisma.event.delete({
       where: {
-        id: params.id,
+        id,
         userId: user.id, // Asegurar que solo el propietario puede eliminar
       },
     });

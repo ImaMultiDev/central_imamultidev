@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 // PATCH /api/courses/[id]/status - Cambiar el estado de un curso
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await getCurrentUser();
@@ -13,6 +13,7 @@ export async function PATCH(
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await request.json();
     const { status } = body;
 
@@ -28,7 +29,7 @@ export async function PATCH(
 
     const course = await prisma.course.update({
       where: {
-        id: params.id,
+        id,
         userId: user.id,
       },
       data: {
