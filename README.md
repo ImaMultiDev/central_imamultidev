@@ -133,7 +133,32 @@ JWT_SECRET="tu-clave-jwt-super-secreta-aqui"
 1. **Crear proyecto** en Railway
 2. **Añadir PostgreSQL** database
 3. **Copiar DATABASE_URL** a variables de Vercel
-4. **Ejecutar migraciones** automáticamente en build
+4. **Las migraciones se ejecutan automáticamente** durante el build
+
+#### Variables de Entorno en Railway
+
+Railway necesita las siguientes variables configuradas:
+
+```env
+# Base de Datos (automático en Railway)
+DATABASE_URL="postgresql://..."
+
+# Autenticación
+AUTH_USERNAME="tu_usuario"
+AUTH_PASSWORD="tu_contraseña_segura"
+
+# JWT (genera una clave segura)
+JWT_SECRET="tu-clave-jwt-super-secreta-aqui"
+```
+
+#### Migraciones Automáticas
+
+El proyecto está configurado para:
+
+- ✅ **Generar cliente Prisma** automáticamente (`prisma generate`)
+- ✅ **Crear tablas** automáticamente (`prisma db push`)
+- ✅ **Ejecutar migraciones** durante el build
+- ✅ **Configurar base de datos** sin intervención manual
 
 ```bash
 git clone https://github.com/tu-usuario/central-imamultidev.git
