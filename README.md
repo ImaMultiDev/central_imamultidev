@@ -2,7 +2,7 @@
 
 Una aplicación web moderna tipo dashboard que funciona como centro de operaciones diarias personal. Construida con Next.js 15, React 19, TypeScript y Tailwind CSS 4.
 
-![Dashboard Preview](https://via.placeholder.com/800x400?text=Central+IMA+Dashboard)
+![Dashboard Preview](public/images/calendar_img.png)
 
 ## 🚀 Características Principales
 
@@ -257,3 +257,5 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 ---
 
 **Central IMA** - Tu centro de operaciones diarias personal 🚀
+
+**Desarrollado por:** [Imanol MU](https://github.com/ImaMultiDev) - [contact@imamultidev.dev](mailto:contact@imamultidev.dev)

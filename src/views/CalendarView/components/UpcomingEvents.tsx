@@ -72,7 +72,7 @@ export function UpcomingEvents({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-4 max-h-160 overflow-y-auto pr-2 pb-2">
+        <div className="flex flex-col gap-4 lg:h-160 max-h-160 overflow-y-auto pr-2 pb-2">
           {upcomingEvents.map((event) => {
             const timeStatus = getEventTimeStatus(event.startDate);
             const eventTime = new Date(event.startDate);
