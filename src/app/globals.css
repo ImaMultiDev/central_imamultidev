@@ -143,3 +143,41 @@ body {
 .animate-subtle-pulse {
   animation: subtlePulse 3s ease-in-out infinite;
 }
+
+/* Estilos personalizados para inputs de fecha */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  /* Posicionamiento absoluto para control total */
+  position: absolute !important;
+  right: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  /* Tamaño y apariencia */
+  width: 20px !important;
+  height: 20px !important;
+  cursor: pointer !important;
+
+  /* Filtro para tema oscuro */
+  filter: invert(1) !important;
+
+  /* Asegurar que esté por encima */
+  z-index: 10 !important;
+}
+
+/* Mejoras específicas para móvil */
+@media (max-width: 768px) {
+
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    width: 24px !important;
+    height: 24px !important;
+    right: 12px !important;
+  }
+
+  /* Mejorar el padding para móvil */
+  input[type="date"],
+  input[type="datetime-local"] {
+    padding-right: 40px !important;
+  }
+}

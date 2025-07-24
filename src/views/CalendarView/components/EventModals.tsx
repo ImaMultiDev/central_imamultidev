@@ -53,7 +53,7 @@ export function EventModals({
         isOpen={isEventModalOpen}
         onClose={onCloseEventModal}
         title="Crear Nuevo Evento"
-        className="max-w-md"
+        className="max-w-md max-h-[90vh] overflow-y-auto"
       >
         <form
           className="space-y-4"
@@ -112,52 +112,56 @@ export function EventModals({
             className={
               newEvent.isAllDay
                 ? "grid grid-cols-1 gap-4"
-                : "grid grid-cols-2 gap-4"
+                : "grid grid-cols-1 lg:grid-cols-2 gap-4"
             }
           >
             <div>
               <label className="text-sm font-medium text-foreground block mb-2">
                 Fecha de inicio
               </label>
-              <Input
-                type={newEvent.isAllDay ? "date" : "datetime-local"}
-                value={formatDateForInput(
-                  newEvent.startDate,
-                  newEvent.isAllDay
-                )}
-                onChange={(e) => {
-                  let date: Date;
-                  if (newEvent.isAllDay) {
-                    const [year, month, day] = e.target.value
-                      .split("-")
-                      .map(Number);
-                    date = new Date(year, month - 1, day);
-                  } else {
-                    date = new Date(e.target.value);
-                  }
-                  onNewEventChange({ ...newEvent, startDate: date });
-                }}
-                className="[&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
-              />
+              <div className="relative">
+                <Input
+                  type={newEvent.isAllDay ? "date" : "datetime-local"}
+                  value={formatDateForInput(
+                    newEvent.startDate,
+                    newEvent.isAllDay
+                  )}
+                  onChange={(e) => {
+                    let date: Date;
+                    if (newEvent.isAllDay) {
+                      const [year, month, day] = e.target.value
+                        .split("-")
+                        .map(Number);
+                      date = new Date(year, month - 1, day);
+                    } else {
+                      date = new Date(e.target.value);
+                    }
+                    onNewEventChange({ ...newEvent, startDate: date });
+                  }}
+                  className="w-full pr-10"
+                />
+              </div>
             </div>
             {!newEvent.isAllDay && (
               <div>
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Fecha de fin (opcional)
                 </label>
-                <Input
-                  type="datetime-local"
-                  value={
-                    newEvent.endDate
-                      ? formatDateForInput(newEvent.endDate, false)
-                      : ""
-                  }
-                  onChange={(e) => {
-                    const date = new Date(e.target.value);
-                    onNewEventChange({ ...newEvent, endDate: date });
-                  }}
-                  className="[&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
-                />
+                <div className="relative">
+                  <Input
+                    type="datetime-local"
+                    value={
+                      newEvent.endDate
+                        ? formatDateForInput(newEvent.endDate, false)
+                        : ""
+                    }
+                    onChange={(e) => {
+                      const date = new Date(e.target.value);
+                      onNewEventChange({ ...newEvent, endDate: date });
+                    }}
+                    className="w-full pr-10"
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -167,7 +171,7 @@ export function EventModals({
               Categoría
             </label>
             <select
-              className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+              className="w-full h-10 px-3 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none cursor-pointer relative"
               value={newEvent.category}
               onChange={(e) =>
                 onNewEventChange({
@@ -175,6 +179,13 @@ export function EventModals({
                   category: e.target.value as EventCategory,
                 })
               }
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: "right 0.5rem center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "1.5em 1.5em",
+                paddingRight: "2.5rem",
+              }}
             >
               <option value="TRABAJO">Trabajo</option>
               <option value="PERSONAL">Personal</option>
@@ -183,7 +194,7 @@ export function EventModals({
             </select>
           </div>
 
-          <div className="flex gap-2 pt-4">
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
               className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
@@ -207,7 +218,7 @@ export function EventModals({
         isOpen={isEditEventModalOpen}
         onClose={onCloseEditModal}
         title="Editar Evento"
-        className="max-w-md"
+        className="max-w-md max-h-[90vh] overflow-y-auto"
       >
         {editingEvent && (
           <form
@@ -273,52 +284,62 @@ export function EventModals({
               className={
                 editingEvent.isAllDay
                   ? "grid grid-cols-1 gap-4"
-                  : "grid grid-cols-2 gap-4"
+                  : "grid grid-cols-1 lg:grid-cols-2 gap-4"
               }
             >
               <div>
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Fecha de inicio
                 </label>
-                <Input
-                  type={editingEvent.isAllDay ? "date" : "datetime-local"}
-                  value={formatDateForInput(
-                    editingEvent.startDate,
-                    editingEvent.isAllDay
-                  )}
-                  onChange={(e) => {
-                    let date: Date;
-                    if (editingEvent.isAllDay) {
-                      const [year, month, day] = e.target.value
-                        .split("-")
-                        .map(Number);
-                      date = new Date(year, month - 1, day);
-                    } else {
-                      date = new Date(e.target.value);
-                    }
-                    onEditingEventChange({ ...editingEvent, startDate: date });
-                  }}
-                  className="[&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
-                />
+                <div className="relative">
+                  <Input
+                    type={editingEvent.isAllDay ? "date" : "datetime-local"}
+                    value={formatDateForInput(
+                      editingEvent.startDate,
+                      editingEvent.isAllDay
+                    )}
+                    onChange={(e) => {
+                      let date: Date;
+                      if (editingEvent.isAllDay) {
+                        const [year, month, day] = e.target.value
+                          .split("-")
+                          .map(Number);
+                        date = new Date(year, month - 1, day);
+                      } else {
+                        date = new Date(e.target.value);
+                      }
+                      onEditingEventChange({
+                        ...editingEvent,
+                        startDate: date,
+                      });
+                    }}
+                    className="w-full pr-10"
+                  />
+                </div>
               </div>
               {!editingEvent.isAllDay && (
                 <div>
                   <label className="text-sm font-medium text-foreground block mb-2">
                     Fecha de fin (opcional)
                   </label>
-                  <Input
-                    type="datetime-local"
-                    value={
-                      editingEvent.endDate
-                        ? formatDateForInput(editingEvent.endDate, false)
-                        : ""
-                    }
-                    onChange={(e) => {
-                      const date = new Date(e.target.value);
-                      onEditingEventChange({ ...editingEvent, endDate: date });
-                    }}
-                    className="[&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
-                  />
+                  <div className="relative">
+                    <Input
+                      type="datetime-local"
+                      value={
+                        editingEvent.endDate
+                          ? formatDateForInput(editingEvent.endDate, false)
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const date = new Date(e.target.value);
+                        onEditingEventChange({
+                          ...editingEvent,
+                          endDate: date,
+                        });
+                      }}
+                      className="w-full pr-10"
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -328,7 +349,7 @@ export function EventModals({
                 Categoría
               </label>
               <select
-                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                className="w-full h-10 px-3 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none cursor-pointer relative"
                 value={editingEvent.category}
                 onChange={(e) =>
                   onEditingEventChange({
@@ -336,6 +357,13 @@ export function EventModals({
                     category: e.target.value as EventCategory,
                   })
                 }
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: "right 0.5rem center",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "1.5em 1.5em",
+                  paddingRight: "2.5rem",
+                }}
               >
                 <option value="TRABAJO">Trabajo</option>
                 <option value="PERSONAL">Personal</option>
@@ -344,7 +372,7 @@ export function EventModals({
               </select>
             </div>
 
-            <div className="flex gap-2 pt-4">
+            <div className="flex flex-col sm:flex-row gap-2 pt-4">
               <Button
                 type="submit"
                 className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
