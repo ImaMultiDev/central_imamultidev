@@ -11,6 +11,7 @@ interface EventDetailModalProps {
   event: CalendarEvent | null;
   onEdit: (event: CalendarEvent) => void;
   onDelete: (eventId: string) => void;
+  isDeleting: string | null;
   categoryColors: Record<string, string>;
   categoryLabels: Record<string, string>;
   getEventTimeStatus: (eventDate: Date | string) => string;
@@ -22,6 +23,7 @@ export function EventDetailModal({
   event,
   onEdit,
   onDelete,
+  isDeleting,
   categoryColors,
   categoryLabels,
   getEventTimeStatus,
@@ -106,6 +108,7 @@ export function EventDetailModal({
             <Button
               variant="outline"
               size="sm"
+              disabled={isDeleting === event.id}
               onClick={() => {
                 if (
                   confirm("¿Estás seguro de que quieres eliminar este evento?")
@@ -114,9 +117,16 @@ export function EventDetailModal({
                   onClose();
                 }
               }}
-              className="text-red-600 hover:text-red-700"
+              className="text-red-600 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Eliminar
+              {isDeleting === event.id ? (
+                <>
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2"></div>
+                  Eliminando...
+                </>
+              ) : (
+                "Eliminar"
+              )}
             </Button>
           </div>
         </div>

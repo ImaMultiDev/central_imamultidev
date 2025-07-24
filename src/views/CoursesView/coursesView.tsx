@@ -19,6 +19,10 @@ export function CoursesView() {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isStatusUpdating, setIsStatusUpdating] = useState<string | null>(null);
   const [newCourse, setNewCourse] = useState({
     title: "",
     description: "",
@@ -52,6 +56,7 @@ export function CoursesView() {
 
   const handleCreateCourse = async () => {
     try {
+      setIsCreating(true);
       await createCourse(newCourse);
       setIsCourseModalOpen(false);
       setNewCourse({
@@ -64,6 +69,8 @@ export function CoursesView() {
       });
     } catch (error) {
       console.error("Error al crear curso:", error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -72,9 +79,12 @@ export function CoursesView() {
     newStatus: CourseStatus
   ) => {
     try {
+      setIsStatusUpdating(courseId);
       await updateCourseStatus(courseId, newStatus);
     } catch (error) {
       console.error("Error al cambiar estado:", error);
+    } finally {
+      setIsStatusUpdating(null);
     }
   };
 
@@ -87,6 +97,7 @@ export function CoursesView() {
     if (!editingCourse) return;
 
     try {
+      setIsUpdating(true);
       await updateCourse(editingCourse.id, {
         title: editingCourse.title,
         description: editingCourse.description || "",
@@ -99,6 +110,8 @@ export function CoursesView() {
       setEditingCourse(null);
     } catch (error) {
       console.error("Error al actualizar curso:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -106,9 +119,12 @@ export function CoursesView() {
     if (!confirm("¿Estás seguro de que quieres eliminar este curso?")) return;
 
     try {
+      setIsDeleting(courseId);
       await deleteCourse(courseId);
     } catch (error) {
       console.error("Error al eliminar curso:", error);
+    } finally {
+      setIsDeleting(null);
     }
   };
 
@@ -160,6 +176,8 @@ export function CoursesView() {
         onDeleteCourse={handleDeleteCourse}
         openMenuId={openMenuId}
         onOpenMenuChange={setOpenMenuId}
+        isDeleting={isDeleting}
+        isStatusUpdating={isStatusUpdating}
         onAddCourse={() => setIsCourseModalOpen(true)}
       />
 
@@ -176,6 +194,8 @@ export function CoursesView() {
         onNewCourseChange={setNewCourse}
         editingCourse={editingCourse}
         onEditingCourseChange={setEditingCourse}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
         onCreateCourse={handleCreateCourse}
         onUpdateCourse={handleUpdateCourse}
       />

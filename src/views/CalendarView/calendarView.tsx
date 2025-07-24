@@ -35,6 +35,9 @@ export function CalendarView() {
   const [isEditEventModalOpen, setIsEditEventModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [newEvent, setNewEvent] = useState({
     title: "",
     description: "",
@@ -91,6 +94,7 @@ export function CalendarView() {
 
   const handleCreateEvent = async () => {
     try {
+      setIsCreating(true);
       await createEvent({
         ...newEvent,
         startDate: newEvent.startDate.toISOString(),
@@ -107,6 +111,8 @@ export function CalendarView() {
       });
     } catch (error) {
       console.error("Error al crear evento:", error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -119,6 +125,7 @@ export function CalendarView() {
     if (!editingEvent) return;
 
     try {
+      setIsUpdating(true);
       await updateEvent(editingEvent.id, {
         title: editingEvent.title,
         description: editingEvent.description || "",
@@ -131,6 +138,8 @@ export function CalendarView() {
       setEditingEvent(null);
     } catch (error) {
       console.error("Error al actualizar evento:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -138,9 +147,12 @@ export function CalendarView() {
     if (!confirm("¿Estás seguro de que quieres eliminar este evento?")) return;
 
     try {
+      setIsDeleting(eventId);
       await deleteEvent(eventId);
     } catch (error) {
       console.error("Error al eliminar evento:", error);
+    } finally {
+      setIsDeleting(null);
     }
   };
 
@@ -153,6 +165,7 @@ export function CalendarView() {
       categoryLabels,
       onEditEvent: handleEditEvent,
       onDeleteEvent: handleDeleteEvent,
+      isDeleting,
     };
 
     switch (currentView) {
@@ -246,6 +259,8 @@ export function CalendarView() {
         isEditEventModalOpen={isEditEventModalOpen}
         editingEvent={editingEvent}
         newEvent={newEvent}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
         onCloseEventModal={() => setIsEventModalOpen(false)}
         onCloseEditModal={() => {
           setIsEditEventModalOpen(false);

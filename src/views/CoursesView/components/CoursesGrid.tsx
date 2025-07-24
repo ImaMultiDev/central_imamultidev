@@ -48,6 +48,8 @@ interface CoursesGridProps {
   onDeleteCourse: (courseId: string) => void;
   openMenuId: string | null;
   onOpenMenuChange: (menuId: string | null) => void;
+  isDeleting: string | null;
+  isStatusUpdating: string | null;
   onAddCourse: () => void;
 }
 
@@ -58,6 +60,8 @@ export function CoursesGrid({
   onDeleteCourse,
   openMenuId,
   onOpenMenuChange,
+  isDeleting,
+  isStatusUpdating,
   onAddCourse,
 }: CoursesGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -124,9 +128,17 @@ export function CoursesGrid({
                             onDeleteCourse(course.id);
                             onOpenMenuChange(null);
                           }}
-                          className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent"
+                          disabled={isDeleting === course.id}
+                          className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          Eliminar
+                          {isDeleting === course.id ? (
+                            <>
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                              Eliminando...
+                            </>
+                          ) : (
+                            "Eliminar"
+                          )}
                         </button>
                       </div>
                     </div>
@@ -166,36 +178,60 @@ export function CoursesGrid({
                   variant={
                     course.status === "POR_COMENZAR" ? "default" : "outline"
                   }
+                  disabled={isStatusUpdating === course.id}
                   onClick={() =>
                     onStatusChange(course.id, CourseStatus.POR_COMENZAR)
                   }
                   className="text-xs w-full sm:w-auto"
                 >
-                  Por Comenzar
+                  {isStatusUpdating === course.id ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                      ...
+                    </>
+                  ) : (
+                    "Por Comenzar"
+                  )}
                 </Button>
                 <Button
                   size="sm"
                   variant={
                     course.status === "EN_PROGRESO" ? "default" : "outline"
                   }
+                  disabled={isStatusUpdating === course.id}
                   onClick={() =>
                     onStatusChange(course.id, CourseStatus.EN_PROGRESO)
                   }
                   className="text-xs w-full sm:w-auto"
                 >
-                  En Progreso
+                  {isStatusUpdating === course.id ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                      ...
+                    </>
+                  ) : (
+                    "En Progreso"
+                  )}
                 </Button>
                 <Button
                   size="sm"
                   variant={
                     course.status === "COMPLETADO" ? "default" : "outline"
                   }
+                  disabled={isStatusUpdating === course.id}
                   onClick={() =>
                     onStatusChange(course.id, CourseStatus.COMPLETADO)
                   }
                   className="text-xs w-full sm:w-auto"
                 >
-                  Completado
+                  {isStatusUpdating === course.id ? (
+                    <>
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                      ...
+                    </>
+                  ) : (
+                    "Completado"
+                  )}
                 </Button>
               </div>
 

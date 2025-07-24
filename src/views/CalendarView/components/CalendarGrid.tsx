@@ -15,6 +15,7 @@ interface CalendarGridProps {
   categoryLabels: Record<string, string>;
   onEditEvent: (event: CalendarEvent) => void;
   onDeleteEvent: (eventId: string) => void;
+  isDeleting: string | null;
 }
 
 export function CalendarGrid({
@@ -25,6 +26,7 @@ export function CalendarGrid({
   categoryLabels,
   onEditEvent,
   onDeleteEvent,
+  isDeleting,
 }: CalendarGridProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
@@ -224,6 +226,7 @@ export function CalendarGrid({
         onClose={() => setIsDetailModalOpen(false)}
         onEdit={onEditEvent}
         onDelete={onDeleteEvent}
+        isDeleting={isDeleting}
         categoryColors={categoryColors}
         categoryLabels={categoryLabels}
         getEventTimeStatus={getEventTimeStatus}

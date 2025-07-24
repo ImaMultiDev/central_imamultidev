@@ -17,6 +17,8 @@ interface EventModalsProps {
     category: EventCategory;
     isAllDay: boolean;
   };
+  isCreating: boolean;
+  isUpdating: boolean;
   onCloseEventModal: () => void;
   onCloseEditModal: () => void;
   onCreateEvent: () => void;
@@ -38,6 +40,8 @@ export function EventModals({
   isEditEventModalOpen,
   editingEvent,
   newEvent,
+  isCreating,
+  isUpdating,
   onCloseEventModal,
   onCloseEditModal,
   onCreateEvent,
@@ -197,13 +201,22 @@ export function EventModals({
           <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
+              disabled={isCreating}
               className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
             >
-              Crear Evento
+              {isCreating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Creando...
+                </>
+              ) : (
+                "Crear Evento"
+              )}
             </Button>
             <Button
               type="button"
               variant="outline"
+              disabled={isCreating}
               onClick={onCloseEventModal}
               className="text-white hover:text-red-500 transition-colors duration-300"
             >
@@ -375,13 +388,22 @@ export function EventModals({
             <div className="flex flex-col sm:flex-row gap-2 pt-4">
               <Button
                 type="submit"
+                disabled={isUpdating}
                 className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
               >
-                Actualizar Evento
+                {isUpdating ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Actualizando...
+                  </>
+                ) : (
+                  "Actualizar Evento"
+                )}
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                disabled={isUpdating}
                 onClick={onCloseEditModal}
                 className="text-white hover:text-red-500 transition-colors duration-300"
               >

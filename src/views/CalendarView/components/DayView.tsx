@@ -15,6 +15,7 @@ interface DayViewProps {
   categoryLabels: Record<string, string>;
   onEditEvent: (event: CalendarEvent) => void;
   onDeleteEvent: (eventId: string) => void;
+  isDeleting: string | null;
 }
 
 export function DayView({
@@ -25,6 +26,7 @@ export function DayView({
   categoryLabels,
   onEditEvent,
   onDeleteEvent,
+  isDeleting,
 }: DayViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
@@ -280,6 +282,7 @@ export function DayView({
         onClose={() => setIsDetailModalOpen(false)}
         onEdit={onEditEvent}
         onDelete={onDeleteEvent}
+        isDeleting={isDeleting}
         categoryColors={categoryColors}
         categoryLabels={categoryLabels}
         getEventTimeStatus={getEventTimeStatus}

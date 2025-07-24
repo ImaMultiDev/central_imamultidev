@@ -15,6 +15,7 @@ interface WeekViewProps {
   categoryLabels: Record<string, string>;
   onEditEvent: (event: CalendarEvent) => void;
   onDeleteEvent: (eventId: string) => void;
+  isDeleting: string | null;
 }
 
 export function WeekView({
@@ -25,6 +26,7 @@ export function WeekView({
   categoryLabels,
   onEditEvent,
   onDeleteEvent,
+  isDeleting,
 }: WeekViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
@@ -221,6 +223,7 @@ export function WeekView({
         onClose={() => setIsDetailModalOpen(false)}
         onEdit={onEditEvent}
         onDelete={onDeleteEvent}
+        isDeleting={isDeleting}
         categoryColors={categoryColors}
         categoryLabels={categoryLabels}
         getEventTimeStatus={getEventTimeStatus}
