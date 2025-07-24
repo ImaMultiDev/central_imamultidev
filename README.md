@@ -99,6 +99,42 @@ La aplicación incluye un sistema de autenticación básica para proteger el acc
 
 1. **Clonar el repositorio**
 
+## 🚀 Despliegue
+
+### Vercel + Railway
+
+La aplicación está configurada para desplegarse en Vercel con base de datos PostgreSQL en Railway.
+
+#### Variables de Entorno Requeridas
+
+Configura las siguientes variables en tu proyecto de Vercel:
+
+```env
+# Base de Datos (Railway PostgreSQL)
+DATABASE_URL="postgresql://username:password@host:port/database"
+
+# Autenticación
+AUTH_USERNAME="tu_usuario"
+AUTH_PASSWORD="tu_contraseña_segura"
+
+# JWT (genera una clave segura)
+JWT_SECRET="tu-clave-jwt-super-secreta-aqui"
+```
+
+#### Pasos de Despliegue
+
+1. **Conectar repositorio** a Vercel
+2. **Configurar variables** de entorno en Vercel
+3. **Desplegar** automáticamente desde main branch
+4. **Configurar dominio** personalizado (opcional)
+
+#### Configuración de Base de Datos
+
+1. **Crear proyecto** en Railway
+2. **Añadir PostgreSQL** database
+3. **Copiar DATABASE_URL** a variables de Vercel
+4. **Ejecutar migraciones** automáticamente en build
+
 ```bash
 git clone https://github.com/tu-usuario/central-imamultidev.git
 cd central-imamultidev
