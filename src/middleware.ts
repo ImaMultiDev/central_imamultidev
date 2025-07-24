@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { verifyToken } from "@/lib/auth";
 
 export function middleware(request: NextRequest) {
   // En desarrollo, ser menos estricto con la autenticación
@@ -11,19 +12,16 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
   // Si no hay autenticación, redirigir al login
-  if (!authHeader) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  // Verificar credenciales básicas
-  const expectedAuth = `Basic ${btoa(
-    `${process.env.AUTH_USERNAME || "imamultidev"}:${
-      process.env.AUTH_PASSWORD || "password123"
-    }`
-  )}`;
+  // Extraer y verificar el token JWT
+  const token = authHeader.substring(7); // Remover "Bearer "
+  const payload = verifyToken(token);
 
-  if (authHeader !== expectedAuth) {
+  if (!payload) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }

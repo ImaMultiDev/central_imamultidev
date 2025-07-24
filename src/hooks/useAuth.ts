@@ -7,9 +7,11 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // En desarrollo, verificar localStorage
-    const auth = localStorage.getItem("auth");
-    if (auth) {
+    // Verificar si hay un token válido en localStorage
+    const token = localStorage.getItem("authToken");
+    const user = localStorage.getItem("user");
+
+    if (token && user) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);
@@ -17,22 +19,22 @@ export function useAuth() {
     setIsLoading(false);
   }, []);
 
-  const login = (username: string, password: string) => {
-    const credentials = btoa(`${username}:${password}`);
-    localStorage.setItem("auth", credentials);
-    setIsAuthenticated(true);
+  const login = () => {
+    // Esta función ya no se usa directamente, el login se maneja en la página
+    console.log("Login function called - should use API route instead");
   };
 
   const logout = () => {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
     setIsAuthenticated(false);
     // Usar window.location para forzar la navegación
     window.location.href = "/login";
   };
 
   const getAuthHeader = () => {
-    const auth = localStorage.getItem("auth");
-    return auth ? { Authorization: `Basic ${auth}` } : {};
+    const token = localStorage.getItem("authToken");
+    return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
   return {

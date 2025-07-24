@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -19,7 +18,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,21 +25,29 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // Verificar credenciales (en producción, esto debería ser contra el servidor)
-      const expectedUsername =
-        process.env.NEXT_PUBLIC_AUTH_USERNAME || "imamultidev";
-      const expectedPassword =
-        process.env.NEXT_PUBLIC_AUTH_PASSWORD || "password123";
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-      if (username === expectedUsername && password === expectedPassword) {
-        login(username, password);
-        // Usar window.location para forzar la navegación
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Guardar token en localStorage
+        localStorage.setItem("authToken", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        // Redirigir al dashboard
         window.location.href = "/";
       } else {
-        setError("Credenciales incorrectas");
+        setError(data.error || "Credenciales incorrectas");
       }
-    } catch {
-      setError("Error al iniciar sesión");
+    } catch (error) {
+      console.error("Error en login:", error);
+      setError("Error al conectar con el servidor");
     } finally {
       setIsLoading(false);
     }
