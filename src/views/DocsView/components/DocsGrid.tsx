@@ -149,7 +149,7 @@ export function DocsGrid({
 
               {/* Date */}
               <div className="text-sm text-muted-foreground">
-                Añadido: {doc.createdAt.toLocaleDateString("es-ES")}
+                Añadido: {new Date(doc.createdAt).toLocaleDateString("es-ES")}
               </div>
 
               {/* Actions */}

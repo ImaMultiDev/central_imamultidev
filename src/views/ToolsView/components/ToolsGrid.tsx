@@ -149,7 +149,7 @@ export function ToolsGrid({
 
               {/* Date */}
               <div className="text-sm text-muted-foreground">
-                Añadido: {tool.createdAt.toLocaleDateString("es-ES")}
+                Añadido: {new Date(tool.createdAt).toLocaleDateString("es-ES")}
               </div>
 
               {/* Actions */}
