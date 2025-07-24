@@ -19,6 +19,7 @@ interface ToolsGridProps {
   onDeleteTool: (toolId: string) => void;
   openMenuId: string | null;
   onOpenMenuChange: (menuId: string | null) => void;
+  isDeleting: string | null;
   typeColors: Record<string, string>;
   typeLabels: Record<string, string>;
   categoryColors: Record<string, string>;
@@ -31,6 +32,7 @@ export function ToolsGrid({
   onDeleteTool,
   openMenuId,
   onOpenMenuChange,
+  isDeleting,
   typeColors,
   typeLabels,
   categoryColors,
@@ -98,9 +100,17 @@ export function ToolsGrid({
                             onDeleteTool(tool.id);
                             onOpenMenuChange(null);
                           }}
-                          className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent"
+                          disabled={isDeleting === tool.id}
+                          className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          Eliminar
+                          {isDeleting === tool.id ? (
+                            <>
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                              Eliminando...
+                            </>
+                          ) : (
+                            "Eliminar"
+                          )}
                         </button>
                       </div>
                     </div>

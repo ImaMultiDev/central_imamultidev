@@ -28,6 +28,9 @@ export function ToolsView() {
   const [tempTagsInput, setTempTagsInput] = useState("");
   const [editingTagsInput, setEditingTagsInput] = useState("");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   // Colores para tipos de herramientas
   const typeColors: Record<string, string> = {
@@ -150,6 +153,7 @@ export function ToolsView() {
         return;
       }
 
+      setIsCreating(true);
       const response = await fetch("/api/tools", {
         method: "POST",
         headers: {
@@ -177,12 +181,15 @@ export function ToolsView() {
       }
     } catch (error) {
       console.error("Error adding tool:", error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
   // Editar herramienta
   const handleEditTool = async (toolData: Tool) => {
     try {
+      setIsUpdating(true);
       const response = await fetch(`/api/tools/${toolData.id}`, {
         method: "PUT",
         headers: {
@@ -201,6 +208,8 @@ export function ToolsView() {
       }
     } catch (error) {
       console.error("Error updating tool:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -210,6 +219,7 @@ export function ToolsView() {
       return;
 
     try {
+      setIsDeleting(toolId);
       const response = await fetch(`/api/tools/${toolId}`, {
         method: "DELETE",
       });
@@ -219,6 +229,8 @@ export function ToolsView() {
       }
     } catch (error) {
       console.error("Error deleting tool:", error);
+    } finally {
+      setIsDeleting(null);
     }
   };
 
@@ -263,6 +275,7 @@ export function ToolsView() {
         onDeleteTool={handleDeleteTool}
         openMenuId={openMenuId}
         onOpenMenuChange={setOpenMenuId}
+        isDeleting={isDeleting}
         typeColors={typeColors}
         typeLabels={typeLabels}
         categoryColors={categoryColors}
@@ -276,6 +289,8 @@ export function ToolsView() {
         newTool={newTool}
         tempTagsInput={tempTagsInput}
         editingTagsInput={editingTagsInput}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
         onCloseToolModal={() => setIsToolModalOpen(false)}
         onCloseEditModal={() => {
           setIsEditModalOpen(false);

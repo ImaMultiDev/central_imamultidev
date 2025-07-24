@@ -20,6 +20,8 @@ interface DocsModalsProps {
   };
   tempTagsInput: string;
   editingTagsInput: string;
+  isCreating: boolean;
+  isUpdating: boolean;
   onCloseDocModal: () => void;
   onCloseEditModal: () => void;
   onCreateDocument: () => void;
@@ -44,6 +46,8 @@ export function DocsModals({
   newDocument,
   tempTagsInput,
   editingTagsInput,
+  isCreating,
+  isUpdating,
   onCloseDocModal,
   onCloseEditModal,
   onCreateDocument,
@@ -259,13 +263,22 @@ export function DocsModals({
           <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
+              disabled={isCreating}
               className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
             >
-              Añadir Documento
+              {isCreating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Creando...
+                </>
+              ) : (
+                "Añadir Documento"
+              )}
             </Button>
             <Button
               type="button"
               variant="outline"
+              disabled={isCreating}
               onClick={onCloseDocModal}
               className="text-white hover:text-red-500 transition-colors duration-300"
             >
@@ -479,13 +492,22 @@ export function DocsModals({
             <div className="flex flex-col sm:flex-row gap-2 pt-4">
               <Button
                 type="submit"
+                disabled={isUpdating}
                 className="flex-1 hover:bg-blue-500 hover:text-white transition-colors duration-300"
               >
-                Actualizar Documento
+                {isUpdating ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Actualizando...
+                  </>
+                ) : (
+                  "Actualizar Documento"
+                )}
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                disabled={isUpdating}
                 onClick={onCloseEditModal}
                 className="text-white hover:text-red-500 transition-colors duration-300"
               >

@@ -62,6 +62,9 @@ export function DocsView() {
   const [tempTagsInput, setTempTagsInput] = useState("");
   const [editingTagsInput, setEditingTagsInput] = useState("");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   const {
     documentation,
@@ -112,6 +115,7 @@ export function DocsView() {
 
   const handleCreateDocument = async () => {
     try {
+      setIsCreating(true);
       await createDocumentation(newDocument);
       setIsDocModalOpen(false);
       setNewDocument({
@@ -125,6 +129,8 @@ export function DocsView() {
       setTempTagsInput("");
     } catch (error) {
       console.error("Error al crear documento:", error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -138,6 +144,7 @@ export function DocsView() {
     if (!editingDoc) return;
 
     try {
+      setIsUpdating(true);
       await updateDocumentation(editingDoc.id, {
         title: editingDoc.title,
         description: editingDoc.description || "",
@@ -150,6 +157,8 @@ export function DocsView() {
       setEditingDoc(null);
     } catch (error) {
       console.error("Error al actualizar documento:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -158,9 +167,12 @@ export function DocsView() {
       return;
 
     try {
+      setIsDeleting(docId);
       await deleteDocumentation(docId);
     } catch (error) {
       console.error("Error al eliminar documento:", error);
+    } finally {
+      setIsDeleting(null);
     }
   };
 
@@ -193,6 +205,7 @@ export function DocsView() {
         onDeleteDocument={handleDeleteDocument}
         openMenuId={openMenuId}
         onOpenMenuChange={setOpenMenuId}
+        isDeleting={isDeleting}
         typeColors={typeColors}
         typeLabels={typeLabels}
         categoryColors={categoryColors}
@@ -207,6 +220,8 @@ export function DocsView() {
         newDocument={newDocument}
         tempTagsInput={tempTagsInput}
         editingTagsInput={editingTagsInput}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
         onCloseDocModal={() => setIsDocModalOpen(false)}
         onCloseEditModal={() => {
           setIsEditModalOpen(false);
