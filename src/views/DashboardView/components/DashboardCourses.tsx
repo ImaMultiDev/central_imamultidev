@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -14,6 +15,16 @@ interface DashboardCoursesProps {
 }
 
 export function DashboardCourses({ courses }: DashboardCoursesProps) {
+  const recentCourses = useMemo(() => {
+    return courses
+      .sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return dateB.getTime() - dateA.getTime(); // Ordenar por más reciente primero
+      })
+      .slice(0, 5); // Limitar a 5 cursos
+  }, [courses]);
+
   return (
     <Card>
       <CardHeader>
@@ -22,7 +33,7 @@ export function DashboardCourses({ courses }: DashboardCoursesProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {courses.map((course) => (
+          {recentCourses.map((course) => (
             <div key={course.id} className="space-y-2">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium leading-none">
@@ -32,7 +43,7 @@ export function DashboardCourses({ courses }: DashboardCoursesProps) {
               <p className="text-xs text-muted-foreground">{course.platform}</p>
             </div>
           ))}
-          {courses.length === 0 && (
+          {recentCourses.length === 0 && (
             <p className="text-center text-muted-foreground py-8">
               No tienes cursos en progreso
             </p>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -14,6 +15,22 @@ interface DashboardEventsProps {
 }
 
 export function DashboardEvents({ events }: DashboardEventsProps) {
+  const now = useMemo(() => new Date(), []);
+
+  const upcomingEvents = useMemo(() => {
+    return events
+      .filter((event) => {
+        const eventDate = new Date(event.startDate);
+        return eventDate >= now; // Solo eventos futuros
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.startDate);
+        const dateB = new Date(b.startDate);
+        return dateA.getTime() - dateB.getTime(); // Ordenar por fecha más próxima
+      })
+      .slice(0, 5); // Limitar a 5 eventos
+  }, [events, now]);
+
   const formatDate = (date: Date | string) => {
     const dateObj = date instanceof Date ? date : new Date(date);
     const day = dateObj.getDate().toString().padStart(2, "0");
@@ -39,7 +56,7 @@ export function DashboardEvents({ events }: DashboardEventsProps) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {events.map((event) => (
+          {upcomingEvents.map((event) => (
             <div
               key={event.id}
               className="flex items-center space-x-4 rounded-lg border p-4"
@@ -58,7 +75,7 @@ export function DashboardEvents({ events }: DashboardEventsProps) {
               </div>
             </div>
           ))}
-          {events.length === 0 && (
+          {upcomingEvents.length === 0 && (
             <p className="text-center text-muted-foreground py-8">
               No tienes eventos próximos programados
             </p>

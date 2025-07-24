@@ -73,7 +73,7 @@ export function Sidebar({ className }: SidebarProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50 lg:hidden bg-background border border-border rounded-full"
+        className="fixed top-4 left-4 z-50 lg:hidden bg-background border border-border"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         {isMobileOpen ? (
@@ -138,11 +138,28 @@ export function Sidebar({ className }: SidebarProps) {
 
           {/* User section */}
           <div className="border-t border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                I
+            {isCollapsed ? (
+              /* Layout colapsado: "I" encima del botón de logout */
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                  I
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-foreground hover:text-accent-foreground"
+                  title="Cerrar sesión"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
-              {!isCollapsed && (
+            ) : (
+              /* Layout expandido: horizontal con información del usuario */
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                  I
+                </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
                     Imanol MU
@@ -151,17 +168,17 @@ export function Sidebar({ className }: SidebarProps) {
                     imamultidev
                   </p>
                 </div>
-              )}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-foreground hover:text-accent-foreground"
-                title="Cerrar sesión"
-                onClick={handleLogout}
-              >
-                <LogOut className="h-4 w-4" />
-              </Button>
-            </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-foreground hover:text-accent-foreground"
+                  title="Cerrar sesión"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </aside>
