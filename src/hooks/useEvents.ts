@@ -2,6 +2,26 @@ import { useState, useEffect } from "react";
 import { Event, EventCategory } from "@/types";
 import { apiRequest, handleApiResponse } from "@/lib/api";
 
+// Tipo para los datos que vienen de la API (con fechas como strings)
+type ApiEvent = Omit<
+  Event,
+  "startDate" | "endDate" | "createdAt" | "updatedAt"
+> & {
+  startDate: string;
+  endDate?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+// Función helper para convertir fechas de string a Date
+const parseEventDates = (event: ApiEvent): Event => ({
+  ...event,
+  startDate: new Date(event.startDate),
+  endDate: event.endDate ? new Date(event.endDate) : undefined,
+  createdAt: new Date(event.createdAt),
+  updatedAt: new Date(event.updatedAt),
+});
+
 export function useEvents() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -12,8 +32,10 @@ export function useEvents() {
     try {
       setLoading(true);
       const response = await apiRequest("/api/events");
-      const data = await handleApiResponse<Event[]>(response);
-      setEvents(data);
+      const data = await handleApiResponse<ApiEvent[]>(response);
+      // Convertir fechas de string a Date objects
+      const eventsWithDates = data.map(parseEventDates);
+      setEvents(eventsWithDates);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -36,9 +58,10 @@ export function useEvents() {
         body: JSON.stringify(eventData),
       });
 
-      const newEvent = await handleApiResponse<Event>(response);
-      setEvents((prev) => [...prev, newEvent]);
-      return newEvent;
+      const newEvent = await handleApiResponse<ApiEvent>(response);
+      const eventWithDates = parseEventDates(newEvent);
+      setEvents((prev) => [...prev, eventWithDates]);
+      return eventWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -63,11 +86,12 @@ export function useEvents() {
         body: JSON.stringify(eventData),
       });
 
-      const updatedEvent = await handleApiResponse<Event>(response);
+      const updatedEvent = await handleApiResponse<ApiEvent>(response);
+      const eventWithDates = parseEventDates(updatedEvent);
       setEvents((prev) =>
-        prev.map((event) => (event.id === id ? updatedEvent : event))
+        prev.map((event) => (event.id === id ? eventWithDates : event))
       );
-      return updatedEvent;
+      return eventWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;

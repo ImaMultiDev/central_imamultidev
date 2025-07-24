@@ -30,7 +30,7 @@ interface EventModalsProps {
     isAllDay: boolean;
   }) => void;
   onEditingEventChange: (event: CalendarEvent) => void;
-  formatDateForInput: (date: Date, isAllDay: boolean) => string;
+  formatDateForInput: (date: Date | string, isAllDay: boolean) => string;
 }
 
 export function EventModals({

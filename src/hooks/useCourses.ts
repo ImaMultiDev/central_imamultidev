@@ -2,6 +2,19 @@ import { useState, useEffect } from "react";
 import { Course, CourseStatus } from "@/types";
 import { apiRequest, handleApiResponse } from "@/lib/api";
 
+// Tipo para la respuesta de la API sin fechas parseadas
+type CourseResponse = Omit<Course, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
+// Función helper para parsear fechas
+const parseCourseDates = (course: CourseResponse): Course => ({
+  ...course,
+  createdAt: new Date(course.createdAt),
+  updatedAt: new Date(course.updatedAt),
+});
+
 export function useCourses() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
@@ -12,8 +25,9 @@ export function useCourses() {
     try {
       setLoading(true);
       const response = await apiRequest("/api/courses");
-      const data = await handleApiResponse<Course[]>(response);
-      setCourses(data);
+      const data = await handleApiResponse<CourseResponse[]>(response);
+      const coursesWithDates = data.map(parseCourseDates);
+      setCourses(coursesWithDates);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -36,9 +50,10 @@ export function useCourses() {
         body: JSON.stringify(courseData),
       });
 
-      const newCourse = await handleApiResponse<Course>(response);
-      setCourses((prev) => [...prev, newCourse]);
-      return newCourse;
+      const newCourse = await handleApiResponse<CourseResponse>(response);
+      const courseWithDates = parseCourseDates(newCourse);
+      setCourses((prev) => [...prev, courseWithDates]);
+      return courseWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -63,11 +78,12 @@ export function useCourses() {
         body: JSON.stringify(courseData),
       });
 
-      const updatedCourse = await handleApiResponse<Course>(response);
+      const updatedCourse = await handleApiResponse<CourseResponse>(response);
+      const courseWithDates = parseCourseDates(updatedCourse);
       setCourses((prev) =>
-        prev.map((course) => (course.id === id ? updatedCourse : course))
+        prev.map((course) => (course.id === id ? courseWithDates : course))
       );
-      return updatedCourse;
+      return courseWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;
@@ -82,11 +98,12 @@ export function useCourses() {
         body: JSON.stringify({ status }),
       });
 
-      const updatedCourse = await handleApiResponse<Course>(response);
+      const updatedCourse = await handleApiResponse<CourseResponse>(response);
+      const courseWithDates = parseCourseDates(updatedCourse);
       setCourses((prev) =>
-        prev.map((course) => (course.id === id ? updatedCourse : course))
+        prev.map((course) => (course.id === id ? courseWithDates : course))
       );
-      return updatedCourse;
+      return courseWithDates;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
       throw err;

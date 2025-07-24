@@ -14,16 +14,18 @@ interface DashboardEventsProps {
 }
 
 export function DashboardEvents({ events }: DashboardEventsProps) {
-  const formatDate = (date: Date) => {
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear();
+  const formatDate = (date: Date | string) => {
+    const dateObj = date instanceof Date ? date : new Date(date);
+    const day = dateObj.getDate().toString().padStart(2, "0");
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, "0");
+    const year = dateObj.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
-  const formatTime = (date: Date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
+  const formatTime = (date: Date | string) => {
+    const dateObj = date instanceof Date ? date : new Date(date);
+    const hours = dateObj.getHours().toString().padStart(2, "0");
+    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
   };
 

@@ -185,7 +185,7 @@ export function DocsModals({
                 }}
               />
               <Button
-                type="submit"
+                type="button"
                 variant="outline"
                 className="hover:bg-blue-500 text-white transition-colors duration-300"
                 size="sm"
@@ -385,7 +385,7 @@ export function DocsModals({
                   }}
                 />
                 <Button
-                  type="submit"
+                  type="button"
                   size="sm"
                   className="flex hover:bg-blue-500 hover:text-white transition-colors duration-300"
                   onClick={() => {

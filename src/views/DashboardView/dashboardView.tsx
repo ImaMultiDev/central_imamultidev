@@ -18,6 +18,11 @@ export function DashboardView() {
   const { courses } = useCourses();
   const { documentation } = useDocumentation();
 
+  // Función helper para convertir fechas de manera segura
+  const safeDate = (date: Date | string): Date => {
+    return date instanceof Date ? date : new Date(date);
+  };
+
   // Calcular estadísticas reales
   const stats = {
     totalTasks: events.length,
@@ -26,7 +31,7 @@ export function DashboardView() {
       .length,
     totalDocuments: documentation.length,
     upcomingEvents: events.filter((event) => {
-      const eventDate = new Date(event.startDate);
+      const eventDate = safeDate(event.startDate);
       const today = new Date();
       const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
       return eventDate >= today && eventDate <= nextWeek;
@@ -36,14 +41,14 @@ export function DashboardView() {
   // Obtener eventos próximos (próximos 7 días)
   const upcomingEvents = events
     .filter((event) => {
-      const eventDate = new Date(event.startDate);
+      const eventDate = safeDate(event.startDate);
       const today = new Date();
       const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
       return eventDate >= today && eventDate <= nextWeek;
     })
     .sort(
       (a, b) =>
-        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        safeDate(a.startDate).getTime() - safeDate(b.startDate).getTime()
     )
     .slice(0, 5);
 

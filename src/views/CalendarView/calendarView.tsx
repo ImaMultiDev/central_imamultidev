@@ -47,15 +47,18 @@ export function CalendarView() {
   const { events, createEvent, updateEvent, deleteEvent } = useEvents();
 
   // Función para formatear fechas correctamente
-  const formatDateForInput = (date: Date, isAllDay: boolean) => {
+  const formatDateForInput = (date: Date | string, isAllDay: boolean) => {
+    // Asegurar que date sea un objeto Date
+    const dateObj = date instanceof Date ? date : new Date(date);
+
     if (isAllDay) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     } else {
       const localDate = new Date(
-        date.getTime() - date.getTimezoneOffset() * 60000
+        dateObj.getTime() - dateObj.getTimezoneOffset() * 60000
       );
       return localDate.toISOString().slice(0, 16);
     }
