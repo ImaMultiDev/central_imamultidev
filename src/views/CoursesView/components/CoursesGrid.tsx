@@ -245,6 +245,20 @@ export function CoursesGrid({
                 </div>
               )}
 
+              {/* Tags */}
+              {course.tags && course.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {course.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               {/* Actions */}
               <div className="flex gap-2 pt-2">
                 {course.url && (

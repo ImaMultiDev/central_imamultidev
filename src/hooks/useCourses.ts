@@ -42,6 +42,7 @@ export function useCourses() {
     platform: string;
     url?: string;
     notes?: string;
+    tags?: string[];
     status?: CourseStatus;
   }) => {
     try {
@@ -69,6 +70,7 @@ export function useCourses() {
       platform: string;
       url?: string;
       notes?: string;
+      tags?: string[];
       status?: CourseStatus;
     }
   ) => {

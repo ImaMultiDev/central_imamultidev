@@ -115,13 +115,13 @@ export function ToolsModals({
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="relative">
               <label className="text-sm font-medium text-foreground block mb-2">
                 Tipo
               </label>
               <select
-                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newTool.type}
                 onChange={(e) =>
                   onNewToolChange({
@@ -142,12 +142,12 @@ export function ToolsModals({
                 <option value="COMUNICACION">Comunicación</option>
               </select>
             </div>
-            <div>
+            <div className="relative">
               <label className="text-sm font-medium text-foreground block mb-2">
                 Categoría
               </label>
               <select
-                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newTool.category}
                 onChange={(e) =>
                   onNewToolChange({
@@ -356,13 +356,13 @@ export function ToolsModals({
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="relative">
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Tipo
                 </label>
                 <select
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={editingTool.type}
                   onChange={(e) =>
                     onEditingToolChange({
@@ -383,12 +383,12 @@ export function ToolsModals({
                   <option value="COMUNICACION">Comunicación</option>
                 </select>
               </div>
-              <div>
+              <div className="relative">
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Categoría
                 </label>
                 <select
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={editingTool.category}
                   onChange={(e) =>
                     onEditingToolChange({

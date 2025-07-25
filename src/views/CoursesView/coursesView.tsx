@@ -29,6 +29,8 @@ export function CoursesView() {
     platform: "",
     url: "",
     notes: "",
+    tags: [] as string[],
+    tagsInput: "",
     status: "POR_COMENZAR" as CourseStatus,
   });
 
@@ -65,6 +67,8 @@ export function CoursesView() {
         platform: "",
         url: "",
         notes: "",
+        tags: [],
+        tagsInput: "",
         status: "POR_COMENZAR" as CourseStatus,
       });
     } catch (error) {
@@ -89,7 +93,10 @@ export function CoursesView() {
   };
 
   const handleEditCourse = (course: Course) => {
-    setEditingCourse(course);
+    setEditingCourse({
+      ...course,
+      tagsInput: "",
+    });
     setIsEditModalOpen(true);
   };
 
@@ -104,6 +111,7 @@ export function CoursesView() {
         platform: editingCourse.platform,
         url: editingCourse.url || "",
         notes: editingCourse.notes || "",
+        tags: editingCourse.tags || [],
         status: editingCourse.status,
       });
       setIsEditModalOpen(false);

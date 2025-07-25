@@ -11,6 +11,8 @@ interface NewCourse {
   platform: string;
   url: string;
   notes: string;
+  tags: string[];
+  tagsInput: string;
   status: CourseStatus;
 }
 
@@ -85,13 +87,13 @@ export function CoursesModals({
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="relative">
               <label className="text-sm font-medium text-foreground block mb-2">
                 Plataforma
               </label>
               <select
-                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newCourse.platform}
                 onChange={(e) =>
                   onNewCourseChange({ ...newCourse, platform: e.target.value })
@@ -105,12 +107,12 @@ export function CoursesModals({
                 <option value="OTRA">Otra</option>
               </select>
             </div>
-            <div>
+            <div className="relative">
               <label className="text-sm font-medium text-foreground block mb-2">
                 Estado
               </label>
               <select
-                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newCourse.status}
                 onChange={(e) =>
                   onNewCourseChange({
@@ -154,11 +156,120 @@ export function CoursesModals({
             />
           </div>
 
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Tags
+            </label>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Input
+                placeholder="react, javascript, tutorial (separados por comas)"
+                value={newCourse.tagsInput || ""}
+                onChange={(e) =>
+                  onNewCourseChange({
+                    ...newCourse,
+                    tagsInput: e.target.value,
+                  })
+                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    const inputValue = newCourse.tagsInput || "";
+                    const tags = inputValue
+                      .split(",")
+                      .map((tag: string) => tag.trim().toLowerCase())
+                      .filter((tag: string) => tag.length > 0)
+                      .filter(
+                        (tag: string) =>
+                          !newCourse.tags
+                            .map((t) => t.toLowerCase())
+                            .includes(tag)
+                      );
+
+                    if (tags.length > 0) {
+                      onNewCourseChange({
+                        ...newCourse,
+                        tags: [...newCourse.tags, ...tags],
+                        tagsInput: "",
+                      });
+                    } else {
+                      onNewCourseChange({
+                        ...newCourse,
+                        tagsInput: "",
+                      });
+                    }
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="hover:bg-blue-500 text-white transition-colors duration-300"
+                size="sm"
+                onClick={() => {
+                  const inputValue = newCourse.tagsInput || "";
+                  const tags = inputValue
+                    .split(",")
+                    .map((tag: string) => tag.trim().toLowerCase())
+                    .filter((tag: string) => tag.length > 0)
+                    .filter(
+                      (tag: string) =>
+                        !newCourse.tags
+                          .map((t) => t.toLowerCase())
+                          .includes(tag)
+                    );
+
+                  if (tags.length > 0) {
+                    onNewCourseChange({
+                      ...newCourse,
+                      tags: [...newCourse.tags, ...tags],
+                      tagsInput: "",
+                    });
+                  } else {
+                    onNewCourseChange({
+                      ...newCourse,
+                      tagsInput: "",
+                    });
+                  }
+                }}
+              >
+                Añadir
+              </Button>
+            </div>
+            {newCourse.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {newCourse.tags.map((tag, index) => (
+                  <span
+                    key={`new-tag-${index}-${tag}`}
+                    className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md flex items-center gap-1"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onNewCourseChange({
+                          ...newCourse,
+                          tags: newCourse.tags.filter((_, i) => i !== index),
+                        });
+                      }}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground mt-1">
+              Escribe los tags y presiona Enter o el botón Añadir. Los tags
+              duplicados se ignorarán.
+            </p>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-2 pt-4">
             <Button
               type="submit"
               disabled={isCreating}
-              className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
+              className="flex-1 hover:bg-blue-500 hover:text-white transition-colors duration-300"
             >
               {isCreating ? (
                 <>
@@ -229,13 +340,13 @@ export function CoursesModals({
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="relative">
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Plataforma
                 </label>
                 <select
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={editingCourse.platform}
                   onChange={(e) =>
                     onEditingCourseChange({
@@ -251,12 +362,12 @@ export function CoursesModals({
                   <option value="OTRA">Otra</option>
                 </select>
               </div>
-              <div>
+              <div className="relative">
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Estado
                 </label>
                 <select
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground"
+                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={editingCourse.status}
                   onChange={(e) =>
                     onEditingCourseChange({
@@ -304,6 +415,116 @@ export function CoursesModals({
                   })
                 }
               />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Tags
+              </label>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Input
+                  placeholder="react, javascript, tutorial (separados por comas)"
+                  value={editingCourse.tagsInput || ""}
+                  onChange={(e) =>
+                    onEditingCourseChange({
+                      ...editingCourse,
+                      tagsInput: e.target.value,
+                    })
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const inputValue = editingCourse.tagsInput || "";
+                      const tags = inputValue
+                        .split(",")
+                        .map((tag: string) => tag.trim().toLowerCase())
+                        .filter((tag: string) => tag.length > 0)
+                        .filter(
+                          (tag: string) =>
+                            !editingCourse.tags
+                              .map((t) => t.toLowerCase())
+                              .includes(tag)
+                        );
+
+                      if (tags.length > 0) {
+                        onEditingCourseChange({
+                          ...editingCourse,
+                          tags: [...editingCourse.tags, ...tags],
+                          tagsInput: "",
+                        });
+                      } else {
+                        onEditingCourseChange({
+                          ...editingCourse,
+                          tagsInput: "",
+                        });
+                      }
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  className="flex hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                  onClick={() => {
+                    const inputValue = editingCourse.tagsInput || "";
+                    const tags = inputValue
+                      .split(",")
+                      .map((tag: string) => tag.trim().toLowerCase())
+                      .filter((tag: string) => tag.length > 0)
+                      .filter(
+                        (tag: string) =>
+                          !editingCourse.tags
+                            .map((t) => t.toLowerCase())
+                            .includes(tag)
+                      );
+
+                    if (tags.length > 0) {
+                      onEditingCourseChange({
+                        ...editingCourse,
+                        tags: [...editingCourse.tags, ...tags],
+                        tagsInput: "",
+                      });
+                    } else {
+                      onEditingCourseChange({
+                        ...editingCourse,
+                        tagsInput: "",
+                      });
+                    }
+                  }}
+                >
+                  Añadir
+                </Button>
+              </div>
+              {editingCourse.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {editingCourse.tags.map((tag, index) => (
+                    <span
+                      key={`edit-tag-${index}-${tag}`}
+                      className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md flex items-center gap-1"
+                    >
+                      {tag}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onEditingCourseChange({
+                            ...editingCourse,
+                            tags: editingCourse.tags.filter(
+                              (_, i) => i !== index
+                            ),
+                          });
+                        }}
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground mt-1">
+                Escribe los tags y presiona Enter o el botón Añadir. Los tags
+                duplicados se ignorarán.
+              </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2 pt-4">

@@ -34,6 +34,8 @@ export interface Course {
   status: CourseStatus;
   url?: string;
   notes?: string;
+  tags: string[];
+  tagsInput?: string;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
