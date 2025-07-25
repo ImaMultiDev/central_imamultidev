@@ -139,7 +139,7 @@ export function DocsGrid({
             <CardContent className="flex-1 space-y-4">
               {/* Tags */}
               <div className="flex flex-wrap gap-1">
-                {doc.tags.slice(0, 4).map((tag) => (
+                {doc.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
                     className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
@@ -147,9 +147,9 @@ export function DocsGrid({
                     {tag}
                   </span>
                 ))}
-                {doc.tags.length > 4 && (
+                {doc.tags.length > 3 && (
                   <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md">
-                    +{doc.tags.length - 4}
+                    +{doc.tags.length - 3}
                   </span>
                 )}
               </div>

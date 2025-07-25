@@ -247,7 +247,7 @@ export function CoursesGrid({
 
               {/* Tags */}
               <div className="flex flex-wrap gap-1">
-                {course.tags.slice(0, 4).map((tag) => (
+                {course.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
                     className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
@@ -255,9 +255,9 @@ export function CoursesGrid({
                     {tag}
                   </span>
                 ))}
-                {course.tags.length > 4 && (
+                {course.tags.length > 3 && (
                   <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md">
-                    +{course.tags.length - 4}
+                    +{course.tags.length - 3}
                   </span>
                 )}
               </div>
