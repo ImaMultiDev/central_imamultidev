@@ -57,26 +57,20 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/icon/icon_16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/icon/icon_32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon/icon_48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon_16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon_32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon_48x48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon_64x64.png", sizes: "64x64", type: "image/png" },
+      { url: "/icon_128x128.png", sizes: "128x128", type: "image/png" },
     ],
-    apple: [
-      { url: "/icon/icon_180x180.png", sizes: "180x180", type: "image/png" },
-    ],
+    apple: [{ url: "/icon_180x180.png", sizes: "180x180", type: "image/png" }],
     other: [
-      { url: "/icon/icon_192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icon/icon_512x512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icon_192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon_256x256.png", sizes: "256x256", type: "image/png" },
+      { url: "/icon_512x512.png", sizes: "512x512", type: "image/png" },
     ],
   },
   manifest: "/manifest.json",
-  themeColor: "#6366f1",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
   robots: {
     index: true,
     follow: true,
@@ -89,6 +83,15 @@ export const metadata: Metadata = {
     },
   },
 };
+
+export function generateViewport() {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    themeColor: "#1e3a8a",
+  };
+}
 
 export default function RootLayout({
   children,
