@@ -18,6 +18,49 @@ interface CalendarGridProps {
   isDeleting: string | null;
 }
 
+// Skeleton component for calendar loading state
+function CalendarSkeleton() {
+  return (
+    <Card className="lg:col-span-2 overflow-x-auto lg:overflow-visible animate-pulse">
+      <CardHeader>
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
+          <div className="h-8 bg-muted rounded w-48"></div>
+          <div className="flex items-center gap-2">
+            <div className="h-10 w-10 bg-muted rounded"></div>
+            <div className="h-9 w-24 bg-muted rounded"></div>
+            <div className="h-10 w-10 bg-muted rounded"></div>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="overflow-x-auto lg:overflow-visible w-[600px] lg:w-full">
+        {/* Headers skeleton */}
+        <div className="grid grid-cols-7 gap-2 mb-4">
+          {Array.from({ length: 7 }).map((_, index) => (
+            <div key={index} className="h-6 bg-muted rounded"></div>
+          ))}
+        </div>
+
+        {/* Calendar grid skeleton */}
+        <div className="grid grid-cols-7 gap-2">
+          {Array.from({ length: 42 }).map((_, index) => (
+            <div
+              key={index}
+              className="min-h-[120px] lg:h-[120px] p-2 border rounded-lg bg-muted/30"
+            >
+              <div className="h-4 bg-muted rounded w-6 mb-2"></div>
+              <div className="space-y-1 h-[80px]">
+                <div className="h-4 bg-muted rounded w-full"></div>
+                <div className="h-4 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function CalendarGrid({
   events,
   selectedCategory,
@@ -33,6 +76,7 @@ export function CalendarGrid({
     null
   );
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
   const today = new Date();
   const year = currentDate.getFullYear();
@@ -56,6 +100,7 @@ export function CalendarGrid({
   const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
   const navigateMonth = (direction: "prev" | "next") => {
+    setIsPageLoading(true);
     setCurrentDate((prev) => {
       const newDate = new Date(prev);
       if (direction === "prev") {
@@ -65,6 +110,11 @@ export function CalendarGrid({
       }
       return newDate;
     });
+
+    // Simulate loading time for better UX
+    setTimeout(() => {
+      setIsPageLoading(false);
+    }, 300);
   };
 
   const getEventsForDate = (date: Date) => {
@@ -97,6 +147,10 @@ export function CalendarGrid({
   while (currentDateIter <= endDate) {
     calendarDays.push(new Date(currentDateIter));
     currentDateIter.setDate(currentDateIter.getDate() + 1);
+  }
+
+  if (isPageLoading) {
+    return <CalendarSkeleton />;
   }
 
   return (

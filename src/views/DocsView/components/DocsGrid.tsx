@@ -26,6 +26,37 @@ interface DocsGridProps {
   categoryLabels: Record<string, string>;
 }
 
+// Skeleton component for loading state
+function DocCardSkeleton() {
+  return (
+    <Card className="flex flex-col animate-pulse">
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <div className="space-y-1 flex-1">
+            <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-muted rounded w-full mb-2"></div>
+            <div className="h-4 bg-muted rounded w-2/3"></div>
+          </div>
+          <div className="h-8 w-8 bg-muted rounded"></div>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap mt-4">
+          <div className="h-6 w-16 bg-muted rounded-full"></div>
+          <div className="h-6 w-20 bg-muted rounded-full"></div>
+        </div>
+      </CardHeader>
+      <CardContent className="flex-1 space-y-4">
+        <div className="flex flex-wrap gap-1">
+          <div className="h-6 w-12 bg-muted rounded"></div>
+          <div className="h-6 w-16 bg-muted rounded"></div>
+          <div className="h-6 w-14 bg-muted rounded"></div>
+        </div>
+        <div className="h-4 bg-muted rounded w-1/2"></div>
+        <div className="h-9 bg-muted rounded"></div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function DocsGrid({
   documents,
   onEditDocument,
@@ -39,6 +70,7 @@ export function DocsGrid({
   categoryLabels,
 }: DocsGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPageLoading, setIsPageLoading] = useState(false);
   const itemsPerPage = 6;
 
   const paginatedDocuments = useMemo(() => {
@@ -54,130 +86,154 @@ export function DocsGrid({
     setCurrentPage(1);
   }, [documents.length]);
 
+  const handlePageChange = (newPage: number) => {
+    setIsPageLoading(true);
+    setCurrentPage(newPage);
+
+    // Simulate loading time for better UX
+    setTimeout(() => {
+      setIsPageLoading(false);
+    }, 300);
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
-        {paginatedDocuments.map((doc) => (
-          <Card key={doc.id} className="flex flex-col">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1 flex-1">
-                  <CardTitle className="text-lg line-clamp-2 flex items-center gap-2">
-                    {doc.title}
-                  </CardTitle>
-                  <CardDescription className="line-clamp-2">
-                    {doc.description}
-                  </CardDescription>
-                </div>
-                <div className="relative">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 doc-menu-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onOpenMenuChange(openMenuId === doc.id ? null : doc.id);
-                    }}
-                  >
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                  {openMenuId === doc.id && (
-                    <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
-                      <div className="py-1">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEditDocument(doc);
-                            onOpenMenuChange(null);
-                          }}
-                          className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onDeleteDocument(doc.id);
-                            onOpenMenuChange(null);
-                          }}
-                          disabled={isDeleting === doc.id}
-                          className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {isDeleting === doc.id ? (
-                            <>
-                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
-                              Eliminando...
-                            </>
-                          ) : (
-                            "Eliminar"
-                          )}
-                        </button>
-                      </div>
+        {isPageLoading
+          ? // Show skeleton loaders while loading
+            Array.from({ length: itemsPerPage }).map((_, index) => (
+              <DocCardSkeleton key={`skeleton-${index}`} />
+            ))
+          : paginatedDocuments.map((doc) => (
+              <Card key={doc.id} className="flex flex-col">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1 flex-1">
+                      <CardTitle className="text-lg line-clamp-2 flex items-center gap-2">
+                        {doc.title}
+                      </CardTitle>
+                      <CardDescription className="line-clamp-2">
+                        {doc.description}
+                      </CardDescription>
                     </div>
-                  )}
-                </div>
-              </div>
+                    <div className="relative">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 doc-menu-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenMenuChange(
+                            openMenuId === doc.id ? null : doc.id
+                          );
+                        }}
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                      {openMenuId === doc.id && (
+                        <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                          <div className="py-1">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onEditDocument(doc);
+                                onOpenMenuChange(null);
+                              }}
+                              className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteDocument(doc.id);
+                                onOpenMenuChange(null);
+                              }}
+                              disabled={isDeleting === doc.id}
+                              className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isDeleting === doc.id ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                                  Eliminando...
+                                </>
+                              ) : (
+                                "Eliminar"
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-              <div className="flex items-center gap-2 flex-wrap">
-                <div
-                  className={`px-2 py-1 rounded-full text-xs font-medium text-white ${
-                    typeColors[doc.type as keyof typeof typeColors]
-                  }`}
-                >
-                  {typeLabels[doc.type as keyof typeof typeLabels]}
-                </div>
-                <div
-                  className={`px-2 py-1 rounded-full text-xs font-medium text-white ${
-                    categoryColors[doc.category as keyof typeof categoryColors]
-                  }`}
-                >
-                  {categoryLabels[doc.category as keyof typeof categoryLabels]}
-                </div>
-              </div>
-            </CardHeader>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div
+                      className={`px-2 py-1 rounded-full text-xs font-medium text-white ${
+                        typeColors[doc.type as keyof typeof typeColors]
+                      }`}
+                    >
+                      {typeLabels[doc.type as keyof typeof typeLabels]}
+                    </div>
+                    <div
+                      className={`px-2 py-1 rounded-full text-xs font-medium text-white ${
+                        categoryColors[
+                          doc.category as keyof typeof categoryColors
+                        ]
+                      }`}
+                    >
+                      {
+                        categoryLabels[
+                          doc.category as keyof typeof categoryLabels
+                        ]
+                      }
+                    </div>
+                  </div>
+                </CardHeader>
 
-            <CardContent className="flex-1 space-y-4">
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1">
-                {doc.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {doc.tags.length > 3 && (
-                  <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md">
-                    +{doc.tags.length - 3}
-                  </span>
-                )}
-              </div>
+                <CardContent className="flex-1 space-y-4">
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1">
+                    {doc.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                    {doc.tags.length > 3 && (
+                      <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md">
+                        +{doc.tags.length - 3}
+                      </span>
+                    )}
+                  </div>
 
-              {/* Date */}
-              <div className="text-sm text-muted-foreground">
-                Añadido: {new Date(doc.createdAt).toLocaleDateString("es-ES")}
-              </div>
+                  {/* Date */}
+                  <div className="text-sm text-muted-foreground">
+                    Añadido:{" "}
+                    {new Date(doc.createdAt).toLocaleDateString("es-ES")}
+                  </div>
 
-              {/* Actions */}
-              <div className="flex gap-2 pt-2 flex-wrap justify-center">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
-                  onClick={() =>
-                    window.open(doc.url, "_blank", "noopener,noreferrer")
-                  }
-                >
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Abrir
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  {/* Actions */}
+                  <div className="flex gap-2 pt-2 flex-wrap justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() =>
+                        window.open(doc.url, "_blank", "noopener,noreferrer")
+                      }
+                    >
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Abrir
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
 
-        {documents.length === 0 && (
+        {!isPageLoading && documents.length === 0 && (
           <Card className="lg:col-span-3">
             <CardContent className="py-12">
               <div className="text-center space-y-4">
@@ -207,7 +263,7 @@ export function DocsGrid({
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
           />
         </div>
       )}
