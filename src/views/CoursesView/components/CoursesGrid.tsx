@@ -246,18 +246,27 @@ export function CoursesGrid({
               )}
 
               {/* Tags */}
-              {course.tags && course.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {course.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+              <div className="flex flex-wrap gap-1">
+                {course.tags.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {course.tags.length > 4 && (
+                  <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md">
+                    +{course.tags.length - 4}
+                  </span>
+                )}
+              </div>
+
+              {/* Date */}
+              <div className="text-sm text-muted-foreground">
+                Añadido:{" "}
+                {new Date(course.createdAt).toLocaleDateString("es-ES")}
+              </div>
 
               {/* Actions */}
               <div className="flex gap-2 pt-2">
