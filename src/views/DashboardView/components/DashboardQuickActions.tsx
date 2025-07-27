@@ -7,6 +7,10 @@ import {
   TrendingUp,
   Monitor,
   Wrench,
+  BarChart3,
+  Cloud,
+  Bot,
+  Hammer,
 } from "lucide-react";
 import {
   Card,
@@ -33,7 +37,7 @@ export function DashboardQuickActions({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           <Button
             variant="outline"
             className="h-20 flex-col space-y-2"
@@ -81,6 +85,38 @@ export function DashboardQuickActions({
           >
             <TrendingUp className="h-6 w-6" />
             <span>Ver Calendario</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2"
+            onClick={() => onQuickAction("dataAnalytics")}
+          >
+            <BarChart3 className="h-6 w-6" />
+            <span>Data Analytics</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2"
+            onClick={() => onQuickAction("cloudStorage")}
+          >
+            <Cloud className="h-6 w-6" />
+            <span>Cloud Storage</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2"
+            onClick={() => onQuickAction("generativeAI")}
+          >
+            <Bot className="h-6 w-6" />
+            <span>IA Generativa</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2"
+            onClick={() => onQuickAction("workshop")}
+          >
+            <Hammer className="h-6 w-6" />
+            <span>Taller</span>
           </Button>
         </div>
       </CardContent>

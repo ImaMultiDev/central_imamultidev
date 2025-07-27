@@ -26,6 +26,10 @@ model User {
   courses       Course[]
   documentation Documentation[]
   tools         Tool[]
+  dataAnalytics DataAnalytics[]
+  cloudStorage  CloudStorage[]
+  generativeAI  GenerativeAI[]
+  workshop      Workshop[]
 
   @@map("users")
 }
@@ -133,6 +137,80 @@ model Tool {
   @@map("tools")
 }
 
+// Nuevos modelos para las vistas adicionales
+
+model DataAnalytics {
+  id          String              @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  type        DataAnalyticsType
+  category    DataAnalyticsCategory
+  tags        String[]
+  userId      String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("data_analytics")
+}
+
+model CloudStorage {
+  id          String            @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  type        CloudStorageType
+  category    CloudStorageCategory
+  tags        String[]
+  userId      String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("cloud_storage")
+}
+
+model GenerativeAI {
+  id          String           @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  type        GenerativeAIType
+  category    GenerativeAICategory
+  tags        String[]
+  userId      String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("generative_ai")
+}
+
+model Workshop {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  type        WorkshopType
+  category    WorkshopCategory
+  tags        String[]
+  userId      String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("workshop")
+}
+
 enum ToolType {
   DESPLIEGUE
   DISENO
@@ -159,4 +237,82 @@ enum ToolCategory {
   AUTENTICACION
   ANALITICAS
   CHAT_COLABORACION
+}
+
+// Nuevos enums para las vistas adicionales
+
+enum DataAnalyticsType {
+  BUSINESS_INTELLIGENCE
+  DATA_PROCESSING
+  MACHINE_LEARNING
+  DATA_VISUALIZATION
+  ETL_ELT
+  CLOUD_ANALYTICS
+}
+
+enum DataAnalyticsCategory {
+  DASHBOARDS
+  SELF_SERVICE_BI
+  CLOUD_ANALYTICS
+  DATA_LAKES
+  ETL_ELT
+  ML_PLATFORMS
+  AUTOML
+  MLOPS
+  ADVANCED_VIZ
+  STATISTICAL
+}
+
+enum CloudStorageType {
+  PERSONAL_STORAGE
+  HIGH_CAPACITY
+  COLLABORATION
+  BACKUP
+  FILE_TRANSFER
+  NOTE_TAKING
+  HOSTING
+  CLOUD_PROVIDERS
+  DATABASES
+  CDN
+  CI_CD
+  MONITORING
+}
+
+enum CloudStorageCategory {
+  STORAGE_SYNC
+  DEV_INFRASTRUCTURE
+}
+
+enum GenerativeAIType {
+  TEXT
+  CODE
+  IMAGE
+  AUDIO
+  VIDEO
+  PRODUCTIVITY
+}
+
+enum GenerativeAICategory {
+  TEXT_GENERATION
+  CODE_GENERATION
+  IMAGE_GENERATION
+  AUDIO_GENERATION
+  VIDEO_GENERATION
+  PRODUCTIVITY_AI
+}
+
+enum WorkshopType {
+  MULTIMEDIA_EDITING
+  CONVERSION
+  UTILITIES
+}
+
+enum WorkshopCategory {
+  IMAGES
+  VIDEO
+  AUDIO
+  FILES
+  GENERATORS
+  TESTING
+  ANALYSIS
 } 

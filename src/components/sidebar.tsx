@@ -13,6 +13,10 @@ import {
   Menu,
   X,
   LogOut,
+  BarChart3,
+  Cloud,
+  Bot,
+  Hammer,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -43,6 +47,26 @@ const navigation = [
     name: "Herramientas",
     href: "/tools",
     icon: Wrench,
+  },
+  {
+    name: "Data & Analytics",
+    href: "/data-analytics",
+    icon: BarChart3,
+  },
+  {
+    name: "Cloud & Storage",
+    href: "/cloud-storage",
+    icon: Cloud,
+  },
+  {
+    name: "IA Generativa",
+    href: "/generative-ai",
+    icon: Bot,
+  },
+  {
+    name: "Taller",
+    href: "/workshop",
+    icon: Hammer,
   },
   {
     name: "Test Hardware",

@@ -6,6 +6,7 @@ import {
   MicrophoneTest,
   SpeakerTest,
   ScreenTest,
+  HardwareTestHeader,
 } from "./components";
 
 // Types
@@ -45,13 +46,8 @@ export function HardwareTestView() {
   });
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-white">Test de Hardware</h1>
-        <p className="text-muted-foreground">
-          Verifica el funcionamiento de los componentes de tu dispositivo
-        </p>
-      </div>
+    <div className="space-y-6">
+      <HardwareTestHeader />
 
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Camera Test */}

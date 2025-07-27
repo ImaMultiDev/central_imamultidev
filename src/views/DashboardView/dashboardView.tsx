@@ -5,6 +5,10 @@ import { useEvents } from "@/hooks/useEvents";
 import { useCourses } from "@/hooks/useCourses";
 import { useDocumentation } from "@/hooks/useDocumentation";
 import { useTools } from "@/hooks/useTools";
+import { useDataAnalytics } from "@/hooks/useDataAnalytics";
+import { useCloudStorage } from "@/hooks/useCloudStorage";
+import { useGenerativeAI } from "@/hooks/useGenerativeAI";
+import { useWorkshop } from "@/hooks/useWorkshop";
 import {
   DashboardHeader,
   DashboardStats,
@@ -20,6 +24,10 @@ export function DashboardView() {
   const { courses } = useCourses();
   const { documentation } = useDocumentation();
   const { tools } = useTools();
+  const { dataAnalytics } = useDataAnalytics();
+  const { cloudStorage } = useCloudStorage();
+  const { generativeAI } = useGenerativeAI();
+  const { workshop } = useWorkshop();
 
   // Función helper para convertir fechas de manera segura
   const safeDate = (date: Date | string): Date => {
@@ -34,6 +42,10 @@ export function DashboardView() {
       .length,
     totalDocuments: documentation.length,
     totalTools: tools.length,
+    totalDataAnalytics: dataAnalytics.length,
+    totalCloudStorage: cloudStorage.length,
+    totalGenerativeAI: generativeAI.length,
+    totalWorkshop: workshop.length,
     upcomingEvents: events.filter((event) => {
       const eventDate = safeDate(event.startDate);
       const today = new Date();
@@ -89,6 +101,18 @@ export function DashboardView() {
         break;
       case "hardwareTest":
         router.push("/hardware-test");
+        break;
+      case "dataAnalytics":
+        router.push("/data-analytics");
+        break;
+      case "cloudStorage":
+        router.push("/cloud-storage");
+        break;
+      case "generativeAI":
+        router.push("/generative-ai");
+        break;
+      case "workshop":
+        router.push("/workshop");
         break;
       default:
         break;
