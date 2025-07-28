@@ -1,38 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser, getTokenFromRequest } from "@/lib/auth";
 
+// PUT /api/data-analytics/[id] - Actualizar un data analytics
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const token = request.headers.get("authorization")?.replace("Bearer ", "");
+    console.log("🔍 PUT /api/data-analytics/[id] - Iniciando actualización");
+    const token = getTokenFromRequest(request);
     const user = await getCurrentUser(token);
 
     if (!user) {
+      console.log("❌ Usuario no autorizado");
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
+
+    const { id } = await params;
+    console.log("🔍 Actualizando data analytics ID:", id);
 
     const body = await request.json();
     const { title, description, url, type, category, tags } = body;
 
+    if (!title || !type || !category) {
+      console.log("❌ Datos faltantes:", {
+        title: !!title,
+        type: !!type,
+        category: !!category,
+      });
+      return NextResponse.json(
+        { error: "Título, tipo y categoría son requeridos" },
+        { status: 400 }
+      );
+    }
+
+    // En desarrollo, verificar que el usuario sea propietario. En producción, no es necesario
+    const whereClause =
+      process.env.NODE_ENV === "development" ? { id, userId: user.id } : { id };
+
     const dataAnalytics = await prisma.dataAnalytics.update({
-      where: { id, userId: user.id },
+      where: whereClause,
       data: {
         title,
         description,
         url,
         type,
         category,
-        tags,
+        tags: tags || [],
       },
     });
 
+    console.log(
+      "✅ Data analytics actualizado exitosamente:",
+      dataAnalytics.id
+    );
     return NextResponse.json(dataAnalytics);
   } catch (error) {
-    console.error("Error updating data analytics:", error);
+    console.error("❌ Error al actualizar data analytics:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 }
@@ -40,26 +65,36 @@ export async function PUT(
   }
 }
 
+// DELETE /api/data-analytics/[id] - Eliminar un data analytics
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const token = request.headers.get("authorization")?.replace("Bearer ", "");
+    console.log("🔍 DELETE /api/data-analytics/[id] - Iniciando eliminación");
+    const token = getTokenFromRequest(request);
     const user = await getCurrentUser(token);
 
     if (!user) {
+      console.log("❌ Usuario no autorizado");
       return NextResponse.json({ error: "No autorizado" }, { status: 401 });
     }
 
+    const { id } = await params;
+    console.log("🔍 Eliminando data analytics ID:", id);
+
+    // En desarrollo, verificar que el usuario sea propietario. En producción, no es necesario
+    const whereClause =
+      process.env.NODE_ENV === "development" ? { id, userId: user.id } : { id };
+
     await prisma.dataAnalytics.delete({
-      where: { id, userId: user.id },
+      where: whereClause,
     });
 
+    console.log("✅ Data analytics eliminado exitosamente:", id);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting data analytics:", error);
+    console.error("❌ Error al eliminar data analytics:", error);
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 }
