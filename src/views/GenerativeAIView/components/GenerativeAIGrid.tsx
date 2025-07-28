@@ -1,207 +1,262 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { MoreHorizontal, ExternalLink, Edit, Trash2 } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import {
+  MoreHorizontal,
+  ExternalLink,
+  Edit,
+  Trash2,
+  Sparkles,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
 import { GenerativeAI } from "@/types";
 
 interface GenerativeAIGridProps {
-  generativeAIs: GenerativeAI[];
+  generativeAI: GenerativeAI[];
   onEditGenerativeAI: (item: GenerativeAI) => void;
-  onDeleteGenerativeAI: (itemId: string) => void;
+  onDeleteGenerativeAI: (id: string) => void;
+  openMenuId: string | null;
+  onOpenMenuChange: (id: string | null) => void;
   isDeleting: string | null;
+  typeColors: Record<string, string>;
+  typeLabels: Record<string, string>;
+  categoryColors: Record<string, string>;
+  categoryLabels: Record<string, string>;
+}
+
+// Skeleton component for loading state
+function GenerativeAICardSkeleton() {
+  return (
+    <Card className="flex flex-col animate-pulse">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 min-w-0">
+            <div className="h-5 bg-muted rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-muted rounded w-full mb-1"></div>
+            <div className="h-4 bg-muted rounded w-2/3"></div>
+          </div>
+          <div className="h-8 w-8 bg-muted rounded"></div>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            <div className="h-6 bg-muted rounded-full w-20"></div>
+            <div className="h-6 bg-muted rounded-full w-24"></div>
+          </div>
+          <div className="flex gap-1">
+            <div className="h-6 bg-muted rounded-full w-16"></div>
+            <div className="h-6 bg-muted rounded-full w-20"></div>
+            <div className="h-6 bg-muted rounded-full w-14"></div>
+          </div>
+          <div className="h-9 bg-muted rounded w-full"></div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function GenerativeAIGrid({
-  generativeAIs,
+  generativeAI,
   onEditGenerativeAI,
   onDeleteGenerativeAI,
+  openMenuId,
+  onOpenMenuChange,
   isDeleting,
+  typeColors,
+  typeLabels,
+  categoryColors,
+  categoryLabels,
 }: GenerativeAIGridProps) {
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isPageLoading, setIsPageLoading] = useState(false);
+  const itemsPerPage = 6;
 
-  const typeColors = {
-    TEXT: "bg-blue-500",
-    CODE: "bg-green-500",
-    IMAGES: "bg-purple-500",
-    AUDIO: "bg-orange-500",
-    VIDEO: "bg-red-500",
-    PRODUCTIVITY: "bg-indigo-500",
-  };
+  const paginatedGenerativeAI = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return generativeAI.slice(startIndex, endIndex);
+  }, [generativeAI, currentPage]);
 
-  const typeLabels = {
-    TEXT: "Texto",
-    CODE: "Código",
-    IMAGES: "Imágenes",
-    AUDIO: "Audio",
-    VIDEO: "Video",
-    PRODUCTIVITY: "Productividad",
-  };
+  const totalPages = Math.ceil(generativeAI.length / itemsPerPage);
 
-  const categoryLabels = {
-    TEXT_GENERATION: "Generación de Texto",
-    CODE_GENERATION: "Generación de Código",
-    IMAGE_GENERATION: "Generación de Imágenes",
-    AUDIO_GENERATION: "Generación de Audio",
-    VIDEO_GENERATION: "Generación de Video",
-    PRODUCTIVITY_TOOLS: "Herramientas de Productividad",
-  };
-
-  // Cerrar menús al hacer clic fuera
+  // Reset to page 1 when generative AI change
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      if (!target.closest(".generative-ai-menu-button")) {
-        setOpenMenuId(null);
-      }
-    };
+    setCurrentPage(1);
+  }, [generativeAI.length]);
 
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  const handlePageChange = (newPage: number) => {
+    setIsPageLoading(true);
+    setCurrentPage(newPage);
 
-  if (generativeAIs.length === 0) {
-    return (
-      <Card>
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-muted-foreground mb-2">
-              No hay herramientas de IA Generativa
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Comienza añadiendo tu primera herramienta de IA Generativa.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
+    // Simulate loading time for better UX
+    setTimeout(() => {
+      setIsPageLoading(false);
+    }, 300);
+  };
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {generativeAIs.map((item) => (
-        <Card key={item.id} className="relative group">
-          <CardHeader className="pb-3">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <CardTitle className="text-lg font-semibold truncate">
-                  {item.title}
-                </CardTitle>
-                <div className="flex items-center gap-2 mt-1">
-                  <span
-                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${
-                      typeColors[item.type as keyof typeof typeColors] ||
-                      "bg-gray-500"
-                    }`}
-                  >
-                    {typeLabels[item.type as keyof typeof typeLabels] ||
-                      item.type}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {categoryLabels[
-                      item.category as keyof typeof categoryLabels
-                    ] || item.category}
-                  </span>
+    <div className="space-y-6">
+      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
+        {isPageLoading
+          ? // Show skeleton loaders while loading
+            Array.from({ length: itemsPerPage }).map((_, index) => (
+              <GenerativeAICardSkeleton key={`skeleton-${index}`} />
+            ))
+          : paginatedGenerativeAI.map((item) => (
+              <Card key={item.id} className="flex flex-col">
+                <CardHeader>
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-1 flex-1">
+                      <CardTitle className="text-lg line-clamp-2 flex items-center gap-2">
+                        {item.title}
+                      </CardTitle>
+                      <CardDescription className="line-clamp-2">
+                        {item.description}
+                      </CardDescription>
+                    </div>
+                    <div className="relative">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="generative-ai-menu-button text-white transition-opacity"
+                        onClick={() =>
+                          onOpenMenuChange(
+                            openMenuId === item.id ? null : item.id
+                          )
+                        }
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                      {openMenuId === item.id && (
+                        <div className="absolute right-0 top-8 z-10 bg-background border rounded-md shadow-lg py-1 min-w-[120px]">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start px-3 py-2"
+                            onClick={() => {
+                              onEditGenerativeAI(item);
+                              onOpenMenuChange(null);
+                            }}
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
+                            Editar
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start px-3 py-2 text-destructive hover:text-destructive"
+                            onClick={() => {
+                              onDeleteGenerativeAI(item.id);
+                              onOpenMenuChange(null);
+                            }}
+                            disabled={isDeleting === item.id}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            {isDeleting === item.id
+                              ? "Eliminando..."
+                              : "Eliminar"}
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col">
+                  <div className="space-y-3 flex-1">
+                    <div className="flex flex-wrap gap-2">
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${
+                          typeColors[item.type]
+                        }`}
+                      >
+                        {typeLabels[item.type]}
+                      </span>
+                      <span
+                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${
+                          categoryColors[item.category]
+                        }`}
+                      >
+                        {categoryLabels[item.category]}
+                      </span>
+                    </div>
+                    {item.tags && item.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {item.tags.slice(0, 3).map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {item.tags.length > 3 && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                            +{item.tags.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {item.url && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full mt-auto"
+                        onClick={() =>
+                          window.open(item.url, "_blank", "noopener,noreferrer")
+                        }
+                      >
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Ver Herramienta
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+        {!isPageLoading && generativeAI.length === 0 && (
+          <Card className="lg:col-span-3">
+            <CardContent className="py-12">
+              <div className="text-center space-y-4">
+                <Sparkles className="h-12 w-12 text-muted-foreground mx-auto" />
+                <div>
+                  <h3 className="text-lg font-medium">
+                    No se encontraron herramientas de IA Generativa
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Ajusta los filtros o añade tu primera herramienta
+                  </p>
                 </div>
               </div>
-              <div className="relative">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0 generative-ai-menu-button text-white"
-                  onClick={() =>
-                    setOpenMenuId(openMenuId === item.id ? null : item.id)
-                  }
-                >
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-                {openMenuId === item.id && (
-                  <div className="absolute right-0 top-8 z-10 w-32 bg-background border rounded-md shadow-lg py-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start px-3 py-2 h-auto"
-                      onClick={() => {
-                        window.open(item.url, "_blank");
-                        setOpenMenuId(null);
-                      }}
-                    >
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      Abrir
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start px-3 py-2 h-auto"
-                      onClick={() => {
-                        onEditGenerativeAI(item);
-                        setOpenMenuId(null);
-                      }}
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Editar
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start px-3 py-2 h-auto text-destructive hover:text-destructive"
-                      onClick={() => {
-                        onDeleteGenerativeAI(item.id);
-                        setOpenMenuId(null);
-                      }}
-                      disabled={isDeleting === item.id}
-                    >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      {isDeleting === item.id ? "Eliminando..." : "Eliminar"}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {item.description && (
-              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                {item.description}
-              </p>
-            )}
-            {item.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {item.tags.slice(0, 3).map((tag, index) => (
-                  <span
-                    key={index}
-                    className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground"
-                  >
-                    {tag}
-                  </span>
-                ))}
-                {item.tags.length > 3 && (
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground">
-                    +{item.tags.length - 3}
-                  </span>
-                )}
-              </div>
-            )}
-            {/* Actions */}
-            <div className="flex gap-2 pt-2 flex-wrap justify-center">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1"
-                onClick={() =>
-                  window.open(item.url, "_blank", "noopener,noreferrer")
-                }
-              >
-                <ExternalLink className="mr-2 h-4 w-4" />
-                Abrir
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Pagination */}
+      {generativeAI.length > 0 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Mostrando {(currentPage - 1) * itemsPerPage + 1} a{" "}
+            {Math.min(currentPage * itemsPerPage, generativeAI.length)} de{" "}
+            {generativeAI.length} herramientas
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }

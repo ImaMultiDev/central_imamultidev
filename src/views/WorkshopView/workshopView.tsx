@@ -61,6 +61,7 @@ export function WorkshopView() {
   });
   const [tempTagsInput, setTempTagsInput] = useState("");
   const [editingTagsInput, setEditingTagsInput] = useState("");
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -191,10 +192,16 @@ export function WorkshopView() {
 
       {/* Grid */}
       <WorkshopGrid
-        workshops={filteredWorkshop}
+        workshop={filteredWorkshop}
         onEditWorkshop={handleEditWorkshop}
         onDeleteWorkshop={handleDeleteWorkshop}
+        openMenuId={openMenuId}
+        onOpenMenuChange={setOpenMenuId}
         isDeleting={isDeleting}
+        typeColors={typeColors}
+        typeLabels={typeLabels}
+        categoryColors={categoryColors}
+        categoryLabels={categoryLabels}
       />
 
       {/* Modals */}
