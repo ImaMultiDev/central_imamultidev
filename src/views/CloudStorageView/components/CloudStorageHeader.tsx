@@ -21,7 +21,7 @@ export function CloudStorageHeader({
       </div>
       <Button onClick={onAddCloudStorage}>
         <Plus className="mr-2 h-4 w-4" />
-        Añadir Documento
+        Añadir Herramienta
       </Button>
     </div>
   );

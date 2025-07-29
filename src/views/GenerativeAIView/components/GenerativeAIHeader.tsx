@@ -23,7 +23,7 @@ export function GenerativeAIHeader({
       </div>
       <Button onClick={onAddGenerativeAI}>
         <Plus className="mr-2 h-4 w-4" />
-        Añadir Curso
+        Añadir Herramienta
       </Button>
     </div>
   );

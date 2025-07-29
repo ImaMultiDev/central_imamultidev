@@ -18,7 +18,7 @@ export function WorkshopHeader({ onAddWorkshop }: WorkshopHeaderProps) {
       </div>
       <Button onClick={onAddWorkshop}>
         <Plus className="mr-2 h-4 w-4" />
-        Añadir Taller
+        Añadir Herramienta
       </Button>
     </div>
   );
