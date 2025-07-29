@@ -66,6 +66,7 @@ model Course {
   platform    String
   status      CourseStatus   @default(POR_COMENZAR)
   url         String?
+  docsUrl     String?
   notes       String?
   tags        String[]
   userId      String?

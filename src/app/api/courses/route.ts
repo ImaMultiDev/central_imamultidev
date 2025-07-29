@@ -62,7 +62,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     console.log("🔍 Datos recibidos:", body);
-    const { title, description, platform, url, notes, status, tags } = body;
+    const { title, description, platform, url, docsUrl, notes, status, tags } =
+      body;
 
     if (!title || !platform) {
       console.log("❌ Datos faltantes:", {
@@ -81,6 +82,7 @@ export async function POST(request: NextRequest) {
       description,
       platform,
       url,
+      docsUrl,
       notes,
       tags: tags || [],
       status: status || "POR_COMENZAR",

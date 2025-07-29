@@ -33,6 +33,7 @@ export interface Course {
   platform: string;
   status: CourseStatus;
   url?: string;
+  docsUrl?: string;
   notes?: string;
   tags: string[];
   tagsInput?: string;

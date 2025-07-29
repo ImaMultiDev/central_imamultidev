@@ -21,7 +21,8 @@ export async function PUT(
     console.log("🔍 Actualizando curso ID:", id);
 
     const body = await request.json();
-    const { title, description, platform, url, notes, status, tags } = body;
+    const { title, description, platform, url, docsUrl, notes, status, tags } =
+      body;
 
     if (!title || !platform) {
       console.log("❌ Datos faltantes:", {
@@ -45,6 +46,7 @@ export async function PUT(
         description,
         platform,
         url,
+        docsUrl,
         notes,
         tags: tags || [],
         status: status || "POR_COMENZAR",

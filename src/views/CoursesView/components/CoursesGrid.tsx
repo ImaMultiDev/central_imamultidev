@@ -340,6 +340,23 @@ export function CoursesGrid({
                         Ver Curso
                       </Button>
                     )}
+                    {course.docsUrl && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        onClick={() =>
+                          window.open(
+                            course.docsUrl,
+                            "_blank",
+                            "noopener,noreferrer"
+                          )
+                        }
+                      >
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        Ver Docs
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>

@@ -10,6 +10,7 @@ interface NewCourse {
   description: string;
   platform: string;
   url: string;
+  docsUrl: string;
   notes: string;
   tags: string[];
   tagsInput: string;
@@ -138,6 +139,20 @@ export function CoursesModals({
               value={newCourse.url}
               onChange={(e) =>
                 onNewCourseChange({ ...newCourse, url: e.target.value })
+              }
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              URL de documentación (opcional)
+            </label>
+            <Input
+              placeholder="https://drive.google.com/..."
+              type="url"
+              value={newCourse.docsUrl}
+              onChange={(e) =>
+                onNewCourseChange({ ...newCourse, docsUrl: e.target.value })
               }
             />
           </div>
@@ -395,6 +410,23 @@ export function CoursesModals({
                   onEditingCourseChange({
                     ...editingCourse,
                     url: e.target.value,
+                  })
+                }
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                URL de documentación (opcional)
+              </label>
+              <Input
+                placeholder="https://drive.google.com/..."
+                type="url"
+                value={editingCourse.docsUrl || ""}
+                onChange={(e) =>
+                  onEditingCourseChange({
+                    ...editingCourse,
+                    docsUrl: e.target.value,
                   })
                 }
               />

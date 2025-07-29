@@ -41,6 +41,7 @@ export function useCourses() {
     description?: string;
     platform: string;
     url?: string;
+    docsUrl?: string;
     notes?: string;
     tags?: string[];
     status?: CourseStatus;
@@ -69,6 +70,7 @@ export function useCourses() {
       description?: string;
       platform: string;
       url?: string;
+      docsUrl?: string;
       notes?: string;
       tags?: string[];
       status?: CourseStatus;
