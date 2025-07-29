@@ -48,6 +48,28 @@ export enum CourseStatus {
   POR_COMENZAR = "POR_COMENZAR",
 }
 
+export interface Tutorial {
+  id: string;
+  title: string;
+  description?: string;
+  platform: string;
+  status: TutorialStatus;
+  url?: string;
+  docsUrl?: string;
+  notes?: string;
+  tags: string[];
+  tagsInput?: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum TutorialStatus {
+  EN_PROGRESO = "EN_PROGRESO",
+  COMPLETADO = "COMPLETADO",
+  POR_COMENZAR = "POR_COMENZAR",
+}
+
 export interface Documentation {
   id: string;
   title: string;
@@ -123,6 +145,7 @@ export interface DashboardStats {
   totalTasks: number;
   completedTasks: number;
   activeCourses: number;
+  totalTutorials: number;
   totalDocuments: number;
   totalTools: number;
   upcomingEvents: number;

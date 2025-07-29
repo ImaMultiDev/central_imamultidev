@@ -10,6 +10,7 @@ import {
   Cloud,
   Bot,
   Hammer,
+  Play,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -17,6 +18,7 @@ interface Stats {
   totalTasks: number;
   completedTasks: number;
   activeCourses: number;
+  totalTutorials: number;
   totalDocuments: number;
   totalTools: number;
   totalDataAnalytics: number;
@@ -54,6 +56,17 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
         <CardContent>
           <div className="text-2xl font-bold">{stats.activeCourses}</div>
           <p className="text-xs text-muted-foreground">En progreso</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Tutoriales</CardTitle>
+          <Play className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.totalTutorials}</div>
+          <p className="text-xs text-muted-foreground">Recursos guardados</p>
         </CardContent>
       </Card>
 

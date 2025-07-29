@@ -24,6 +24,7 @@ model User {
   // Relations
   events        Event[]
   courses       Course[]
+  tutorials     Tutorial[]
   documentation Documentation[]
   tools         Tool[]
   dataAnalytics DataAnalytics[]
@@ -79,7 +80,33 @@ model Course {
   @@map("courses")
 }
 
+model Tutorial {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  platform    String
+  status      TutorialStatus @default(POR_COMENZAR)
+  url         String?
+  docsUrl     String?
+  notes       String?
+  tags        String[]
+  userId      String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations (opcional en producción)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tutorials")
+}
+
 enum CourseStatus {
+  EN_PROGRESO
+  COMPLETADO
+  POR_COMENZAR
+}
+
+enum TutorialStatus {
   EN_PROGRESO
   COMPLETADO
   POR_COMENZAR

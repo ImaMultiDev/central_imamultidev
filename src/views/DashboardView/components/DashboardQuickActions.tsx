@@ -11,6 +11,7 @@ import {
   Cloud,
   Bot,
   Hammer,
+  Play,
 } from "lucide-react";
 import {
   Card,
@@ -53,6 +54,14 @@ export function DashboardQuickActions({
           >
             <BookOpen className="h-6 w-6" />
             <span>Añadir Curso</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2"
+            onClick={() => onQuickAction("newTutorial")}
+          >
+            <Play className="h-6 w-6" />
+            <span>Añadir Tutorial</span>
           </Button>
           <Button
             variant="outline"

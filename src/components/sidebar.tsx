@@ -17,6 +17,7 @@ import {
   Cloud,
   Bot,
   Hammer,
+  Play,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,11 @@ const navigation = [
     name: "Cursos",
     href: "/courses",
     icon: BookOpen,
+  },
+  {
+    name: "Tutoriales",
+    href: "/tutorials",
+    icon: Play,
   },
   {
     name: "Documentación",
