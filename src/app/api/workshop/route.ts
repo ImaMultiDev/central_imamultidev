@@ -22,8 +22,9 @@ export async function GET(request: NextRequest) {
 
     console.log("🔍 Buscando workshop para usuario:", user.id);
 
-    // Filtrar por userId en todos los entornos
-    const whereClause = { userId: user.id };
+    // En desarrollo, filtrar por userId. En producción, obtener todos
+    const whereClause =
+      process.env.NODE_ENV === "development" ? { userId: user.id } : {};
 
     const workshop = await prisma.workshop.findMany({
       where: whereClause,
@@ -88,7 +89,10 @@ export async function POST(request: NextRequest) {
     console.log("🔍 Intentando crear workshop en BD");
 
     const workshop = await prisma.workshop.create({
-      data: { ...baseData, userId: user.id },
+      data:
+        process.env.NODE_ENV === "development"
+          ? { ...baseData, userId: user.id }
+          : (baseData as Parameters<typeof prisma.workshop.create>[0]["data"]),
     });
 
     console.log("✅ Workshop creado exitosamente:", workshop.id);

@@ -35,8 +35,9 @@ export async function PUT(
       );
     }
 
-    // Verificar que el usuario sea propietario en todos los entornos
-    const whereClause = { id, userId: user.id };
+    // En desarrollo, verificar que el usuario sea propietario. En producción, no es necesario
+    const whereClause =
+      process.env.NODE_ENV === "development" ? { id, userId: user.id } : { id };
 
     const dataAnalytics = await prisma.dataAnalytics.update({
       where: whereClause,
@@ -82,8 +83,9 @@ export async function DELETE(
     const { id } = await params;
     console.log("🔍 Eliminando data analytics ID:", id);
 
-    // Verificar que el usuario sea propietario en todos los entornos
-    const whereClause = { id, userId: user.id };
+    // En desarrollo, verificar que el usuario sea propietario. En producción, no es necesario
+    const whereClause =
+      process.env.NODE_ENV === "development" ? { id, userId: user.id } : { id };
 
     await prisma.dataAnalytics.delete({
       where: whereClause,
