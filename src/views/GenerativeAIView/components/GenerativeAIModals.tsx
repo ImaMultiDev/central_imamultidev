@@ -138,11 +138,11 @@ export function GenerativeAIModals({
                 }
               >
                 <option value="TEXT">Texto</option>
+                <option value="CODE">Código</option>
                 <option value="IMAGE">Imagen</option>
                 <option value="AUDIO">Audio</option>
                 <option value="VIDEO">Video</option>
-                <option value="CODE">Código</option>
-                <option value="MULTIMODAL">Multimodal</option>
+                <option value="PRODUCTIVITY">Productividad</option>
               </select>
             </div>
             <div className="relative">
@@ -160,13 +160,11 @@ export function GenerativeAIModals({
                 }
               >
                 <option value="TEXT_GENERATION">Generación de Texto</option>
+                <option value="CODE_GENERATION">Generación de Código</option>
                 <option value="IMAGE_GENERATION">Generación de Imágenes</option>
                 <option value="AUDIO_GENERATION">Generación de Audio</option>
                 <option value="VIDEO_GENERATION">Generación de Video</option>
-                <option value="CODE_GENERATION">Generación de Código</option>
-                <option value="CHATBOTS">Chatbots</option>
-                <option value="TRANSLATION">Traducción</option>
-                <option value="SUMMARIZATION">Resúmenes</option>
+                <option value="PRODUCTIVITY_AI">IA Productividad</option>
               </select>
             </div>
           </div>
@@ -379,11 +377,11 @@ export function GenerativeAIModals({
                   }
                 >
                   <option value="TEXT">Texto</option>
+                  <option value="CODE">Código</option>
                   <option value="IMAGE">Imagen</option>
                   <option value="AUDIO">Audio</option>
                   <option value="VIDEO">Video</option>
-                  <option value="CODE">Código</option>
-                  <option value="MULTIMODAL">Multimodal</option>
+                  <option value="PRODUCTIVITY">Productividad</option>
                 </select>
               </div>
               <div className="relative">
@@ -401,15 +399,13 @@ export function GenerativeAIModals({
                   }
                 >
                   <option value="TEXT_GENERATION">Generación de Texto</option>
+                  <option value="CODE_GENERATION">Generación de Código</option>
                   <option value="IMAGE_GENERATION">
                     Generación de Imágenes
                   </option>
                   <option value="AUDIO_GENERATION">Generación de Audio</option>
                   <option value="VIDEO_GENERATION">Generación de Video</option>
-                  <option value="CODE_GENERATION">Generación de Código</option>
-                  <option value="CHATBOTS">Chatbots</option>
-                  <option value="TRANSLATION">Traducción</option>
-                  <option value="SUMMARIZATION">Resúmenes</option>
+                  <option value="PRODUCTIVITY_AI">IA Productividad</option>
                 </select>
               </div>
             </div>

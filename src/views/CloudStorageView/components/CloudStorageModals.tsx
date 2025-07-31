@@ -137,12 +137,20 @@ export function CloudStorageModals({
                   })
                 }
               >
-                <option value="OBJECT_STORAGE">Object Storage</option>
-                <option value="BLOCK_STORAGE">Block Storage</option>
-                <option value="FILE_STORAGE">File Storage</option>
-                <option value="BACKUP_SOLUTIONS">Backup Solutions</option>
+                <option value="PERSONAL_STORAGE">
+                  Almacenamiento Personal
+                </option>
+                <option value="HIGH_CAPACITY">Alta Capacidad</option>
+                <option value="COLLABORATION">Colaboración</option>
+                <option value="BACKUP">Backup</option>
+                <option value="FILE_TRANSFER">Transferencia de Archivos</option>
+                <option value="NOTE_TAKING">Toma de Notas</option>
+                <option value="HOSTING">Hosting</option>
+                <option value="CLOUD_PROVIDERS">Proveedores Cloud</option>
+                <option value="DATABASES">Bases de Datos</option>
                 <option value="CDN">CDN</option>
-                <option value="DATABASE_HOSTING">Database Hosting</option>
+                <option value="CI_CD">CI/CD</option>
+                <option value="MONITORING">Monitoreo</option>
               </select>
             </div>
             <div className="relative">
@@ -159,13 +167,11 @@ export function CloudStorageModals({
                   })
                 }
               >
-                <option value="PUBLIC_CLOUD">Public Cloud</option>
-                <option value="PRIVATE_CLOUD">Private Cloud</option>
-                <option value="HYBRID_CLOUD">Hybrid Cloud</option>
-                <option value="MULTI_CLOUD">Multi-Cloud</option>
-                <option value="EDGE_COMPUTING">Edge Computing</option>
-                <option value="BACKUP_DISASTER">
-                  Backup & Disaster Recovery
+                <option value="STORAGE_SYNC">
+                  Almacenamiento y Sincronización
+                </option>
+                <option value="DEV_INFRASTRUCTURE">
+                  Infraestructura de Desarrollo
                 </option>
               </select>
             </div>
@@ -378,12 +384,22 @@ export function CloudStorageModals({
                     })
                   }
                 >
-                  <option value="OBJECT_STORAGE">Object Storage</option>
-                  <option value="BLOCK_STORAGE">Block Storage</option>
-                  <option value="FILE_STORAGE">File Storage</option>
-                  <option value="BACKUP_SOLUTIONS">Backup Solutions</option>
+                  <option value="PERSONAL_STORAGE">
+                    Almacenamiento Personal
+                  </option>
+                  <option value="HIGH_CAPACITY">Alta Capacidad</option>
+                  <option value="COLLABORATION">Colaboración</option>
+                  <option value="BACKUP">Backup</option>
+                  <option value="FILE_TRANSFER">
+                    Transferencia de Archivos
+                  </option>
+                  <option value="NOTE_TAKING">Toma de Notas</option>
+                  <option value="HOSTING">Hosting</option>
+                  <option value="CLOUD_PROVIDERS">Proveedores Cloud</option>
+                  <option value="DATABASES">Bases de Datos</option>
                   <option value="CDN">CDN</option>
-                  <option value="DATABASE_HOSTING">Database Hosting</option>
+                  <option value="CI_CD">CI/CD</option>
+                  <option value="MONITORING">Monitoreo</option>
                 </select>
               </div>
               <div className="relative">
@@ -400,13 +416,11 @@ export function CloudStorageModals({
                     })
                   }
                 >
-                  <option value="PUBLIC_CLOUD">Public Cloud</option>
-                  <option value="PRIVATE_CLOUD">Private Cloud</option>
-                  <option value="HYBRID_CLOUD">Hybrid Cloud</option>
-                  <option value="MULTI_CLOUD">Multi-Cloud</option>
-                  <option value="EDGE_COMPUTING">Edge Computing</option>
-                  <option value="BACKUP_DISASTER">
-                    Backup & Disaster Recovery
+                  <option value="STORAGE_SYNC">
+                    Almacenamiento y Sincronización
+                  </option>
+                  <option value="DEV_INFRASTRUCTURE">
+                    Infraestructura de Desarrollo
                   </option>
                 </select>
               </div>

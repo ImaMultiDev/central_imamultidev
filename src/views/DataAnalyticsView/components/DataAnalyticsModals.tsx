@@ -137,12 +137,14 @@ export function DataAnalyticsModals({
                   })
                 }
               >
-                <option value="VISUALIZATION">Visualización</option>
-                <option value="ANALYSIS">Análisis</option>
-                <option value="REPORTING">Reportes</option>
-                <option value="DASHBOARDS">Dashboards</option>
-                <option value="ETL">ETL</option>
-                <option value="BI">Business Intelligence</option>
+                <option value="BUSINESS_INTELLIGENCE">
+                  Business Intelligence
+                </option>
+                <option value="DATA_PROCESSING">Data Processing</option>
+                <option value="MACHINE_LEARNING">Machine Learning</option>
+                <option value="DATA_VISUALIZATION">Data Visualization</option>
+                <option value="ETL_ELT">ETL/ELT</option>
+                <option value="CLOUD_ANALYTICS">Cloud Analytics</option>
               </select>
             </div>
             <div className="relative">
@@ -159,20 +161,16 @@ export function DataAnalyticsModals({
                   })
                 }
               >
-                <option value="BUSINESS_INTELLIGENCE">
-                  Business Intelligence
-                </option>
-                <option value="DATA_VISUALIZATION">
-                  Visualización Datos
-                </option>
-                <option value="DATA_ANALYSIS">Análisis de Datos</option>
-                <option value="REPORTING_TOOLS">
-                  Herramientas Reportes
-                </option>
-                <option value="ETL_TOOLS">Herramientas ETL</option>
-                <option value="DASHBOARD_BUILDERS">
-                  Constructor Dashboard
-                </option>
+                <option value="DASHBOARDS">Dashboards</option>
+                <option value="SELF_SERVICE_BI">Self-Service BI</option>
+                <option value="CLOUD_ANALYTICS">Cloud Analytics</option>
+                <option value="DATA_LAKES">Data Lakes</option>
+                <option value="ETL_ELT">ETL/ELT</option>
+                <option value="ML_PLATFORMS">ML Platforms</option>
+                <option value="AUTOML">AutoML</option>
+                <option value="MLOPS">MLOps</option>
+                <option value="ADVANCED_VIZ">Advanced Viz</option>
+                <option value="STATISTICAL">Statistical</option>
               </select>
             </div>
           </div>
@@ -384,12 +382,14 @@ export function DataAnalyticsModals({
                     })
                   }
                 >
-                  <option value="VISUALIZATION">Visualización</option>
-                  <option value="ANALYSIS">Análisis</option>
-                  <option value="REPORTING">Reportes</option>
-                  <option value="DASHBOARDS">Dashboards</option>
-                  <option value="ETL">ETL</option>
-                  <option value="BI">Business Intelligence</option>
+                  <option value="BUSINESS_INTELLIGENCE">
+                    Business Intelligence
+                  </option>
+                  <option value="DATA_PROCESSING">Data Processing</option>
+                  <option value="MACHINE_LEARNING">Machine Learning</option>
+                  <option value="DATA_VISUALIZATION">Data Visualization</option>
+                  <option value="ETL_ELT">ETL/ELT</option>
+                  <option value="CLOUD_ANALYTICS">Cloud Analytics</option>
                 </select>
               </div>
               <div className="relative">
@@ -406,18 +406,16 @@ export function DataAnalyticsModals({
                     })
                   }
                 >
-                  <option value="BUSINESS_INTELLIGENCE">
-                    Business Intelligence
-                  </option>
-                  <option value="DATA_VISUALIZATION">
-                    Visualización Datos
-                  </option>
-                  <option value="DATA_ANALYSIS">Análisis de Datos</option>
-                  <option value="REPORTING_TOOLS">Herramientas Reportes</option>
-                  <option value="ETL_TOOLS">Herramientas ETL</option>
-                  <option value="DASHBOARD_BUILDERS">
-                    Constructor Dashboard
-                  </option>
+                  <option value="DASHBOARDS">Dashboards</option>
+                  <option value="SELF_SERVICE_BI">Self-Service BI</option>
+                  <option value="CLOUD_ANALYTICS">Cloud Analytics</option>
+                  <option value="DATA_LAKES">Data Lakes</option>
+                  <option value="ETL_ELT">ETL/ELT</option>
+                  <option value="ML_PLATFORMS">ML Platforms</option>
+                  <option value="AUTOML">AutoML</option>
+                  <option value="MLOPS">MLOps</option>
+                  <option value="ADVANCED_VIZ">Advanced Viz</option>
+                  <option value="STATISTICAL">Statistical</option>
                 </select>
               </div>
             </div>

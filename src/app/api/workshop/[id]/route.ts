@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser, getTokenFromRequest } from "@/lib/auth";
 
 // PUT /api/workshop/[id] - Actualizar un workshop
 export async function PUT(
@@ -8,38 +7,20 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log("🔍 PUT /api/workshop/[id] - Iniciando actualización");
-    const token = getTokenFromRequest(request);
-    const user = await getCurrentUser(token);
-
-    if (!user) {
-      console.log("❌ Usuario no autorizado");
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
-
     const { id } = await params;
-    console.log("🔍 Actualizando workshop ID:", id);
-
     const body = await request.json();
     const { title, description, url, type, category, tags } = body;
 
-    if (!title || !type || !category) {
-      console.log("❌ Datos faltantes:", {
-        title: !!title,
-        type: !!type,
-        category: !!category,
-      });
+    // Validaciones básicas
+    if (!title || !url || !type || !category) {
       return NextResponse.json(
-        { error: "Título, tipo y categoría son requeridos" },
+        { error: "Faltan campos obligatorios" },
         { status: 400 }
       );
     }
 
-    // Verificar que el usuario sea propietario
-    const whereClause = { id, userId: user.id };
-
     const workshop = await prisma.workshop.update({
-      where: whereClause,
+      where: { id },
       data: {
         title,
         description,
@@ -50,12 +31,11 @@ export async function PUT(
       },
     });
 
-    console.log("✅ Workshop actualizado exitosamente:", workshop.id);
     return NextResponse.json(workshop);
   } catch (error) {
-    console.error("❌ Error al actualizar workshop:", error);
+    console.error("Error updating workshop:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: "Error al actualizar el workshop" },
       { status: 500 }
     );
   }
@@ -67,31 +47,19 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log("🔍 DELETE /api/workshop/[id] - Iniciando eliminación");
-    const token = getTokenFromRequest(request);
-    const user = await getCurrentUser(token);
-
-    if (!user) {
-      console.log("❌ Usuario no autorizado");
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
-
     const { id } = await params;
-    console.log("🔍 Eliminando workshop ID:", id);
-
-    // Verificar que el usuario sea propietario
-    const whereClause = { id, userId: user.id };
 
     await prisma.workshop.delete({
-      where: whereClause,
+      where: { id },
     });
 
-    console.log("✅ Workshop eliminado exitosamente:", id);
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      message: "Workshop eliminado correctamente",
+    });
   } catch (error) {
-    console.error("❌ Error al eliminar workshop:", error);
+    console.error("Error deleting workshop:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: "Error al eliminar el workshop" },
       { status: 500 }
     );
   }

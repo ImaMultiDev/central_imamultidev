@@ -132,11 +132,8 @@ export function WorkshopModals({
                 }
               >
                 <option value="MULTIMEDIA_EDITING">Edición Multimedia</option>
-                <option value="GRAPHIC_DESIGN">Diseño Gráfico</option>
-                <option value="VIDEO_EDITING">Edición de Video</option>
-                <option value="AUDIO_EDITING">Edición de Audio</option>
-                <option value="3D_MODELING">Modelado 3D</option>
-                <option value="ANIMATION">Animación</option>
+                <option value="CONVERSION">Conversión</option>
+                <option value="UTILITIES">Utilidades</option>
               </select>
             </div>
             <div className="relative">
@@ -154,11 +151,12 @@ export function WorkshopModals({
                 }
               >
                 <option value="IMAGES">Imágenes</option>
-                <option value="VIDEOS">Videos</option>
+                <option value="VIDEO">Video</option>
                 <option value="AUDIO">Audio</option>
-                <option value="3D">3D</option>
-                <option value="ANIMATION">Animación</option>
-                <option value="DESIGN">Diseño</option>
+                <option value="FILES">Archivos</option>
+                <option value="GENERATORS">Generadores</option>
+                <option value="TESTING">Testing</option>
+                <option value="ANALYSIS">Análisis</option>
               </select>
             </div>
           </div>
@@ -369,11 +367,8 @@ export function WorkshopModals({
                   }
                 >
                   <option value="MULTIMEDIA_EDITING">Edición Multimedia</option>
-                  <option value="GRAPHIC_DESIGN">Diseño Gráfico</option>
-                  <option value="VIDEO_EDITING">Edición de Video</option>
-                  <option value="AUDIO_EDITING">Edición de Audio</option>
-                  <option value="3D_MODELING">Modelado 3D</option>
-                  <option value="ANIMATION">Animación</option>
+                  <option value="CONVERSION">Conversión</option>
+                  <option value="UTILITIES">Utilidades</option>
                 </select>
               </div>
               <div className="relative">
@@ -391,11 +386,12 @@ export function WorkshopModals({
                   }
                 >
                   <option value="IMAGES">Imágenes</option>
-                  <option value="VIDEOS">Videos</option>
+                  <option value="VIDEO">Video</option>
                   <option value="AUDIO">Audio</option>
-                  <option value="3D">3D</option>
-                  <option value="ANIMATION">Animación</option>
-                  <option value="DESIGN">Diseño</option>
+                  <option value="FILES">Archivos</option>
+                  <option value="GENERATORS">Generadores</option>
+                  <option value="TESTING">Testing</option>
+                  <option value="ANALYSIS">Análisis</option>
                 </select>
               </div>
             </div>

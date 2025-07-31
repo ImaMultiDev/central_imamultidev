@@ -1,41 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getCurrentUser, getTokenFromRequest } from "@/lib/auth";
 
-// GET /api/workshop - Obtener todos los workshop del usuario
-export async function GET(request: NextRequest) {
+// GET /api/workshop - Obtener todos los workshop
+export async function GET() {
   try {
-    console.log("🔍 GET /api/workshop - Iniciando request");
-    const token = getTokenFromRequest(request);
-    console.log("🔍 Token encontrado:", token ? "Sí" : "No");
-
-    const user = await getCurrentUser(token);
-    console.log(
-      "🔍 Usuario obtenido:",
-      user ? `ID: ${user.id}` : "No autorizado"
-    );
-
-    if (!user) {
-      console.log("❌ Usuario no autorizado");
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
-
-    console.log("🔍 Buscando workshop para usuario:", user.id);
-
-    // Filtrar por userId
-    const whereClause = { userId: user.id };
-
     const workshop = await prisma.workshop.findMany({
-      where: whereClause,
-      orderBy: { createdAt: "desc" },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-    console.log("✅ Workshop encontrados:", workshop.length);
 
     return NextResponse.json(workshop);
   } catch (error) {
-    console.error("❌ Error al obtener workshop:", error);
+    console.error("Error fetching workshop:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: "Error al obtener los workshop" },
       { status: 500 }
     );
   }
@@ -44,62 +23,34 @@ export async function GET(request: NextRequest) {
 // POST /api/workshop - Crear un nuevo workshop
 export async function POST(request: NextRequest) {
   try {
-    console.log("🔍 POST /api/workshop - Iniciando creación");
-    const token = getTokenFromRequest(request);
-    console.log("🔍 Token encontrado:", token ? "Sí" : "No");
-
-    const user = await getCurrentUser(token);
-    console.log(
-      "🔍 Usuario obtenido:",
-      user ? `ID: ${user.id}` : "No autorizado"
-    );
-
-    if (!user) {
-      console.log("❌ Usuario no autorizado");
-      return NextResponse.json({ error: "No autorizado" }, { status: 401 });
-    }
-
     const body = await request.json();
-    console.log("🔍 Datos recibidos:", body);
-    const { title, description, url, type, category, tags } = body;
+    const { title, description, url, type, category, tags, userId } = body;
 
-    if (!title || !type || !category) {
-      console.log("❌ Datos faltantes:", {
-        title: !!title,
-        type: !!type,
-        category: !!category,
-      });
+    // Validaciones básicas
+    if (!title || !url || !type || !category) {
       return NextResponse.json(
-        { error: "Título, tipo y categoría son requeridos" },
+        { error: "Faltan campos obligatorios" },
         { status: 400 }
       );
     }
 
-    // En desarrollo, incluir userId. En producción, no es necesario
-    const baseData = {
-      title,
-      description,
-      url,
-      type,
-      category,
-      tags: tags || [],
-    };
-
-    console.log("🔍 Intentando crear workshop en BD");
-
     const workshop = await prisma.workshop.create({
       data: {
-        ...baseData,
-        userId: user.id,
+        title,
+        description,
+        url,
+        type,
+        category,
+        tags: tags || [],
+        userId: userId || null,
       },
     });
 
-    console.log("✅ Workshop creado exitosamente:", workshop.id);
     return NextResponse.json(workshop, { status: 201 });
   } catch (error) {
-    console.error("❌ Error al crear workshop:", error);
+    console.error("Error creating workshop:", error);
     return NextResponse.json(
-      { error: "Error interno del servidor" },
+      { error: "Error al crear el workshop" },
       { status: 500 }
     );
   }
