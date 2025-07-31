@@ -22,9 +22,8 @@ export async function GET(request: NextRequest) {
 
     console.log("🔍 Buscando cloud storage para usuario:", user.id);
 
-    // En desarrollo, filtrar por userId. En producción, obtener todos
-    const whereClause =
-      process.env.NODE_ENV === "development" ? { userId: user.id } : {};
+    // Filtrar por userId
+    const whereClause = { userId: user.id };
 
     const cloudStorage = await prisma.cloudStorage.findMany({
       where: whereClause,
@@ -89,12 +88,10 @@ export async function POST(request: NextRequest) {
     console.log("🔍 Intentando crear cloud storage en BD");
 
     const cloudStorage = await prisma.cloudStorage.create({
-      data:
-        process.env.NODE_ENV === "development"
-          ? { ...baseData, userId: user.id }
-          : (baseData as Parameters<
-              typeof prisma.cloudStorage.create
-            >[0]["data"]),
+      data: {
+        ...baseData,
+        userId: user.id,
+      },
     });
 
     console.log("✅ Cloud storage creado exitosamente:", cloudStorage.id);

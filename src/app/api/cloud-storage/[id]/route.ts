@@ -35,9 +35,8 @@ export async function PUT(
       );
     }
 
-    // En desarrollo, verificar que el usuario sea propietario. En producción, no es necesario
-    const whereClause =
-      process.env.NODE_ENV === "development" ? { id, userId: user.id } : { id };
+    // Verificar que el usuario sea propietario
+    const whereClause = { id, userId: user.id };
 
     const cloudStorage = await prisma.cloudStorage.update({
       where: whereClause,
@@ -80,9 +79,8 @@ export async function DELETE(
     const { id } = await params;
     console.log("🔍 Eliminando cloud storage ID:", id);
 
-    // En desarrollo, verificar que el usuario sea propietario. En producción, no es necesario
-    const whereClause =
-      process.env.NODE_ENV === "development" ? { id, userId: user.id } : { id };
+    // Verificar que el usuario sea propietario
+    const whereClause = { id, userId: user.id };
 
     await prisma.cloudStorage.delete({
       where: whereClause,

@@ -22,9 +22,8 @@ export async function GET(request: NextRequest) {
 
     console.log("🔍 Buscando data analytics para usuario:", user.id);
 
-    // En desarrollo, filtrar por userId. En producción, obtener todos
-    const whereClause =
-      process.env.NODE_ENV === "development" ? { userId: user.id } : {};
+    // Filtrar por userId
+    const whereClause = { userId: user.id };
 
     const dataAnalytics = await prisma.dataAnalytics.findMany({
       where: whereClause,
@@ -89,12 +88,10 @@ export async function POST(request: NextRequest) {
     console.log("🔍 Intentando crear data analytics en BD");
 
     const dataAnalytics = await prisma.dataAnalytics.create({
-      data:
-        process.env.NODE_ENV === "development"
-          ? { ...baseData, userId: user.id }
-          : (baseData as Parameters<
-              typeof prisma.dataAnalytics.create
-            >[0]["data"]),
+      data: {
+        ...baseData,
+        userId: user.id,
+      },
     });
 
     console.log("✅ Data analytics creado exitosamente:", dataAnalytics.id);

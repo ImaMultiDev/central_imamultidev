@@ -22,9 +22,8 @@ export async function GET(request: NextRequest) {
 
     console.log("🔍 Buscando generative AI para usuario:", user.id);
 
-    // En desarrollo, filtrar por userId. En producción, obtener todos
-    const whereClause =
-      process.env.NODE_ENV === "development" ? { userId: user.id } : {};
+    // Filtrar por userId
+    const whereClause = { userId: user.id };
 
     const generativeAI = await prisma.generativeAI.findMany({
       where: whereClause,
@@ -89,12 +88,10 @@ export async function POST(request: NextRequest) {
     console.log("🔍 Intentando crear generative AI en BD");
 
     const generativeAI = await prisma.generativeAI.create({
-      data:
-        process.env.NODE_ENV === "development"
-          ? { ...baseData, userId: user.id }
-          : (baseData as Parameters<
-              typeof prisma.generativeAI.create
-            >[0]["data"]),
+      data: {
+        ...baseData,
+        userId: user.id,
+      },
     });
 
     console.log("✅ Generative AI creado exitosamente:", generativeAI.id);
