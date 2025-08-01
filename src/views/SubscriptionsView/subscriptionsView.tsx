@@ -27,6 +27,10 @@ export default function SubscriptionsView() {
   const [editingSubscription, setEditingSubscription] =
     useState<Subscription | null>(null);
 
+  // Estados de carga
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
   // Estados para filtros
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
@@ -103,9 +107,13 @@ export default function SubscriptionsView() {
     >
   ) => {
     try {
+      setIsCreating(true);
       await createSubscription(subscription);
+      setIsAddModalOpen(false);
     } catch (error) {
       console.error("Error creating subscription:", error);
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -114,9 +122,14 @@ export default function SubscriptionsView() {
     subscription: Partial<Subscription>
   ) => {
     try {
+      setIsUpdating(true);
       await updateSubscription(id, subscription);
+      setIsEditModalOpen(false);
+      setEditingSubscription(null);
     } catch (error) {
       console.error("Error updating subscription:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -178,6 +191,8 @@ export default function SubscriptionsView() {
         }}
         onAddSubscription={handleAddSubscription}
         onUpdateSubscription={handleUpdateSubscription}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
       />
     </div>
   );

@@ -30,6 +30,8 @@ interface SubscriptionsModalsProps {
     id: string,
     subscription: Partial<Subscription>
   ) => void;
+  isCreating: boolean;
+  isUpdating: boolean;
 }
 
 export default function SubscriptionsModals({
@@ -40,6 +42,8 @@ export default function SubscriptionsModals({
   onCloseEditModal,
   onAddSubscription,
   onUpdateSubscription,
+  isCreating,
+  isUpdating,
 }: SubscriptionsModalsProps) {
   const [newSubscription, setNewSubscription] = useState({
     title: "",
@@ -169,7 +173,9 @@ export default function SubscriptionsModals({
       >
         <div className="space-y-4">
           <div>
-            <Label htmlFor="title">Título *</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Título *
+            </label>
             <Input
               id="title"
               placeholder="Ej: Netflix, Spotify, Adobe Creative..."
@@ -184,7 +190,9 @@ export default function SubscriptionsModals({
           </div>
 
           <div>
-            <Label htmlFor="description">Descripción</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Descripción
+            </label>
             <Textarea
               id="description"
               placeholder="Descripción de la suscripción..."
@@ -199,7 +207,9 @@ export default function SubscriptionsModals({
           </div>
 
           <div>
-            <Label htmlFor="url">URL</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              URL
+            </label>
             <Input
               id="url"
               placeholder="https://..."
@@ -212,8 +222,11 @@ export default function SubscriptionsModals({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="type">Tipo *</Label>
-              <Select
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Tipo *
+              </label>
+              <select
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newSubscription.type}
                 onChange={(e) =>
                   setNewSubscription({
@@ -238,12 +251,15 @@ export default function SubscriptionsModals({
                 <option value={SubscriptionType.EDUCATION}>Educación</option>
                 <option value={SubscriptionType.NEWS}>Noticias</option>
                 <option value={SubscriptionType.FITNESS}>Fitness</option>
-              </Select>
+              </select>
             </div>
 
             <div>
-              <Label htmlFor="category">Categoría *</Label>
-              <Select
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Categoría *
+              </label>
+              <select
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newSubscription.category}
                 onChange={(e) =>
                   setNewSubscription({
@@ -262,13 +278,15 @@ export default function SubscriptionsModals({
                 </option>
                 <option value={SubscriptionCategory.HEALTH}>Salud</option>
                 <option value={SubscriptionCategory.FINANCE}>Finanzas</option>
-              </Select>
+              </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="price">Precio *</Label>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Precio *
+              </label>
               <Input
                 id="price"
                 type="number"
@@ -286,8 +304,11 @@ export default function SubscriptionsModals({
             </div>
 
             <div>
-              <Label htmlFor="billingCycle">Ciclo de Facturación *</Label>
-              <Select
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Ciclo de Facturación *
+              </label>
+              <select
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={newSubscription.billingCycle}
                 onChange={(e) =>
                   setNewSubscription({
@@ -300,13 +321,15 @@ export default function SubscriptionsModals({
                 <option value={BillingCycle.YEARLY}>Anual</option>
                 <option value={BillingCycle.WEEKLY}>Semanal</option>
                 <option value={BillingCycle.LIFETIME}>Lifetime</option>
-              </Select>
+              </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="startDate">Fecha de Inicio *</Label>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Fecha de Inicio *
+              </label>
               <Input
                 id="startDate"
                 type="date"
@@ -321,7 +344,9 @@ export default function SubscriptionsModals({
             </div>
 
             <div>
-              <Label htmlFor="nextBillingDate">Próximo Pago</Label>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Próximo Pago
+              </label>
               <Input
                 id="nextBillingDate"
                 type="date"
@@ -339,7 +364,7 @@ export default function SubscriptionsModals({
           </div>
 
           <div>
-            <Label>
+            <label className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={newSubscription.isActive}
@@ -349,14 +374,16 @@ export default function SubscriptionsModals({
                     isActive: e.target.checked,
                   })
                 }
-                className="mr-2"
+                className="rounded"
               />
               Suscripción activa
-            </Label>
+            </label>
           </div>
 
           <div>
-            <Label htmlFor="tags">Etiquetas</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Etiquetas
+            </label>
             <div className="flex gap-2 mb-2">
               <Input
                 placeholder="Agregar etiqueta..."
@@ -387,11 +414,31 @@ export default function SubscriptionsModals({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={onCloseAddModal}>
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
+            <Button
+              type="submit"
+              disabled={isCreating}
+              className="flex-1 hover:bg-green-500 hover:text-white transition-colors duration-300"
+              onClick={handleAddSubscription}
+            >
+              {isCreating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Creando...
+                </>
+              ) : (
+                "Agregar Suscripción"
+              )}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isCreating}
+              onClick={onCloseAddModal}
+              className="text-white hover:text-red-500 transition-colors duration-300"
+            >
               Cancelar
             </Button>
-            <Button onClick={handleAddSubscription}>Agregar Suscripción</Button>
           </div>
         </div>
       </Modal>
@@ -404,7 +451,9 @@ export default function SubscriptionsModals({
       >
         <div className="space-y-4">
           <div>
-            <Label htmlFor="edit-title">Título *</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Título *
+            </label>
             <Input
               id="edit-title"
               placeholder="Ej: Netflix, Spotify, Adobe Creative..."
@@ -419,7 +468,9 @@ export default function SubscriptionsModals({
           </div>
 
           <div>
-            <Label htmlFor="edit-description">Descripción</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              Descripción
+            </label>
             <Textarea
               id="edit-description"
               placeholder="Descripción de la suscripción..."
@@ -434,7 +485,9 @@ export default function SubscriptionsModals({
           </div>
 
           <div>
-            <Label htmlFor="edit-url">URL</Label>
+            <label className="text-sm font-medium text-foreground block mb-2">
+              URL
+            </label>
             <Input
               id="edit-url"
               placeholder="https://..."
@@ -450,8 +503,11 @@ export default function SubscriptionsModals({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="edit-type">Tipo *</Label>
-              <Select
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Tipo *
+              </label>
+              <select
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={editingSubscriptionData.type}
                 onChange={(e) =>
                   setEditingSubscriptionData({
@@ -476,12 +532,15 @@ export default function SubscriptionsModals({
                 <option value={SubscriptionType.EDUCATION}>Educación</option>
                 <option value={SubscriptionType.NEWS}>Noticias</option>
                 <option value={SubscriptionType.FITNESS}>Fitness</option>
-              </Select>
+              </select>
             </div>
 
             <div>
-              <Label htmlFor="edit-category">Categoría *</Label>
-              <Select
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Categoría *
+              </label>
+              <select
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={editingSubscriptionData.category}
                 onChange={(e) =>
                   setEditingSubscriptionData({
@@ -500,13 +559,15 @@ export default function SubscriptionsModals({
                 </option>
                 <option value={SubscriptionCategory.HEALTH}>Salud</option>
                 <option value={SubscriptionCategory.FINANCE}>Finanzas</option>
-              </Select>
+              </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="edit-price">Precio *</Label>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Precio *
+              </label>
               <Input
                 id="edit-price"
                 type="number"
@@ -524,8 +585,11 @@ export default function SubscriptionsModals({
             </div>
 
             <div>
-              <Label htmlFor="edit-billingCycle">Ciclo de Facturación *</Label>
-              <Select
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Ciclo de Facturación *
+              </label>
+              <select
+                className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                 value={editingSubscriptionData.billingCycle}
                 onChange={(e) =>
                   setEditingSubscriptionData({
@@ -538,13 +602,15 @@ export default function SubscriptionsModals({
                 <option value={BillingCycle.YEARLY}>Anual</option>
                 <option value={BillingCycle.WEEKLY}>Semanal</option>
                 <option value={BillingCycle.LIFETIME}>Lifetime</option>
-              </Select>
+              </select>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="edit-startDate">Fecha de Inicio *</Label>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Fecha de Inicio *
+              </label>
               <Input
                 id="edit-startDate"
                 type="date"
@@ -559,7 +625,9 @@ export default function SubscriptionsModals({
             </div>
 
             <div>
-              <Label htmlFor="edit-nextBillingDate">Próximo Pago</Label>
+              <label className="text-sm font-medium text-foreground block mb-2">
+                Próximo Pago
+              </label>
               <Input
                 id="edit-nextBillingDate"
                 type="date"
@@ -627,12 +695,30 @@ export default function SubscriptionsModals({
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={onCloseEditModal}>
-              Cancelar
+          <div className="flex flex-col sm:flex-row gap-2 pt-4">
+            <Button
+              type="submit"
+              disabled={isUpdating}
+              className="flex-1 hover:bg-blue-500 hover:text-white transition-colors duration-300"
+              onClick={handleUpdateSubscription}
+            >
+              {isUpdating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Actualizando...
+                </>
+              ) : (
+                "Actualizar Suscripción"
+              )}
             </Button>
-            <Button onClick={handleUpdateSubscription}>
-              Actualizar Suscripción
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isUpdating}
+              onClick={onCloseEditModal}
+              className="text-white hover:text-red-500 transition-colors duration-300"
+            >
+              Cancelar
             </Button>
           </div>
         </div>
