@@ -31,6 +31,7 @@ model User {
   cloudStorage  CloudStorage[]
   generativeAI  GenerativeAI[]
   workshop      Workshop[]
+  subscriptions Subscription[]
 
   @@map("users")
 }
@@ -239,6 +240,29 @@ model Workshop {
   @@map("workshop")
 }
 
+model Subscription {
+  id              String             @id @default(cuid())
+  title           String
+  description     String?
+  url             String?
+  type            SubscriptionType
+  category        SubscriptionCategory
+  price           Float
+  billingCycle    BillingCycle
+  startDate       DateTime
+  nextBillingDate DateTime?
+  isActive        Boolean            @default(true)
+  tags            String[]
+  userId          String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
 enum ToolType {
   DESPLIEGUE
   DISENO
@@ -343,4 +367,33 @@ enum WorkshopCategory {
   GENERATORS
   TESTING
   ANALYSIS
+}
+
+enum SubscriptionType {
+  SOFTWARE
+  STREAMING
+  CLOUD_SERVICE
+  PRODUCTIVITY
+  DESIGN
+  DEVELOPMENT
+  ENTERTAINMENT
+  EDUCATION
+  NEWS
+  FITNESS
+}
+
+enum SubscriptionCategory {
+  WORK
+  PERSONAL
+  ENTERTAINMENT
+  EDUCATION
+  HEALTH
+  FINANCE
+}
+
+enum BillingCycle {
+  MONTHLY
+  YEARLY
+  WEEKLY
+  LIFETIME
 } 

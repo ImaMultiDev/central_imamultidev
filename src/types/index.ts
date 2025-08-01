@@ -153,6 +153,7 @@ export interface DashboardStats {
   totalCloudStorage: number;
   totalGenerativeAI: number;
   totalWorkshop: number;
+  totalSubscriptions: number;
 }
 
 // Nuevos tipos para las vistas adicionales
@@ -287,4 +288,52 @@ export enum WorkshopCategory {
   GENERATORS = "GENERATORS",
   TESTING = "TESTING",
   ANALYSIS = "ANALYSIS",
+}
+
+// Subscriptions
+export interface Subscription {
+  id: string;
+  title: string;
+  description?: string;
+  url?: string;
+  type: SubscriptionType;
+  category: SubscriptionCategory;
+  price: number;
+  billingCycle: BillingCycle;
+  startDate: Date;
+  nextBillingDate?: Date;
+  isActive: boolean;
+  tags: string[];
+  userId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum SubscriptionType {
+  SOFTWARE = "SOFTWARE",
+  STREAMING = "STREAMING",
+  CLOUD_SERVICE = "CLOUD_SERVICE",
+  PRODUCTIVITY = "PRODUCTIVITY",
+  DESIGN = "DESIGN",
+  DEVELOPMENT = "DEVELOPMENT",
+  ENTERTAINMENT = "ENTERTAINMENT",
+  EDUCATION = "EDUCATION",
+  NEWS = "NEWS",
+  FITNESS = "FITNESS",
+}
+
+export enum SubscriptionCategory {
+  WORK = "WORK",
+  PERSONAL = "PERSONAL",
+  ENTERTAINMENT = "ENTERTAINMENT",
+  EDUCATION = "EDUCATION",
+  HEALTH = "HEALTH",
+  FINANCE = "FINANCE",
+}
+
+export enum BillingCycle {
+  MONTHLY = "MONTHLY",
+  YEARLY = "YEARLY",
+  WEEKLY = "WEEKLY",
+  LIFETIME = "LIFETIME",
 }
