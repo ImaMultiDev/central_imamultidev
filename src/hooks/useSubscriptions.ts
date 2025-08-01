@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Subscription } from "@/types";
 import { apiRequest, handleApiResponse } from "@/lib/api";
 
@@ -9,18 +9,57 @@ export function useSubscriptions() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSubscriptions = async () => {
+  // Función helper para convertir fechas de strings a Date objects
+  const convertSubscriptionDates = useCallback(
+    (
+      subscription: Omit<
+        Subscription,
+        "startDate" | "nextBillingDate" | "createdAt" | "updatedAt"
+      > & {
+        startDate: string;
+        nextBillingDate?: string;
+        createdAt: string;
+        updatedAt: string;
+      }
+    ): Subscription => {
+      return {
+        ...subscription,
+        startDate: new Date(subscription.startDate),
+        nextBillingDate: subscription.nextBillingDate
+          ? new Date(subscription.nextBillingDate)
+          : undefined,
+        createdAt: new Date(subscription.createdAt),
+        updatedAt: new Date(subscription.updatedAt),
+      };
+    },
+    []
+  );
+
+  const fetchSubscriptions = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiRequest("/api/subscriptions");
-      const data = await handleApiResponse<Subscription[]>(response);
-      setSubscriptions(data);
+      const data = await handleApiResponse<
+        Array<
+          Omit<
+            Subscription,
+            "startDate" | "nextBillingDate" | "createdAt" | "updatedAt"
+          > & {
+            startDate: string;
+            nextBillingDate?: string;
+            createdAt: string;
+            updatedAt: string;
+          }
+        >
+      >(response);
+      const convertedData = data.map(convertSubscriptionDates);
+      setSubscriptions(convertedData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setLoading(false);
     }
-  };
+  }, [convertSubscriptionDates]);
 
   const createSubscription = async (
     subscription: Omit<
@@ -33,7 +72,18 @@ export function useSubscriptions() {
         method: "POST",
         body: JSON.stringify(subscription),
       });
-      const newSubscription = await handleApiResponse<Subscription>(response);
+      const rawSubscription = await handleApiResponse<
+        Omit<
+          Subscription,
+          "startDate" | "nextBillingDate" | "createdAt" | "updatedAt"
+        > & {
+          startDate: string;
+          nextBillingDate?: string;
+          createdAt: string;
+          updatedAt: string;
+        }
+      >(response);
+      const newSubscription = convertSubscriptionDates(rawSubscription);
       setSubscriptions((prev) => [...prev, newSubscription]);
       return newSubscription;
     } catch (err) {
@@ -51,9 +101,18 @@ export function useSubscriptions() {
         method: "PUT",
         body: JSON.stringify(subscription),
       });
-      const updatedSubscription = await handleApiResponse<Subscription>(
-        response
-      );
+      const rawSubscription = await handleApiResponse<
+        Omit<
+          Subscription,
+          "startDate" | "nextBillingDate" | "createdAt" | "updatedAt"
+        > & {
+          startDate: string;
+          nextBillingDate?: string;
+          createdAt: string;
+          updatedAt: string;
+        }
+      >(response);
+      const updatedSubscription = convertSubscriptionDates(rawSubscription);
       setSubscriptions((prev) =>
         prev.map((item) => (item.id === id ? updatedSubscription : item))
       );
@@ -79,7 +138,7 @@ export function useSubscriptions() {
 
   useEffect(() => {
     fetchSubscriptions();
-  }, []);
+  }, [fetchSubscriptions]);
 
   return {
     subscriptions,
