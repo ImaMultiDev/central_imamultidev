@@ -92,7 +92,7 @@ export default function SubscriptionsGrid({
         >
           <div className="flex justify-between items-start mb-3">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg text-gray-900 mb-1">
+              <h3 className="font-semibold text-lg text-white mb-1">
                 {subscription.title}
               </h3>
               <div className="flex items-center gap-2 mb-2">
