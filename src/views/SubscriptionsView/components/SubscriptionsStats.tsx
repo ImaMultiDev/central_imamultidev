@@ -71,10 +71,10 @@ export default function SubscriptionsStats({
       {stats.map((stat, index) => (
         <Card key={index} className="p-4">
           <div className="text-center">
-            <p className="text-sm font-medium text-gray-600 mb-1">
+            <p className="text-sm font-medium text-gray-400 mb-1">
               {stat.title}
             </p>
-            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+            <p className="text-2xl font-bold text-gray-200">{stat.value}</p>
             <p className="text-xs text-gray-500">{stat.subtitle}</p>
           </div>
         </Card>
