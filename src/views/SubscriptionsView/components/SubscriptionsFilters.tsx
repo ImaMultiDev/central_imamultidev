@@ -31,7 +31,7 @@ export default function SubscriptionsFilters({
   onStatusChange,
 }: SubscriptionsFiltersProps) {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border mb-6">
+    <div className="p-4 rounded-lg shadow-sm border mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Búsqueda */}
         <div className="relative">

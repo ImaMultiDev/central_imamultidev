@@ -11,10 +11,10 @@ export default function SubscriptionsHeader({
   onAddNew,
 }: SubscriptionsHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+    <div className="flex flex-col mb-6 lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Suscripciones</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-3xl font-bold text-white">Suscripciones</h1>
+        <p className="text-muted-foreground">
           Gestiona todas tus suscripciones de servicios y controla tus gastos
         </p>
       </div>
