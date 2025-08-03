@@ -36,6 +36,11 @@ const navigation = [
     icon: Calendar,
   },
   {
+    name: "Suscripciones",
+    href: "/subscriptions",
+    icon: CreditCard,
+  },
+  {
     name: "Cursos",
     href: "/courses",
     icon: BookOpen,
@@ -75,11 +80,7 @@ const navigation = [
     href: "/workshop",
     icon: Hammer,
   },
-  {
-    name: "Suscripciones",
-    href: "/subscriptions",
-    icon: CreditCard,
-  },
+
   {
     name: "Test Hardware",
     href: "/hardware-test",

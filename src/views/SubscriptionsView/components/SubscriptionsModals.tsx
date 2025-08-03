@@ -96,6 +96,19 @@ export default function SubscriptionsModals({
   }, [editingSubscription]);
 
   const handleAddSubscription = () => {
+    // Validación de campos obligatorios (como en ToolsView)
+    if (
+      !newSubscription.title ||
+      !newSubscription.type ||
+      !newSubscription.category ||
+      !newSubscription.price ||
+      !newSubscription.billingCycle ||
+      !newSubscription.startDate
+    ) {
+      alert("Por favor completa todos los campos obligatorios");
+      return;
+    }
+
     onAddSubscription(newSubscription);
     setNewSubscription({
       title: "",
@@ -115,11 +128,24 @@ export default function SubscriptionsModals({
   };
 
   const handleUpdateSubscription = () => {
-    if (editingSubscription) {
-      onUpdateSubscription(editingSubscription.id, editingSubscriptionData);
-      setEditTagInput("");
-      onCloseEditModal();
+    if (!editingSubscription) return;
+
+    // Validación de campos obligatorios
+    if (
+      !editingSubscriptionData.title ||
+      !editingSubscriptionData.type ||
+      !editingSubscriptionData.category ||
+      !editingSubscriptionData.price ||
+      !editingSubscriptionData.billingCycle ||
+      !editingSubscriptionData.startDate
+    ) {
+      alert("Por favor completa todos los campos obligatorios");
+      return;
     }
+
+    onUpdateSubscription(editingSubscription.id, editingSubscriptionData);
+    setEditTagInput("");
+    onCloseEditModal();
   };
 
   const addTag = (isEdit = false) => {
@@ -157,9 +183,18 @@ export default function SubscriptionsModals({
     }
   };
 
-  const formatDateForInput = (date: Date | undefined) => {
+  // Función para formatear fechas correctamente (copiada de Events)
+  const formatDateForInput = (date: Date | undefined): string => {
     if (!date) return "";
-    return date.toISOString().split("T")[0];
+
+    // Asegurar que date sea un objeto Date
+    const dateObj = date instanceof Date ? date : new Date(date);
+
+    // Para campos de solo fecha (sin hora)
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -338,17 +373,22 @@ export default function SubscriptionsModals({
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Fecha de Inicio *
                 </label>
-                <input
+                <Input
                   id="startDate"
                   type="date"
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={formatDateForInput(newSubscription.startDate)}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    // Manejo correcto como en Events
+                    const [year, month, day] = e.target.value
+                      .split("-")
+                      .map(Number);
+                    const date = new Date(year, month - 1, day);
                     setNewSubscription({
                       ...newSubscription,
-                      startDate: new Date(e.target.value),
-                    })
-                  }
+                      startDate: date,
+                    });
+                  }}
+                  className="w-full"
                 />
               </div>
 
@@ -356,19 +396,29 @@ export default function SubscriptionsModals({
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Próximo Pago
                 </label>
-                <input
+                <Input
                   id="nextBillingDate"
                   type="date"
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={formatDateForInput(newSubscription.nextBillingDate)}
-                  onChange={(e) =>
-                    setNewSubscription({
-                      ...newSubscription,
-                      nextBillingDate: e.target.value
-                        ? new Date(e.target.value)
-                        : undefined,
-                    })
-                  }
+                  onChange={(e) => {
+                    // Manejo correcto como en Events
+                    if (e.target.value) {
+                      const [year, month, day] = e.target.value
+                        .split("-")
+                        .map(Number);
+                      const date = new Date(year, month - 1, day);
+                      setNewSubscription({
+                        ...newSubscription,
+                        nextBillingDate: date,
+                      });
+                    } else {
+                      setNewSubscription({
+                        ...newSubscription,
+                        nextBillingDate: undefined,
+                      });
+                    }
+                  }}
+                  className="w-full"
                 />
               </div>
             </div>
@@ -628,17 +678,22 @@ export default function SubscriptionsModals({
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Fecha de Inicio *
                 </label>
-                <input
+                <Input
                   id="edit-startDate"
                   type="date"
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={formatDateForInput(editingSubscriptionData.startDate)}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    // Manejo correcto como en Events
+                    const [year, month, day] = e.target.value
+                      .split("-")
+                      .map(Number);
+                    const date = new Date(year, month - 1, day);
                     setEditingSubscriptionData({
                       ...editingSubscriptionData,
-                      startDate: new Date(e.target.value),
-                    })
-                  }
+                      startDate: date,
+                    });
+                  }}
+                  className="w-full"
                 />
               </div>
 
@@ -646,21 +701,31 @@ export default function SubscriptionsModals({
                 <label className="text-sm font-medium text-foreground block mb-2">
                   Próximo Pago
                 </label>
-                <input
+                <Input
                   id="edit-nextBillingDate"
                   type="date"
-                  className="w-full h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm"
                   value={formatDateForInput(
                     editingSubscriptionData.nextBillingDate
                   )}
-                  onChange={(e) =>
-                    setEditingSubscriptionData({
-                      ...editingSubscriptionData,
-                      nextBillingDate: e.target.value
-                        ? new Date(e.target.value)
-                        : undefined,
-                    })
-                  }
+                  onChange={(e) => {
+                    // Manejo correcto como en Events
+                    if (e.target.value) {
+                      const [year, month, day] = e.target.value
+                        .split("-")
+                        .map(Number);
+                      const date = new Date(year, month - 1, day);
+                      setEditingSubscriptionData({
+                        ...editingSubscriptionData,
+                        nextBillingDate: date,
+                      });
+                    } else {
+                      setEditingSubscriptionData({
+                        ...editingSubscriptionData,
+                        nextBillingDate: undefined,
+                      });
+                    }
+                  }}
+                  className="w-full"
                 />
               </div>
             </div>
