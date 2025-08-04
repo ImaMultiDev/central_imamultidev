@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 // PUT /api/certifications/[id] - Actualizar certificación
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const { id } = params;
 
     // Validación básica de campos requeridos
     if (!body.title || !body.type || !body.level || !body.startDate) {
@@ -49,10 +49,10 @@ export async function PUT(
 // DELETE /api/certifications/[id] - Eliminar certificación
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     await prisma.certification.delete({
       where: { id },
