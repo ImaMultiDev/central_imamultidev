@@ -2,12 +2,17 @@
 
 import { Plus, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/contexts/UserContext";
 
 interface CertificationsHeaderProps {
   onAddCertification: () => void;
 }
 
-export function CertificationsHeader({ onAddCertification }: CertificationsHeaderProps) {
+export function CertificationsHeader({
+  onAddCertification,
+}: CertificationsHeaderProps) {
+  const { isAdmin } = useUser();
+
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
       <div className="flex items-center gap-3">
@@ -19,14 +24,18 @@ export function CertificationsHeader({ onAddCertification }: CertificationsHeade
             Certificaciones y Títulos
           </h1>
           <p className="text-muted-foreground">
-            Gestiona tu galería de certificaciones, títulos académicos y logros profesionales
+            {isAdmin
+              ? "Gestiona tu galería de certificaciones, títulos académicos y logros profesionales"
+              : "Explora la galería de certificaciones, títulos académicos y logros profesionales"}
           </p>
         </div>
       </div>
-      <Button onClick={onAddCertification} className="shrink-0">
-        <Plus className="mr-2 h-4 w-4" />
-        Añadir Certificación
-      </Button>
+      {isAdmin && (
+        <Button onClick={onAddCertification} className="shrink-0">
+          <Plus className="mr-2 h-4 w-4" />
+          Añadir Certificación
+        </Button>
+      )}
     </div>
   );
 }

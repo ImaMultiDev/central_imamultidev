@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Pagination } from "@/components/ui/pagination";
 import { Certification, CertificationType } from "@/types";
 import Image from "next/image";
+import { useUser } from "@/contexts/UserContext";
 
 interface CertificationsGridProps {
   certifications: Certification[];
@@ -50,6 +51,7 @@ export function CertificationsGrid({
   isDeleting,
   onAddCertification,
 }: CertificationsGridProps) {
+  const { isAdmin } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -137,58 +139,60 @@ export function CertificationsGrid({
                       </Badge>
                     </div>
                   </div>
-                  <div className="relative">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 certification-menu-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onOpenMenuChange(
-                          openMenuId === certification.id
-                            ? null
-                            : certification.id
-                        );
-                      }}
-                      disabled={isDeleting === certification.id}
-                    >
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                    {openMenuId === certification.id && (
-                      <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
-                        <div className="py-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onEditCertification(certification);
-                              onOpenMenuChange(null);
-                            }}
-                            className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDeleteCertification(certification.id);
-                              onOpenMenuChange(null);
-                            }}
-                            disabled={isDeleting === certification.id}
-                            className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {isDeleting === certification.id ? (
-                              <>
-                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
-                                Eliminando...
-                              </>
-                            ) : (
-                              "Eliminar"
-                            )}
-                          </button>
+                  {isAdmin && (
+                    <div className="relative">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 certification-menu-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenMenuChange(
+                            openMenuId === certification.id
+                              ? null
+                              : certification.id
+                          );
+                        }}
+                        disabled={isDeleting === certification.id}
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                      {openMenuId === certification.id && (
+                        <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                          <div className="py-1">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onEditCertification(certification);
+                                onOpenMenuChange(null);
+                              }}
+                              className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteCertification(certification.id);
+                                onOpenMenuChange(null);
+                              }}
+                              disabled={isDeleting === certification.id}
+                              className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isDeleting === certification.id ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                                  Eliminando...
+                                </>
+                              ) : (
+                                "Eliminar"
+                              )}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </CardHeader>
 

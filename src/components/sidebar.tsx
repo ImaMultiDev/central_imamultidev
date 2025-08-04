@@ -24,73 +24,86 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useUser } from "@/contexts/UserContext";
 
 const navigation = [
   {
     name: "Dashboard",
     href: "/",
     icon: LayoutDashboard,
+    adminOnly: true,
   },
   {
     name: "Calendario",
     href: "/calendar",
     icon: Calendar,
+    adminOnly: true,
   },
   {
     name: "Suscripciones",
     href: "/subscriptions",
     icon: CreditCard,
+    adminOnly: true,
   },
   {
     name: "Certificaciones",
     href: "/certifications",
     icon: Award,
+    adminOnly: false,
   },
   {
     name: "Cursos",
     href: "/courses",
     icon: BookOpen,
+    adminOnly: false,
   },
   {
     name: "Tutoriales",
     href: "/tutorials",
     icon: Play,
+    adminOnly: false,
   },
   {
     name: "Documentación",
     href: "/docs",
     icon: FileText,
+    adminOnly: false,
   },
   {
     name: "Herramientas",
     href: "/tools",
     icon: Wrench,
+    adminOnly: false,
   },
   {
     name: "Data & Analytics",
     href: "/data-analytics",
     icon: BarChart3,
+    adminOnly: false,
   },
   {
     name: "Cloud & Storage",
     href: "/cloud-storage",
     icon: Cloud,
+    adminOnly: false,
   },
   {
     name: "IA Generativa",
     href: "/generative-ai",
     icon: Bot,
+    adminOnly: false,
   },
   {
     name: "Taller",
     href: "/workshop",
     icon: Hammer,
+    adminOnly: false,
   },
-
   {
     name: "Test Hardware",
     href: "/hardware-test",
     icon: HardDrive,
+    adminOnly: true,
   },
 ];
 
@@ -103,6 +116,7 @@ export function Sidebar({ className }: SidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
   const { logout } = useAuth();
+  const { isAdmin } = useUser();
 
   const handleLogout = () => {
     logout();
@@ -164,6 +178,7 @@ export function Sidebar({ className }: SidebarProps) {
             {navigation.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
+              const isRestricted = item.adminOnly && !isAdmin;
 
               return (
                 <Link
@@ -173,13 +188,30 @@ export function Sidebar({ className }: SidebarProps) {
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
                     isActive
                       ? "bg-primary text-primary-foreground"
+                      : isRestricted
+                      ? "text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
                       : "text-foreground hover:bg-accent hover:text-accent-foreground",
                     isCollapsed && "justify-center"
                   )}
                   onClick={() => setIsMobileOpen(false)}
+                  title={
+                    isRestricted
+                      ? "Acceso restringido - Solo administrador"
+                      : undefined
+                  }
                 >
-                  <Icon className="h-5 w-5 flex-shrink-0" />
-                  {!isCollapsed && <span>{item.name}</span>}
+                  <Icon
+                    className={cn(
+                      "h-5 w-5 flex-shrink-0",
+                      isRestricted && "text-red-500"
+                    )}
+                  />
+                  {!isCollapsed && (
+                    <span className={cn(isRestricted && "text-red-500")}>
+                      {item.name}
+                      {isRestricted && " 🔒"}
+                    </span>
+                  )}
                 </Link>
               );
             })}
@@ -211,10 +243,10 @@ export function Sidebar({ className }: SidebarProps) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    Imanol MU
+                    {isAdmin ? "Imanol MU" : "Usuario Público"}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
-                    imamultidev
+                    {isAdmin ? "imamultidev" : "Solo lectura"}
                   </p>
                 </div>
                 <Button
