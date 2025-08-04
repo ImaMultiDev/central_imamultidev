@@ -56,13 +56,13 @@ const navigation = [
     name: "Cursos",
     href: "/courses",
     icon: BookOpen,
-    adminOnly: false,
+    adminOnly: true,
   },
   {
     name: "Tutoriales",
     href: "/tutorials",
     icon: Play,
-    adminOnly: false,
+    adminOnly: true,
   },
   {
     name: "Documentación",
