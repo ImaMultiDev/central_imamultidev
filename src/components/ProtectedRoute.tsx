@@ -12,6 +12,8 @@ interface ProtectedRouteProps {
 const ADMIN_ONLY_ROUTES = [
   "/",
   "/calendar",
+  "/courses",
+  "/tutorials",
   "/subscriptions",
   "/hardware-test",
 ];
@@ -19,8 +21,6 @@ const ADMIN_ONLY_ROUTES = [
 // Rutas públicas (solo lectura para usuarios no admin)
 const PUBLIC_READONLY_ROUTES = [
   "/certifications",
-  "/courses",
-  "/tutorials",
   "/docs",
   "/tools",
   "/data-analytics",
