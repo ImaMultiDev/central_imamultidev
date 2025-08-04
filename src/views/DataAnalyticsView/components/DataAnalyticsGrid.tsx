@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Pagination } from "@/components/ui/pagination";
 import { DataAnalytics } from "@/types";
+import { useUser } from "@/contexts/UserContext";
 
 interface DataAnalyticsGridProps {
   dataAnalytics: DataAnalytics[];
@@ -76,6 +77,7 @@ export function DataAnalyticsGrid({
   categoryColors,
   categoryLabels,
 }: DataAnalyticsGridProps) {
+  const { isAdmin } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageLoading, setIsPageLoading] = useState(false);
   const itemsPerPage = 6;
@@ -123,51 +125,53 @@ export function DataAnalyticsGrid({
                         {item.description}
                       </CardDescription>
                     </div>
-                    <div className="relative">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="data-analytics-menu-button text-white transition-opacity"
-                        onClick={() =>
-                          onOpenMenuChange(
-                            openMenuId === item.id ? null : item.id
-                          )
-                        }
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                      {openMenuId === item.id && (
-                        <div className="absolute right-0 top-8 z-10 bg-background border rounded-md shadow-lg py-1 min-w-[120px]">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="w-full justify-start px-3 py-2"
-                            onClick={() => {
-                              onEditDataAnalytics(item);
-                              onOpenMenuChange(null);
-                            }}
-                          >
-                            <Edit className="h-4 w-4 mr-2" />
-                            Editar
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="w-full justify-start px-3 py-2 text-destructive hover:text-destructive"
-                            onClick={() => {
-                              onDeleteDataAnalytics(item.id);
-                              onOpenMenuChange(null);
-                            }}
-                            disabled={isDeleting === item.id}
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            {isDeleting === item.id
-                              ? "Eliminando..."
-                              : "Eliminar"}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
+                    {isAdmin && (
+                      <div className="relative">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="data-analytics-menu-button text-white transition-opacity"
+                          onClick={() =>
+                            onOpenMenuChange(
+                              openMenuId === item.id ? null : item.id
+                            )
+                          }
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        {openMenuId === item.id && (
+                          <div className="absolute right-0 top-8 z-10 bg-background border rounded-md shadow-lg py-1 min-w-[120px]">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full justify-start px-3 py-2"
+                              onClick={() => {
+                                onEditDataAnalytics(item);
+                                onOpenMenuChange(null);
+                              }}
+                            >
+                              <Edit className="h-4 w-4 mr-2" />
+                              Editar
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full justify-start px-3 py-2 text-destructive hover:text-destructive"
+                              onClick={() => {
+                                onDeleteDataAnalytics(item.id);
+                                onOpenMenuChange(null);
+                              }}
+                              disabled={isDeleting === item.id}
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              {isDeleting === item.id
+                                ? "Eliminando..."
+                                : "Eliminar"}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col">

@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Tutorial, TutorialStatus } from "@/types";
+import { useUser } from "@/contexts/UserContext";
 
 const platformColors = {
   YOUTUBE: "bg-red-500",
@@ -107,6 +108,7 @@ export function TutorialsGrid({
   isStatusUpdating,
   onAddTutorial,
 }: TutorialsGridProps) {
+  const { isAdmin } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageLoading, setIsPageLoading] = useState(false);
   const itemsPerPage = 6;
@@ -154,55 +156,57 @@ export function TutorialsGrid({
                         {tutorial.description}
                       </CardDescription>
                     </div>
-                    <div className="relative">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 tutorial-menu-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenMenuChange(
-                            openMenuId === tutorial.id ? null : tutorial.id
-                          );
-                        }}
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                      {openMenuId === tutorial.id && (
-                        <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
-                          <div className="py-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onEditTutorial(tutorial);
-                                onOpenMenuChange(null);
-                              }}
-                              className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
-                            >
-                              Editar
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDeleteTutorial(tutorial.id);
-                                onOpenMenuChange(null);
-                              }}
-                              disabled={isDeleting === tutorial.id}
-                              className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {isDeleting === tutorial.id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
-                                  Eliminando...
-                                </>
-                              ) : (
-                                "Eliminar"
-                              )}
-                            </button>
+                    {isAdmin && (
+                      <div className="relative">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 tutorial-menu-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenMenuChange(
+                              openMenuId === tutorial.id ? null : tutorial.id
+                            );
+                          }}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        {openMenuId === tutorial.id && (
+                          <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                            <div className="py-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEditTutorial(tutorial);
+                                  onOpenMenuChange(null);
+                                }}
+                                className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                              >
+                                Editar
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDeleteTutorial(tutorial.id);
+                                  onOpenMenuChange(null);
+                                }}
+                                disabled={isDeleting === tutorial.id}
+                                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {isDeleting === tutorial.id ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                                    Eliminando...
+                                  </>
+                                ) : (
+                                  "Eliminar"
+                                )}
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -236,73 +240,83 @@ export function TutorialsGrid({
                 </CardHeader>
 
                 <CardContent className="flex-1 space-y-4">
-                  {/* Status Change Buttons */}
-                  <div className="flex gap-2 mb-3 flex-wrap ">
-                    <Button
-                      size="sm"
-                      variant={
-                        tutorial.status === "POR_COMENZAR"
-                          ? "default"
-                          : "outline"
-                      }
-                      disabled={isStatusUpdating === tutorial.id}
-                      onClick={() =>
-                        onStatusChange(tutorial.id, TutorialStatus.POR_COMENZAR)
-                      }
-                      className="text-xs w-full sm:w-auto"
-                    >
-                      {isStatusUpdating === tutorial.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                          ...
-                        </>
-                      ) : (
-                        "Por Comenzar"
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={
-                        tutorial.status === "EN_PROGRESO"
-                          ? "default"
-                          : "outline"
-                      }
-                      disabled={isStatusUpdating === tutorial.id}
-                      onClick={() =>
-                        onStatusChange(tutorial.id, TutorialStatus.EN_PROGRESO)
-                      }
-                      className="text-xs w-full sm:w-auto"
-                    >
-                      {isStatusUpdating === tutorial.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                          ...
-                        </>
-                      ) : (
-                        "En Progreso"
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={
-                        tutorial.status === "COMPLETADO" ? "default" : "outline"
-                      }
-                      disabled={isStatusUpdating === tutorial.id}
-                      onClick={() =>
-                        onStatusChange(tutorial.id, TutorialStatus.COMPLETADO)
-                      }
-                      className="text-xs w-full sm:w-auto"
-                    >
-                      {isStatusUpdating === tutorial.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                          ...
-                        </>
-                      ) : (
-                        "Completado"
-                      )}
-                    </Button>
-                  </div>
+                  {/* Status Change Buttons - Solo para admin */}
+                  {isAdmin && (
+                    <div className="flex gap-2 mb-3 flex-wrap ">
+                      <Button
+                        size="sm"
+                        variant={
+                          tutorial.status === "POR_COMENZAR"
+                            ? "default"
+                            : "outline"
+                        }
+                        disabled={isStatusUpdating === tutorial.id}
+                        onClick={() =>
+                          onStatusChange(
+                            tutorial.id,
+                            TutorialStatus.POR_COMENZAR
+                          )
+                        }
+                        className="text-xs w-full sm:w-auto"
+                      >
+                        {isStatusUpdating === tutorial.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                            ...
+                          </>
+                        ) : (
+                          "Por Comenzar"
+                        )}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={
+                          tutorial.status === "EN_PROGRESO"
+                            ? "default"
+                            : "outline"
+                        }
+                        disabled={isStatusUpdating === tutorial.id}
+                        onClick={() =>
+                          onStatusChange(
+                            tutorial.id,
+                            TutorialStatus.EN_PROGRESO
+                          )
+                        }
+                        className="text-xs w-full sm:w-auto"
+                      >
+                        {isStatusUpdating === tutorial.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                            ...
+                          </>
+                        ) : (
+                          "En Progreso"
+                        )}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={
+                          tutorial.status === "COMPLETADO"
+                            ? "default"
+                            : "outline"
+                        }
+                        disabled={isStatusUpdating === tutorial.id}
+                        onClick={() =>
+                          onStatusChange(tutorial.id, TutorialStatus.COMPLETADO)
+                        }
+                        className="text-xs w-full sm:w-auto"
+                      >
+                        {isStatusUpdating === tutorial.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                            ...
+                          </>
+                        ) : (
+                          "Completado"
+                        )}
+                      </Button>
+                    </div>
+                  )}
 
                   {/* Notes */}
                   {tutorial.notes && (

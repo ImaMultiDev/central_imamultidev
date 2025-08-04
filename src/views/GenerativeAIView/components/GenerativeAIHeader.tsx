@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/contexts/UserContext";
 
 interface GenerativeAIHeaderProps {
   onAddGenerativeAI: () => void;
@@ -10,6 +11,8 @@ interface GenerativeAIHeaderProps {
 export function GenerativeAIHeader({
   onAddGenerativeAI,
 }: GenerativeAIHeaderProps) {
+  const { isAdmin } = useUser();
+
   return (
     <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 text-center lg:text-left items-center justify-between">
       <div>
@@ -17,14 +20,17 @@ export function GenerativeAIHeader({
           Generative AI
         </h1>
         <p className="text-muted-foreground">
-          Herramientas de IA Generativa para texto, código, imágenes, audio y
-          video
+          {isAdmin
+            ? "Herramientas de IA Generativa para texto, código, imágenes, audio y video"
+            : "Explora las herramientas de IA Generativa para texto, código, imágenes, audio y video"}
         </p>
       </div>
-      <Button onClick={onAddGenerativeAI}>
-        <Plus className="mr-2 h-4 w-4" />
-        Añadir Herramienta
-      </Button>
+      {isAdmin && (
+        <Button onClick={onAddGenerativeAI}>
+          <Plus className="mr-2 h-4 w-4" />
+          Añadir Herramienta
+        </Button>
+      )}
     </div>
   );
 }

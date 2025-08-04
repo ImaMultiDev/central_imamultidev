@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Course, CourseStatus } from "@/types";
+import { useUser } from "@/contexts/UserContext";
 
 const platformColors = {
   UDEMY: "bg-purple-500",
@@ -101,6 +102,7 @@ export function CoursesGrid({
   isStatusUpdating,
   onAddCourse,
 }: CoursesGridProps) {
+  const { isAdmin } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageLoading, setIsPageLoading] = useState(false);
   const itemsPerPage = 6;
@@ -148,55 +150,57 @@ export function CoursesGrid({
                         {course.description}
                       </CardDescription>
                     </div>
-                    <div className="relative">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 course-menu-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenMenuChange(
-                            openMenuId === course.id ? null : course.id
-                          );
-                        }}
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                      {openMenuId === course.id && (
-                        <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
-                          <div className="py-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onEditCourse(course);
-                                onOpenMenuChange(null);
-                              }}
-                              className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
-                            >
-                              Editar
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDeleteCourse(course.id);
-                                onOpenMenuChange(null);
-                              }}
-                              disabled={isDeleting === course.id}
-                              className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {isDeleting === course.id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
-                                  Eliminando...
-                                </>
-                              ) : (
-                                "Eliminar"
-                              )}
-                            </button>
+                    {isAdmin && (
+                      <div className="relative">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 course-menu-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenMenuChange(
+                              openMenuId === course.id ? null : course.id
+                            );
+                          }}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        {openMenuId === course.id && (
+                          <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                            <div className="py-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEditCourse(course);
+                                  onOpenMenuChange(null);
+                                }}
+                                className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                              >
+                                Editar
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDeleteCourse(course.id);
+                                  onOpenMenuChange(null);
+                                }}
+                                disabled={isDeleting === course.id}
+                                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {isDeleting === course.id ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                                    Eliminando...
+                                  </>
+                                ) : (
+                                  "Eliminar"
+                                )}
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -224,69 +228,75 @@ export function CoursesGrid({
                 </CardHeader>
 
                 <CardContent className="flex-1 space-y-4">
-                  {/* Status Change Buttons */}
-                  <div className="flex gap-2 mb-3 flex-wrap ">
-                    <Button
-                      size="sm"
-                      variant={
-                        course.status === "POR_COMENZAR" ? "default" : "outline"
-                      }
-                      disabled={isStatusUpdating === course.id}
-                      onClick={() =>
-                        onStatusChange(course.id, CourseStatus.POR_COMENZAR)
-                      }
-                      className="text-xs w-full sm:w-auto"
-                    >
-                      {isStatusUpdating === course.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                          ...
-                        </>
-                      ) : (
-                        "Por Comenzar"
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={
-                        course.status === "EN_PROGRESO" ? "default" : "outline"
-                      }
-                      disabled={isStatusUpdating === course.id}
-                      onClick={() =>
-                        onStatusChange(course.id, CourseStatus.EN_PROGRESO)
-                      }
-                      className="text-xs w-full sm:w-auto"
-                    >
-                      {isStatusUpdating === course.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                          ...
-                        </>
-                      ) : (
-                        "En Progreso"
-                      )}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={
-                        course.status === "COMPLETADO" ? "default" : "outline"
-                      }
-                      disabled={isStatusUpdating === course.id}
-                      onClick={() =>
-                        onStatusChange(course.id, CourseStatus.COMPLETADO)
-                      }
-                      className="text-xs w-full sm:w-auto"
-                    >
-                      {isStatusUpdating === course.id ? (
-                        <>
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
-                          ...
-                        </>
-                      ) : (
-                        "Completado"
-                      )}
-                    </Button>
-                  </div>
+                  {/* Status Change Buttons - Solo para admin */}
+                  {isAdmin && (
+                    <div className="flex gap-2 mb-3 flex-wrap ">
+                      <Button
+                        size="sm"
+                        variant={
+                          course.status === "POR_COMENZAR"
+                            ? "default"
+                            : "outline"
+                        }
+                        disabled={isStatusUpdating === course.id}
+                        onClick={() =>
+                          onStatusChange(course.id, CourseStatus.POR_COMENZAR)
+                        }
+                        className="text-xs w-full sm:w-auto"
+                      >
+                        {isStatusUpdating === course.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                            ...
+                          </>
+                        ) : (
+                          "Por Comenzar"
+                        )}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={
+                          course.status === "EN_PROGRESO"
+                            ? "default"
+                            : "outline"
+                        }
+                        disabled={isStatusUpdating === course.id}
+                        onClick={() =>
+                          onStatusChange(course.id, CourseStatus.EN_PROGRESO)
+                        }
+                        className="text-xs w-full sm:w-auto"
+                      >
+                        {isStatusUpdating === course.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                            ...
+                          </>
+                        ) : (
+                          "En Progreso"
+                        )}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={
+                          course.status === "COMPLETADO" ? "default" : "outline"
+                        }
+                        disabled={isStatusUpdating === course.id}
+                        onClick={() =>
+                          onStatusChange(course.id, CourseStatus.COMPLETADO)
+                        }
+                        className="text-xs w-full sm:w-auto"
+                      >
+                        {isStatusUpdating === course.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-1"></div>
+                            ...
+                          </>
+                        ) : (
+                          "Completado"
+                        )}
+                      </Button>
+                    </div>
+                  )}
 
                   {/* Notes */}
                   {course.notes && (

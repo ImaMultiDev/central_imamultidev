@@ -4,6 +4,7 @@ import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { useUser } from "@/contexts/UserContext";
 
 interface TutorialsHeaderProps {
   onAddTutorial: () => void;
@@ -16,6 +17,8 @@ export function TutorialsHeader({
   searchQuery,
   onSearchChange,
 }: TutorialsHeaderProps) {
+  const { isAdmin } = useUser();
+
   return (
     <Card>
       <CardContent className="p-6">
@@ -23,7 +26,9 @@ export function TutorialsHeader({
           <div className="flex-1 min-w-0">
             <h1 className="text-2xl font-bold text-foreground">Tutoriales</h1>
             <p className="text-muted-foreground mt-1">
-              Gestiona tus tutoriales de YouTube y otras plataformas
+              {isAdmin
+                ? "Gestiona tus tutoriales de YouTube y otras plataformas"
+                : "Explora los tutoriales disponibles de YouTube y otras plataformas"}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -36,10 +41,12 @@ export function TutorialsHeader({
                 className="pl-10"
               />
             </div>
-            <Button onClick={onAddTutorial} className="w-full sm:w-auto">
-              <Plus className="mr-2 h-4 w-4" />
-              Añadir Tutorial
-            </Button>
+            {isAdmin && (
+              <Button onClick={onAddTutorial} className="w-full sm:w-auto">
+                <Plus className="mr-2 h-4 w-4" />
+                Añadir Tutorial
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { Tool } from "@/types";
+import { useUser } from "@/contexts/UserContext";
 
 interface ToolsGridProps {
   tools: Tool[];
@@ -69,6 +70,7 @@ export function ToolsGrid({
   categoryColors,
   categoryLabels,
 }: ToolsGridProps) {
+  const { isAdmin } = useUser();
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageLoading, setIsPageLoading] = useState(false);
   const itemsPerPage = 6;
@@ -116,55 +118,57 @@ export function ToolsGrid({
                         {tool.description}
                       </CardDescription>
                     </div>
-                    <div className="relative">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 tool-menu-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenMenuChange(
-                            openMenuId === tool.id ? null : tool.id
-                          );
-                        }}
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                      {openMenuId === tool.id && (
-                        <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
-                          <div className="py-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onEditTool(tool);
-                                onOpenMenuChange(null);
-                              }}
-                              className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
-                            >
-                              Editar
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDeleteTool(tool.id);
-                                onOpenMenuChange(null);
-                              }}
-                              disabled={isDeleting === tool.id}
-                              className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {isDeleting === tool.id ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
-                                  Eliminando...
-                                </>
-                              ) : (
-                                "Eliminar"
-                              )}
-                            </button>
+                    {isAdmin && (
+                      <div className="relative">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 tool-menu-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenMenuChange(
+                              openMenuId === tool.id ? null : tool.id
+                            );
+                          }}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        {openMenuId === tool.id && (
+                          <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                            <div className="py-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEditTool(tool);
+                                  onOpenMenuChange(null);
+                                }}
+                                className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                              >
+                                Editar
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDeleteTool(tool.id);
+                                  onOpenMenuChange(null);
+                                }}
+                                disabled={isDeleting === tool.id}
+                                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {isDeleting === tool.id ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                                    Eliminando...
+                                  </>
+                                ) : (
+                                  "Eliminar"
+                                )}
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2 flex-wrap">
