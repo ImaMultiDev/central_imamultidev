@@ -33,8 +33,8 @@ export function useAuth() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     setIsAuthenticated(false);
-    // Usar window.location para forzar la navegación
-    window.location.href = "/login";
+    // Redirigir a una ruta pública en lugar de login para permitir acceso público
+    window.location.href = "/certifications";
   };
 
   const getAuthHeader = () => {

@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { usePathname } from "next/navigation";
-import { AccessDenied } from "@/components/AccessDenied";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -33,17 +32,18 @@ const PUBLIC_READONLY_ROUTES = [
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
+  // Redirigir al login si intenta acceder a ruta de admin sin estar autenticado
   useEffect(() => {
-    // Solo redirigir a login si intenta acceder a rutas de admin sin estar autenticado
     if (
       !isLoading &&
       !isAuthenticated &&
       ADMIN_ONLY_ROUTES.includes(pathname)
     ) {
-      window.location.href = "/login";
+      router.push("/login");
     }
-  }, [isAuthenticated, isLoading, pathname]);
+  }, [isLoading, isAuthenticated, pathname, router]);
 
   if (isLoading) {
     return (
@@ -56,9 +56,16 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  // Si no está autenticado y trata de acceder a ruta de admin, mostrar acceso denegado
+  // Si no está autenticado y trata de acceder a ruta de admin, mostrar loading mientras redirige
   if (!isAuthenticated && ADMIN_ONLY_ROUTES.includes(pathname)) {
-    return <AccessDenied />;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-muted-foreground">Redirigiendo al login...</p>
+        </div>
+      </div>
+    );
   }
 
   // Si no está autenticado pero está en ruta pública, permitir acceso (modo lectura)
@@ -71,6 +78,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <>{children}</>;
   }
 
-  // Por defecto, permitir acceso (fallback)
+  // Por defecto, permitir acceso a rutas públicas (fallback para rutas no categorizadas)
   return <>{children}</>;
 }

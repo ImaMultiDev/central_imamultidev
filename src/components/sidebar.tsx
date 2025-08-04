@@ -13,6 +13,7 @@ import {
   Menu,
   X,
   LogOut,
+  ShieldUser,
   BarChart3,
   Cloud,
   Bot,
@@ -115,11 +116,17 @@ export function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const { isAdmin } = useUser();
 
-  const handleLogout = () => {
-    logout();
+  const handleAuthAction = () => {
+    if (isAuthenticated) {
+      // Si está autenticado, hacer logout
+      logout();
+    } else {
+      // Si no está autenticado, ir al login
+      window.location.href = "/login";
+    }
   };
 
   return (
@@ -220,43 +227,59 @@ export function Sidebar({ className }: SidebarProps) {
           {/* User section */}
           <div className="border-t border-border p-4">
             {isCollapsed ? (
-              /* Layout colapsado: "I" encima del botón de logout */
+              /* Layout colapsado: "I" encima del botón de auth */
               <div className="flex flex-col items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                  I
+                  {isAuthenticated ? "I" : "?"}
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 text-foreground hover:text-accent-foreground"
-                  title="Cerrar sesión"
-                  onClick={handleLogout}
+                  title={
+                    isAuthenticated
+                      ? "Cerrar sesión"
+                      : "Iniciar sesión como admin"
+                  }
+                  onClick={handleAuthAction}
                 >
-                  <LogOut className="h-4 w-4" />
+                  {isAuthenticated ? (
+                    <LogOut className="h-4 w-4" />
+                  ) : (
+                    <ShieldUser className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             ) : (
               /* Layout expandido: horizontal con información del usuario */
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
-                  I
+                  {isAuthenticated ? "I" : "?"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
-                    {isAdmin ? "Imanol MU" : "Usuario Público"}
+                    {isAuthenticated ? "Imanol MU" : "Usuario Público"}
                   </p>
                   <p className="text-xs text-muted-foreground truncate">
-                    {isAdmin ? "imamultidev" : "Solo lectura"}
+                    {isAuthenticated ? "imamultidev" : "Solo lectura"}
                   </p>
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 text-foreground hover:text-accent-foreground"
-                  title="Cerrar sesión"
-                  onClick={handleLogout}
+                  title={
+                    isAuthenticated
+                      ? "Cerrar sesión"
+                      : "Iniciar sesión como admin"
+                  }
+                  onClick={handleAuthAction}
                 >
-                  <LogOut className="h-4 w-4" />
+                  {isAuthenticated ? (
+                    <LogOut className="h-4 w-4" />
+                  ) : (
+                    <ShieldUser className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
             )}

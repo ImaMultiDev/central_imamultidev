@@ -35,14 +35,28 @@ export function AccessDenied({
             Esta sección requiere permisos de administrador para acceder.
           </p>
           {showBackButton && (
-            <div className="pt-4">
+            <div className="pt-4 space-y-2">
               <Button
                 variant="outline"
-                onClick={() => router.back()}
-                className="gap-2"
+                onClick={() => {
+                  // Si hay historial, volver; si no, ir al login
+                  if (window.history.length > 1) {
+                    router.back();
+                  } else {
+                    router.push("/login");
+                  }
+                }}
+                className="gap-2 w-full"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Volver
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => router.push("/certifications")}
+                className="w-full"
+              >
+                Ver como Usuario Público
               </Button>
             </div>
           )}

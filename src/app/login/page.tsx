@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { Eye, EyeOff, Lock, User, X, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -59,10 +59,26 @@ export default function LoginPage() {
     }
   };
 
+  const handlePublicAccess = () => {
+    // Redirigir a certificaciones como usuario público
+    window.location.href = "/certifications";
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center relative">
+          {/* Botón de cerrar - esquina superior derecha */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-2 h-8 w-8 text-muted-foreground hover:text-foreground"
+            onClick={handlePublicAccess}
+            title="Continuar como usuario público"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary">
             <Lock className="h-6 w-6 text-primary-foreground" />
           </div>
@@ -130,6 +146,28 @@ export default function LoginPage() {
               {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
             </Button>
           </form>
+
+          {/* Separador visual */}
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                o
+              </span>
+            </div>
+          </div>
+
+          {/* Botón de acceso público */}
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={handlePublicAccess}
+          >
+            <Users className="mr-2 h-4 w-4" />
+            Usuario Público
+          </Button>
         </CardContent>
       </Card>
     </div>
