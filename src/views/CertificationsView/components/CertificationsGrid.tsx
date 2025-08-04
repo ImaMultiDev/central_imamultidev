@@ -98,8 +98,8 @@ export function CertificationsGrid({
           // Estilos según el tipo (Certificado = plateado, Título = dorado)
           const typeStyles =
             certification.type === CertificationType.TITULO
-              ? "bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-200 dark:from-amber-950/20 dark:to-yellow-950/20 dark:border-amber-800"
-              : "bg-gradient-to-br from-slate-50 to-gray-50 border-slate-200 dark:from-slate-950/20 dark:to-gray-950/20 dark:border-slate-700";
+              ? "bg-gradient-to-br from-yellow-900 to-green-500 border-amber-200 dark:from-amber-950/20 dark:to-yellow-950/20 dark:border-amber-800"
+              : "bg-gradient-to-br from-gray-600 to-black border-slate-200 dark:from-slate-950/20 dark:to-gray-950/20 dark:border-slate-700";
 
           const iconBgStyles =
             certification.type === CertificationType.TITULO
@@ -129,8 +129,8 @@ export function CertificationsGrid({
                         variant="outline"
                         className={`text-xs mt-1 ${
                           certification.type === CertificationType.TITULO
-                            ? "border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-300"
-                            : "border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-300"
+                            ? "border-amber-300 text-amber-200 dark:border-amber-700 dark:text-amber-300"
+                            : "border-slate-300 text-slate-400 dark:border-slate-600 dark:text-slate-300"
                         }`}
                       >
                         {levelLabels[certification.level]}
@@ -140,42 +140,52 @@ export function CertificationsGrid({
                   <div className="relative">
                     <Button
                       variant="ghost"
-                      size="sm"
-                      onClick={() =>
+                      size="icon"
+                      className="h-8 w-8 certification-menu-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
                         onOpenMenuChange(
                           openMenuId === certification.id
                             ? null
                             : certification.id
-                        )
-                      }
-                      className="h-8 w-8 p-0"
+                        );
+                      }}
                       disabled={isDeleting === certification.id}
                     >
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                     {openMenuId === certification.id && (
-                      <div className="absolute right-0 top-8 bg-popover border border-border rounded-md shadow-lg z-10 min-w-[120px]">
-                        <button
-                          onClick={() => {
-                            onEditCertification(certification);
-                            onOpenMenuChange(null);
-                          }}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => {
-                            onDeleteCertification(certification.id);
-                            onOpenMenuChange(null);
-                          }}
-                          className="w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive"
-                          disabled={isDeleting === certification.id}
-                        >
-                          {isDeleting === certification.id
-                            ? "Eliminando..."
-                            : "Eliminar"}
-                        </button>
+                      <div className="absolute right-0 top-full z-50 mt-1 w-32 rounded-md border bg-background shadow-lg">
+                        <div className="py-1">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onEditCertification(certification);
+                              onOpenMenuChange(null);
+                            }}
+                            className="block w-full px-4 py-2 text-left text-sm hover:bg-accent"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeleteCertification(certification.id);
+                              onOpenMenuChange(null);
+                            }}
+                            disabled={isDeleting === certification.id}
+                            className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {isDeleting === certification.id ? (
+                              <>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-red-600 mr-2 inline"></div>
+                                Eliminando...
+                              </>
+                            ) : (
+                              "Eliminar"
+                            )}
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>

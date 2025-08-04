@@ -429,6 +429,7 @@ export function CertificationsModals({
               <Button
                 type="button"
                 variant="outline"
+                className="text-gray-400"
                 onClick={() =>
                   onNewCertificationChange(
                     handleAddTag(newCertification, newCertification.tagsInput)
@@ -444,12 +445,17 @@ export function CertificationsModals({
             <Button
               type="button"
               variant="outline"
+              className="text-gray-400"
               onClick={onCertificationModalClose}
               disabled={isCreating}
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isCreating}>
+            <Button
+              type="submit"
+              disabled={isCreating}
+              className="hover:bg-blue-500 transition-colors duration-300"
+            >
               {isCreating ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -738,6 +744,7 @@ export function CertificationsModals({
                 <Button
                   type="button"
                   variant="outline"
+                  className="text-gray-400"
                   onClick={(e) => {
                     const input = e.currentTarget
                       .previousElementSibling as HTMLInputElement;
@@ -756,12 +763,17 @@ export function CertificationsModals({
               <Button
                 type="button"
                 variant="outline"
+                className="text-gray-400"
                 onClick={onEditModalClose}
                 disabled={isUpdating}
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={isUpdating}>
+              <Button
+                type="submit"
+                disabled={isUpdating}
+                className="hover:bg-blue-500 transition-colors duration-300"
+              >
                 {isUpdating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

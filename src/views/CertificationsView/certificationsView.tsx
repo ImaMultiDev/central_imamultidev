@@ -164,10 +164,13 @@ export function CertificationsView() {
     setIsEditModalOpen(true);
   };
 
-  // Cerrar menú al hacer clic fuera
+  // Cerrar menús al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = () => {
-      setOpenMenuId(null);
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest(".certification-menu-button")) {
+        setOpenMenuId(null);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
