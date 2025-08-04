@@ -154,6 +154,7 @@ export interface DashboardStats {
   totalGenerativeAI: number;
   totalWorkshop: number;
   totalSubscriptions: number;
+  totalCertifications: number;
 }
 
 // Nuevos tipos para las vistas adicionales
@@ -336,4 +337,37 @@ export enum BillingCycle {
   YEARLY = "YEARLY",
   WEEKLY = "WEEKLY",
   LIFETIME = "LIFETIME",
+}
+
+// Certifications
+export interface Certification {
+  id: string;
+  title: string;
+  description?: string;
+  type: CertificationType;
+  level: CertificationLevel;
+  startDate: Date;
+  endDate?: Date;
+  certificateUrl?: string;
+  docsUrl?: string;
+  logoImage?: string;
+  badgeImage?: string;
+  notes?: string;
+  tags: string[];
+  userId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum CertificationType {
+  CERTIFICADO = "CERTIFICADO",
+  TITULO = "TITULO",
+}
+
+export enum CertificationLevel {
+  FPGS = "FPGS",
+  FPGM = "FPGM",
+  CERTIFICADO_NIVEL_3 = "CERTIFICADO_NIVEL_3",
+  CERTIFICADO_NIVEL_2 = "CERTIFICADO_NIVEL_2",
+  CERTIFICADO_NIVEL_1 = "CERTIFICADO_NIVEL_1",
 }

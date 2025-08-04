@@ -32,6 +32,7 @@ model User {
   generativeAI  GenerativeAI[]
   workshop      Workshop[]
   subscriptions Subscription[]
+  certifications Certification[]
 
   @@map("users")
 }
@@ -263,6 +264,30 @@ model Subscription {
   @@map("subscriptions")
 }
 
+model Certification {
+  id              String             @id @default(cuid())
+  title           String
+  description     String?
+  type            CertificationType
+  level           CertificationLevel
+  startDate       DateTime
+  endDate         DateTime?
+  certificateUrl  String?
+  docsUrl         String?
+  logoImage       String?
+  badgeImage      String?
+  notes           String?
+  tags            String[]
+  userId          String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  // Relations
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("certifications")
+}
+
 enum ToolType {
   DESPLIEGUE
   DISENO
@@ -396,4 +421,17 @@ enum BillingCycle {
   YEARLY
   WEEKLY
   LIFETIME
+}
+
+enum CertificationType {
+  CERTIFICADO
+  TITULO
+}
+
+enum CertificationLevel {
+  FPGS
+  FPGM
+  CERTIFICADO_NIVEL_3
+  CERTIFICADO_NIVEL_2
+  CERTIFICADO_NIVEL_1
 } 

@@ -19,6 +19,7 @@ import {
   Hammer,
   Play,
   CreditCard,
+  Award,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,11 @@ const navigation = [
     name: "Suscripciones",
     href: "/subscriptions",
     icon: CreditCard,
+  },
+  {
+    name: "Certificaciones",
+    href: "/certifications",
+    icon: Award,
   },
   {
     name: "Cursos",
